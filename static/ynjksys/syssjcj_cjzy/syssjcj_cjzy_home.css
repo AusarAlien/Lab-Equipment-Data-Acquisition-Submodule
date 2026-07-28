@@ -1,0 +1,427 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: #f5f7fa;
+    color: #333;
+    font-family: "Microsoft YaHei", "微软雅黑", "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.page-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 12px;
+}
+
+.query-section,
+.chart-section {
+    background: #fff;
+    border: 1px solid #e5e9f0;
+}
+
+.query-section {
+    padding: 18px 16px;
+}
+
+.query-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    flex: 0 1 390px;
+    min-width: 300px;
+}
+
+.date-range-group {
+    flex-basis: 540px;
+}
+
+.form-group label {
+    flex: 0 0 76px;
+    margin-right: 10px;
+    color: #444;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.form-group input,
+.form-group select {
+    height: 38px;
+    border: 1px solid #d9dfe8;
+    border-radius: 3px;
+    outline: none;
+    background: #fff;
+    color: #333;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.form-group input {
+    min-width: 160px;
+    padding: 0 10px;
+}
+
+.form-group select {
+    flex: 1;
+    min-width: 220px;
+    padding: 0 34px 0 10px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2f78f6;
+    box-shadow: 0 0 0 2px rgba(47, 120, 246, .1);
+}
+
+.date-range {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+}
+
+.date-range input {
+    flex: 1;
+}
+
+.date-separator {
+    flex: 0 0 34px;
+    color: #777;
+    text-align: center;
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.button {
+    min-width: 88px;
+    height: 38px;
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color .2s, border-color .2s, opacity .2s;
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: .6;
+}
+
+.button-primary {
+    border-color: #3478f6;
+    background: #3478f6;
+    color: #fff;
+}
+
+.button-primary:hover:not(:disabled) {
+    border-color: #2467df;
+    background: #2467df;
+}
+
+.button-secondary {
+    border-color: #d8dde6;
+    background: #fff;
+    color: #555;
+}
+
+.button-secondary:hover:not(:disabled) {
+    border-color: #3478f6;
+    color: #3478f6;
+}
+
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.metric-card {
+    position: relative;
+    display: flex;
+    min-height: 128px;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid #e4e9f1;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+
+.metric-card:hover {
+    border-color: #b9c9e5;
+    box-shadow: 0 4px 14px rgba(51, 79, 126, .09);
+    transform: translateY(-1px);
+}
+
+.metric-card:focus-visible {
+    outline: 2px solid #3478f6;
+    outline-offset: 2px;
+}
+
+.metric-card.is-active {
+    border-color: #8cb3fb;
+    box-shadow: 0 0 0 2px rgba(52, 120, 246, .12);
+}
+
+.metric-card-data.is-active {
+    border-color: #75c8b6;
+    box-shadow: 0 0 0 2px rgba(22, 160, 133, .12);
+}
+
+.metric-card-record.is-active {
+    border-color: #f7bd7a;
+    box-shadow: 0 0 0 2px rgba(243, 156, 54, .12);
+}
+
+.metric-card::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    content: "";
+}
+
+.metric-card-file::before {
+    background: #3478f6;
+}
+
+.metric-card-data::before {
+    background: #16a085;
+}
+
+.metric-card-record::before {
+    background: #f39c36;
+}
+
+.metric-icon {
+    position: relative;
+    display: flex;
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 22px 0 26px;
+    border-radius: 50%;
+}
+
+.metric-card-file .metric-icon {
+    background: #edf4ff;
+    color: #3478f6;
+}
+
+.metric-card-data .metric-icon {
+    background: #eaf8f5;
+    color: #16a085;
+}
+
+.metric-card-record .metric-icon {
+    background: #fff4e8;
+    color: #f39c36;
+}
+
+.icon-file,
+.icon-record {
+    position: relative;
+    display: block;
+    width: 27px;
+    height: 34px;
+    border: 3px solid currentColor;
+    border-radius: 2px;
+}
+
+.icon-file::after,
+.icon-record::after {
+    position: absolute;
+    right: 4px;
+    bottom: 7px;
+    left: 4px;
+    height: 3px;
+    background: currentColor;
+    box-shadow: 0 -7px 0 currentColor;
+    content: "";
+}
+
+.icon-record::before {
+    position: absolute;
+    top: -7px;
+    left: 5px;
+    width: 11px;
+    height: 6px;
+    border: 3px solid currentColor;
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+    background: #fff4e8;
+    content: "";
+}
+
+.icon-data {
+    position: relative;
+    display: block;
+    width: 34px;
+    height: 25px;
+    border-bottom: 3px solid currentColor;
+}
+
+.icon-data::before {
+    position: absolute;
+    inset: 0 1px 3px 1px;
+    background:
+        linear-gradient(140deg, transparent 0 18%, currentColor 19% 25%, transparent 26% 41%, currentColor 42% 48%, transparent 49% 63%, currentColor 64% 70%, transparent 71%);
+    content: "";
+}
+
+.metric-content {
+    min-width: 0;
+}
+
+.metric-label {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.metric-value-row {
+    display: flex;
+    align-items: baseline;
+}
+
+.metric-value {
+    overflow: hidden;
+    color: #252b36;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.metric-unit {
+    margin-left: 8px;
+    color: #888;
+    font-size: 14px;
+}
+
+.chart-section {
+    min-height: 420px;
+}
+
+.section-title {
+    display: flex;
+    height: 48px;
+    align-items: center;
+    border-bottom: 1px solid #e7ebf1;
+    padding: 0 16px;
+}
+
+.section-title-mark {
+    width: 4px;
+    height: 18px;
+    margin-right: 9px;
+    border-radius: 2px;
+    background: #3478f6;
+}
+
+.section-title h2 {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.chart-body {
+    position: relative;
+    height: 370px;
+    padding: 10px 14px 14px;
+}
+
+.trend-chart {
+    width: 100%;
+    height: 100%;
+}
+
+.chart-state {
+    position: absolute;
+    inset: 10px 14px 14px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .9);
+    color: #888;
+}
+
+.chart-state.is-hidden {
+    display: none;
+}
+
+@media (max-width: 980px) {
+    .metric-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-container {
+        padding: 8px;
+    }
+
+    .query-section {
+        padding: 14px 10px;
+    }
+
+    .form-group,
+    .date-range-group {
+        min-width: 100%;
+        flex-basis: 100%;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        margin: 0 0 7px;
+        text-align: left;
+    }
+
+    .date-range,
+    .form-group select {
+        width: 100%;
+    }
+
+    .date-range input {
+        min-width: 0;
+    }
+
+    .metric-value {
+        font-size: 28px;
+    }
+}

@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采集主页</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjzy_home.css' %}?v=2026072801">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/issubmit.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+    <script src="{% static 'lib/echarts/echarts.min.js' %}"></script>
+</head>
+<body>
+<main class="page-container">
+    <section class="query-section" aria-label="查询条件">
+        <div class="query-grid">
+            <div class="form-group date-range-group">
+                <label for="startDate">统计时间</label>
+                <div class="date-range">
+                    <input id="startDate" type="date" aria-label="开始日期">
+                    <span class="date-separator">至</span>
+                    <input id="endDate" type="date" aria-label="结束日期">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="deviceSelect">仪器设备</label>
+                <select id="deviceSelect">
+                    <option value="">全部设备</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button id="queryButton" class="button button-primary" type="button">查询</button>
+                <button id="resetButton" class="button button-secondary" type="button">重置</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="metric-grid" aria-label="采集统计汇总">
+        <article class="metric-card metric-card-file is-active" data-metric="file"
+                 role="button" tabindex="0" aria-pressed="true" aria-label="查看采集文件数量趋势">
+            <div class="metric-icon" aria-hidden="true">
+                <span class="icon-file"></span>
+            </div>
+            <div class="metric-content">
+                <div class="metric-label">采集文件数量</div>
+                <div class="metric-value-row">
+                    <strong id="fileCount" class="metric-value">--</strong>
+                    <span class="metric-unit">个</span>
+                </div>
+            </div>
+        </article>
+        <article class="metric-card metric-card-data" data-metric="data"
+                 role="button" tabindex="0" aria-pressed="false" aria-label="查看采集数据数量趋势">
+            <div class="metric-icon" aria-hidden="true">
+                <span class="icon-data"></span>
+            </div>
+            <div class="metric-content">
+                <div class="metric-label">采集数据数量</div>
+                <div class="metric-value-row">
+                    <strong id="dataCount" class="metric-value">--</strong>
+                    <span class="metric-unit">条</span>
+                </div>
+            </div>
+        </article>
+        <article class="metric-card metric-card-record" data-metric="record"
+                 role="button" tabindex="0" aria-pressed="false" aria-label="查看原始记录数量趋势">
+            <div class="metric-icon" aria-hidden="true">
+                <span class="icon-record"></span>
+            </div>
+            <div class="metric-content">
+                <div class="metric-label">原始记录数量</div>
+                <div class="metric-value-row">
+                    <strong id="recordCount" class="metric-value">--</strong>
+                    <span class="metric-unit">份</span>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <section class="chart-section">
+        <div class="section-title">
+            <span class="section-title-mark" aria-hidden="true"></span>
+            <h2 id="chartTitle">采集文件数量趋势</h2>
+        </div>
+        <div class="chart-body">
+            <div id="chartLoading" class="chart-state">正在加载...</div>
+            <div id="chartEmpty" class="chart-state is-hidden">暂无采集文件数据</div>
+            <div id="fileTrendChart" class="trend-chart" role="img" aria-label="采集文件数量趋势折线图"></div>
+        </div>
+    </section>
+</main>
+
+<script src="{% static 'ynjksys/syssjcj_cjzy_home.js' %}?v=2026072801"></script>
+</body>
+</html>
