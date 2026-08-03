@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采集文档和数据管理</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjwd_list.css' %}?v=2026080308">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/issubmit.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+</head>
+<body>
+<main class="page-container">
+    <section class="query-panel" aria-label="查询条件">
+        <div class="query-grid">
+            <div class="form-item">
+                <label for="fileName">文件名称</label>
+                <input id="fileName" type="text" maxlength="100" placeholder="请输入文件名称">
+            </div>
+            <div class="form-item">
+                <label for="deviceSelect">仪器设备</label>
+                <select id="deviceSelect"><option value="">全部设备</option></select>
+            </div>
+            <div class="form-item">
+                <label for="fileType">文件类型</label>
+                <select id="fileType">
+                    <option value="">全部</option>
+                    <option value="PDF">PDF</option>
+                    <option value="Excel">Excel</option>
+                    <option value="CSV">CSV</option>
+                    <option value="TXT">TXT</option>
+                    <option value="图像">图像</option>
+                </select>
+            </div>
+            <div class="form-item">
+                <label for="parseStatus">解析状态</label>
+                <select id="parseStatus">
+                    <option value="">全部</option>
+                    <option value="解析成功">解析成功</option>
+                    <option value="解析失败">解析失败</option>
+                </select>
+            </div>
+            <div class="form-item date-item">
+                <label for="startDate">采集时间</label>
+                <div class="date-range">
+                    <input id="startDate" type="date" aria-label="采集开始日期">
+                    <span>至</span>
+                    <input id="endDate" type="date" aria-label="采集结束日期">
+                </div>
+            </div>
+            <div class="query-actions">
+                <button id="queryButton" class="button button-primary" type="button">查询</button>
+                <button id="resetButton" class="button button-secondary" type="button">重置</button>
+                <button id="spectrumButton" class="button button-secondary" type="button">图谱查询</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="list-panel" aria-label="采集文档列表">
+        <div class="panel-title">
+            <span class="title-mark" aria-hidden="true"></span>
+            <h1>采集文档列表</h1>
+            <span id="resultSummary" class="result-summary"></span>
+        </div>
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th class="col-actions">操作</th>
+                    <th class="col-index">序号</th>
+                    <th class="col-name">文件名称</th>
+                    <th>文件类型</th>
+                    <th>仪器设备</th>
+                    <th>文件大小</th>
+                    <th>采集时间</th>
+                    <th>解析状态</th>
+                    <th>解析数据量</th>
+                </tr>
+                </thead>
+                <tbody id="documentRows"></tbody>
+            </table>
+            <div id="loadingState" class="table-state">正在加载...</div>
+            <div id="emptyState" class="table-state is-hidden">暂无符合条件的采集文档</div>
+        </div>
+        <div class="pagination">
+            <button id="previousPage" class="page-button" type="button" aria-label="上一页">‹</button>
+            <div id="pageNumbers" class="page-numbers"></div>
+            <button id="nextPage" class="page-button" type="button" aria-label="下一页">›</button>
+            <span id="pageSummary">共 0 页，10 条</span>
+            <label for="jumpPage">跳至</label>
+            <input id="jumpPage" class="jump-input" type="number" min="1" aria-label="跳转页码">
+            <span>页</span>
+        </div>
+    </section>
+</main>
+
+<div id="mockConfirm" class="dialog-mask is-hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="dialog-box">
+        <div class="dialog-header">
+            <h2 id="confirmTitle">删除确认</h2>
+            <button id="confirmClose" class="dialog-close" type="button" aria-label="关闭">×</button>
+        </div>
+        <div id="confirmMessage" class="dialog-content"></div>
+        <div class="dialog-actions">
+            <button id="confirmCancel" class="button button-secondary" type="button">取消</button>
+            <button id="confirmSubmit" class="button button-danger" type="button">确认删除</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast is-hidden" role="status" aria-live="polite"></div>
+<script src="{% static 'ynjksys/syssjcj_cjwd_list.js' %}?v=2026080308"></script>
+</body>
+</html>

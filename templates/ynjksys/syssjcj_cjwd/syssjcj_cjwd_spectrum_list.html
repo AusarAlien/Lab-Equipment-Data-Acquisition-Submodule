@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图谱查询</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjwd_spectrum_list.css' %}?v=2026080303">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+</head>
+<body>
+<main class="page-container">
+    <section class="query-panel">
+        <div class="query-grid">
+            <div class="form-item"><label for="sampleNo">样品编号</label><input id="sampleNo" type="text" maxlength="80" placeholder="请输入样品编号"></div>
+            <div class="form-item"><label for="deviceSelect">仪器设备</label><select id="deviceSelect"><option value="">全部设备</option></select></div>
+            <div class="form-item"><label for="spectrumType">图谱类型</label><select id="spectrumType"><option value="">全部</option><option>色谱图</option><option>质谱图</option><option>扩增曲线</option><option>光谱图</option></select></div>
+            <div class="form-item"><label for="projectName">检测项目</label><input id="projectName" type="text" maxlength="80" placeholder="请输入检测项目"></div>
+            <div class="form-item date-item"><label for="startDate">采集时间</label><div class="date-range"><input id="startDate" type="date" aria-label="采集开始日期"><span>至</span><input id="endDate" type="date" aria-label="采集结束日期"></div></div>
+            <div class="query-actions"><button id="queryButton" class="button button-primary" type="button">查询</button><button id="resetButton" class="button button-secondary" type="button">重置</button></div>
+        </div>
+    </section>
+    <section class="gallery-panel">
+        <div class="panel-title"><span class="title-mark"></span><h1>图谱检索结果</h1><span id="resultSummary" class="result-summary"></span></div>
+        <div id="galleryArea" class="gallery-area">
+            <div id="spectrumGallery" class="spectrum-gallery"></div>
+            <div id="loadingState" class="gallery-state">正在加载...</div>
+            <div id="emptyState" class="gallery-state is-hidden">暂无符合条件的图谱信息</div>
+        </div>
+        <div class="pagination"><button id="previousPage" class="page-button" type="button">‹</button><div id="pageNumbers" class="page-numbers"></div><button id="nextPage" class="page-button" type="button">›</button><span id="pageSummary">共 0 页，12 条</span><label for="jumpPage">跳至</label><input id="jumpPage" class="jump-input" type="number" min="1"><span>页</span></div>
+    </section>
+</main>
+<div id="imageModal" class="image-modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle">
+    <div class="image-dialog">
+        <header class="image-dialog-header"><h2 id="imageModalTitle">图谱原图</h2><button id="imageModalClose" type="button" aria-label="关闭">×</button></header>
+        <iframe id="imageModalFrame" title="图谱原图" src="about:blank"></iframe>
+    </div>
+</div>
+<div id="toast" class="toast is-hidden"></div>
+<script src="{% static 'ynjksys/syssjcj_cjwd_spectrum_list.js' %}?v=2026080303"></script>
+</body>
+</html>

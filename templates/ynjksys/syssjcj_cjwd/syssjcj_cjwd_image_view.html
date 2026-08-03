@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>图谱原图</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjwd_image_view.css' %}?v=2026080301">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+</head>
+<body>
+<main class="viewer-page">
+    <section class="spectrum-info">
+        <div class="title-block"><span class="title-mark"></span><div><h1 id="spectrumName">正在加载图谱...</h1><p id="spectrumId">--</p></div></div>
+        <div class="info-grid"><div><span>样品编号</span><strong id="sampleNo">--</strong></div><div><span>检测项目</span><strong id="project">--</strong></div><div><span>图谱类型</span><strong id="spectrumType">--</strong></div><div><span>仪器设备</span><strong id="deviceName">--</strong></div><div><span>采集时间</span><strong id="collectTime">--</strong></div><div><span>来源文件</span><strong id="sourceFile">--</strong></div></div>
+    </section>
+    <section class="image-panel">
+        <div class="toolbar"><button id="zoomOut" type="button">缩小</button><button id="zoomIn" type="button">放大</button><button id="resetView" type="button">原始大小</button><button id="fitView" class="is-active" type="button">适合窗口</button><span id="scaleText">100%</span></div>
+        <div id="imageViewport" class="image-viewport"><div id="imageCanvas" class="image-canvas"><svg id="spectrumSvg" viewBox="0 0 1200 650" role="img" aria-label="仪器图谱原图"></svg></div></div>
+    </section>
+</main>
+<div id="pageError" class="page-error is-hidden">未找到对应图谱信息</div>
+<script src="{% static 'ynjksys/syssjcj_cjwd_image_view.js' %}?v=2026080301"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采集文件详情</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjwd_detail.css' %}?v=2026080308">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/issubmit.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+</head>
+<body>
+<main class="page-container">
+    <header class="page-header">
+        <div class="header-title">
+            <span class="title-mark" aria-hidden="true"></span>
+            <div>
+                <h1 id="headerFileName">正在加载文件信息...</h1>
+                <p id="headerFileId">--</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button id="downloadButton" class="button button-secondary" type="button">下载</button>
+        </div>
+    </header>
+
+    <div id="pageLoading" class="page-state">正在加载...</div>
+    <div id="pageError" class="page-state is-hidden">
+        <p id="errorText">文件信息加载失败</p>
+        <button id="errorBackButton" class="button button-secondary" type="button">关闭</button>
+    </div>
+
+    <div id="detailContent" class="detail-content is-hidden">
+        <section class="info-panel">
+            <div class="section-title"><span></span><h2>文件基本信息</h2></div>
+            <dl class="info-grid">
+                <div><dt>文件名称</dt><dd id="fileName">--</dd></div>
+                <div><dt>文件类型</dt><dd id="fileType">--</dd></div>
+                <div><dt>文件大小</dt><dd id="fileSize">--</dd></div>
+                <div><dt>文件标识</dt><dd id="fileId">--</dd></div>
+                <div><dt>仪器设备</dt><dd id="deviceName">--</dd></div>
+                <div><dt>仪器编号</dt><dd id="instno">--</dd></div>
+                <div><dt>采集时间</dt><dd id="collectTime">--</dd></div>
+                <div><dt>采集方式</dt><dd id="collectMode">--</dd></div>
+            </dl>
+        </section>
+
+        <section class="summary-panel">
+            <div class="section-title"><span></span><h2>解析摘要</h2></div>
+            <div class="summary-grid">
+                <div class="summary-item"><span>解析状态</span><strong id="parseStatus">--</strong></div>
+                <div class="summary-item"><span>解析数据量</span><strong id="dataCount">--</strong></div>
+                <div class="summary-item"><span>最近解析时间</span><strong id="lastParseTime">--</strong></div>
+                <div class="summary-item"><span>处理接口</span><strong id="parserName">--</strong></div>
+            </div>
+            <div id="parseMessageRow" class="parse-message is-hidden">
+                <span>解析说明</span><p id="parseMessage"></p>
+            </div>
+        </section>
+
+        <section class="preview-panel">
+            <div class="preview-header">
+                <div class="section-title no-border"><span></span><h2>文件预览</h2></div>
+                <div class="preview-meta"><span id="previewType">--</span></div>
+            </div>
+            <div id="previewArea" class="preview-area">
+                <div id="excelPreview" class="preview-content is-hidden">
+                    <div class="sheet-tabs"><button class="sheet-tab is-active" type="button">检测结果</button></div>
+                    <div class="sheet-scroll">
+                        <table class="preview-table">
+                            <thead id="excelHead"></thead>
+                            <tbody id="excelRows"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="csvPreview" class="preview-content is-hidden">
+                    <div class="text-toolbar"><span id="textPreviewTitle">数据预览</span><span id="textPreviewEncoding">--</span></div>
+                    <pre id="csvText" class="csv-text"></pre>
+                </div>
+                <div id="pdfPreview" class="preview-content pdf-preview is-hidden">
+                    <div class="pdf-toolbar">
+                        <button id="pdfPrevious" type="button">‹</button>
+                        <span>第 <strong id="pdfPage">1</strong> / <strong id="pdfTotal">2</strong> 页</span>
+                        <button id="pdfNext" type="button">›</button>
+                    </div>
+                    <article id="pdfPaper" class="pdf-paper"></article>
+                </div>
+                <div id="imagePreview" class="preview-content image-preview is-hidden">
+                    <div class="image-toolbar">
+                        <button id="imageZoomOut" type="button">缩小</button>
+                        <span id="imageScale">100%</span>
+                        <button id="imageZoomIn" type="button">放大</button>
+                        <button id="imageReset" type="button">复位</button>
+                    </div>
+                    <div class="image-stage">
+                        <div id="spectrumImage" class="spectrum-image" role="img" aria-label="仪器图谱">
+                            <div class="axis axis-y"></div><div class="axis axis-x"></div>
+                            <svg viewBox="0 0 900 380" aria-hidden="true">
+                                <polyline points="30,330 75,325 110,315 140,318 170,290 205,305 242,250 275,312 310,298 345,80 375,300 420,275 455,305 490,190 520,295 555,286 590,120 620,292 665,270 700,310 742,210 775,302 820,280 870,290" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div id="unsupportedPreview" class="preview-content unsupported-preview is-hidden">
+                    <div class="file-symbol">FILE</div>
+                    <h3>该文件类型暂不支持在线预览</h3>
+                    <p>可以下载文件后使用本地程序查看。</p>
+                    <button id="unsupportedDownload" class="button button-primary" type="button">下载文件</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<div id="toast" class="toast is-hidden" role="status" aria-live="polite"></div>
+<script src="{% static 'ynjksys/syssjcj_cjwd_detail.js' %}?v=2026080308"></script>
+</body>
+</html>

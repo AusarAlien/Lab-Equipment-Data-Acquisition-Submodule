@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解析工作页</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjwd_parse_workspace.css' %}?v=2026080301">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/issubmit.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+</head>
+<body>
+<main class="page-container">
+    <section class="file-summary">
+        <div class="summary-title">
+            <span class="title-mark"></span>
+            <div><h1 id="fileName">正在加载...</h1><p id="fileId">--</p></div>
+        </div>
+        <dl class="summary-fields">
+            <div><dt>仪器设备</dt><dd id="deviceName">--</dd></div>
+            <div><dt>仪器编号</dt><dd id="instno">--</dd></div>
+            <div><dt>处理接口</dt><dd id="parserName">--</dd></div>
+            <div><dt>解析状态</dt><dd id="parseStatus">--</dd></div>
+            <div><dt>解析数据量</dt><dd id="dataCount">--</dd></div>
+            <div><dt>最近解析时间</dt><dd id="lastParseTime">--</dd></div>
+        </dl>
+        <button id="reparseButton" class="button button-primary" type="button">重新解析</button>
+    </section>
+
+    <section class="workspace-panel">
+        <nav class="tabs" aria-label="解析工作区">
+            <button class="tab-button is-active" data-tab="data" type="button">解析数据</button>
+            <button class="tab-button" data-tab="info" type="button">解析信息</button>
+        </nav>
+
+        <div id="dataTab" class="tab-panel">
+            <div class="query-bar">
+                <div class="form-item"><label for="sampleQuery">样品编号</label><input id="sampleQuery" type="text" placeholder="请输入样品编号"></div>
+                <div class="form-item"><label for="itemQuery">检测项目</label><input id="itemQuery" type="text" placeholder="请输入检测项目"></div>
+                <div class="query-actions">
+                    <button id="queryButton" class="button button-primary" type="button">查询</button>
+                    <button id="resetButton" class="button button-secondary" type="button">重置</button>
+                    <button id="deleteSelectedButton" class="button button-danger" type="button" disabled>删除选中数据</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table id="resultTable" class="data-table">
+                    <thead id="resultHead"></thead>
+                    <tbody id="resultRows"></tbody>
+                </table>
+                <div id="emptyState" class="table-state is-hidden">暂无解析数据</div>
+            </div>
+            <div class="pagination">
+                <button id="previousPage" class="page-button" type="button">‹</button>
+                <div id="pageNumbers" class="page-numbers"></div>
+                <button id="nextPage" class="page-button" type="button">›</button>
+                <span id="pageSummary">共 0 页，10 条</span>
+                <label for="jumpPage">跳至</label>
+                <input id="jumpPage" class="jump-input" type="number" min="1">
+                <span>页</span>
+            </div>
+        </div>
+
+        <div id="infoTab" class="tab-panel is-hidden">
+            <dl class="parse-info-grid">
+                <div><dt>仪器编号</dt><dd id="infoInstno">--</dd></div>
+                <div><dt>处理接口</dt><dd id="infoParser">--</dd></div>
+                <div><dt>文件类型</dt><dd id="infoFileType">--</dd></div>
+                <div><dt>样品标识</dt><dd id="infoSampleFlag">--</dd></div>
+                <div><dt>开始解析时间</dt><dd id="infoStartTime">--</dd></div>
+                <div><dt>完成时间</dt><dd id="infoEndTime">--</dd></div>
+                <div><dt>解析结果</dt><dd id="infoResult">--</dd></div>
+                <div><dt>原始数据量</dt><dd id="infoRawCount">--</dd></div>
+                <div><dt>成功入库量</dt><dd id="infoSuccessCount">--</dd></div>
+                <div><dt>跳过数据量</dt><dd id="infoSkipCount">--</dd></div>
+                <div class="wide"><dt>错误摘要</dt><dd id="infoError">--</dd></div>
+                <div class="wide"><dt>最近重新解析原因</dt><dd id="infoReason">--</dd></div>
+                <div><dt>操作人</dt><dd id="infoOperator">--</dd></div>
+            </dl>
+        </div>
+    </section>
+</main>
+
+<div id="reasonDialog" class="dialog-mask is-hidden" role="dialog" aria-modal="true" aria-labelledby="reasonTitle">
+    <div class="dialog-box">
+        <div class="dialog-header"><h2 id="reasonTitle">重新解析</h2><button id="reasonClose" type="button">×</button></div>
+        <div class="dialog-content">
+            <label for="reparseReason"><span>*</span>重新解析原因</label>
+            <textarea id="reparseReason" maxlength="200" placeholder="请输入重新解析原因"></textarea>
+            <p id="reasonError" class="field-error is-hidden">请输入重新解析原因</p>
+        </div>
+        <div class="dialog-actions"><button id="reasonCancel" class="button button-secondary" type="button">取消</button><button id="reasonSubmit" class="button button-primary" type="button">确定</button></div>
+    </div>
+</div>
+
+<div id="deleteDialog" class="dialog-mask is-hidden" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+    <div class="dialog-box dialog-small">
+        <div class="dialog-header"><h2 id="deleteTitle">删除确认</h2><button id="deleteClose" type="button">×</button></div>
+        <div class="dialog-message">确认删除选中的解析数据吗？删除后不可恢复。</div>
+        <div class="dialog-actions"><button id="deleteCancel" class="button button-secondary" type="button">取消</button><button id="deleteSubmit" class="button button-danger" type="button">确认删除</button></div>
+    </div>
+</div>
+
+<div id="processingMask" class="processing-mask is-hidden" aria-live="assertive">
+    <div class="processing-box"><span class="spinner"></span><strong>正在重新解析</strong><p>请稍候，当前页面暂不可操作</p></div>
+</div>
+<div id="toast" class="toast is-hidden" role="status" aria-live="polite"></div>
+<script src="{% static 'ynjksys/syssjcj_cjwd_parse_workspace.js' %}?v=2026080302"></script>
+</body>
+</html>
