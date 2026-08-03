@@ -1,0 +1,138 @@
+{% load static %} <!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>在线编辑模板</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'ynjksys/syssjcj_sbbg_work.css' %}?v=2026080403"
+    />
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080410"></script>
+  </head>
+  <body>
+    <main id="page" class="page template-editor-page">
+      <section class="editor-topbar card">
+        <div>
+          <strong id="templateFile">--</strong
+          ><span id="templateVersion">--</span>
+        </div>
+        <div>
+          <button id="save" class="button button-primary">保存为新版本</button
+          ><button id="download" class="button">下载模板</button>
+        </div>
+      </section>
+      <div class="template-editor-layout">
+        <aside class="card source-panel">
+          <div class="card-title"><h1>可用数据源</h1></div>
+          <div class="editor-fields">
+            <p>先在中间选择“基本信息区”或“明细表”，再点击字段插入。</p>
+            <div id="fieldList" class="source-field-list"></div>
+          </div>
+        </aside>
+        <section class="card structure-panel">
+          <div class="card-title"><h1>模板结构</h1></div>
+          <div class="section-list">
+            <button class="section-item" data-section="header">
+              <span>页眉</span><em>固定文字</em>
+            </button>
+            <button class="section-item" data-section="title">
+              <span>标题区</span><em>标题与说明</em>
+            </button>
+            <button class="section-item" data-section="basic">
+              <span>基本信息区</span><em id="basicCount">0 个字段</em>
+            </button>
+            <div id="basicFields" class="structure-fields"></div>
+            <button class="section-item" data-section="detail">
+              <span>明细表</span><em id="detailCount">0 列</em>
+            </button>
+            <div id="detailFields" class="structure-fields"></div>
+            <button class="section-item" data-section="notes">
+              <span>说明区</span><em>固定文字/占位符</em>
+            </button>
+            <button class="section-item" data-section="signature">
+              <span>签字区</span><em>检测、复核、日期</em>
+            </button>
+            <button class="section-item" data-section="footer">
+              <span>页脚</span><em>固定文字</em>
+            </button>
+          </div>
+        </section>
+        <aside class="card property-panel">
+          <div class="card-title"><h1>属性设置</h1></div>
+          <div id="noSelection" class="property-empty">
+            请选择模板区域或字段
+          </div>
+          <div id="sectionProperties" class="property-form is-hidden">
+            <div class="property-name" id="sectionPropertyTitle">区域属性</div>
+            <label
+              >是否显示<select id="sectionVisible">
+                <option value="true">显示</option>
+                <option value="false">隐藏</option>
+              </select></label
+            >
+            <label id="sectionTextWrap"
+              >区域文字<textarea id="sectionText"></textarea>
+            </label>
+            <label id="sectionDescriptionWrap" class="is-hidden"
+              >标题说明<textarea id="sectionDescription"></textarea>
+            </label>
+          </div>
+          <div id="fieldProperties" class="property-form is-hidden">
+            <div class="property-name">字段属性</div>
+            <label>字段编码<input id="fieldCode" disabled /></label
+            ><label>显示名称<input id="fieldLabel" /></label
+            ><label
+              >列宽<input
+                id="fieldWidth"
+                type="number"
+                min="60"
+                max="500"
+              /><span>px</span></label
+            ><label
+              >对齐方式<select id="fieldAlign">
+                <option value="left">左对齐</option>
+                <option value="center">居中</option>
+                <option value="right">右对齐</option>
+              </select></label
+            ><label>格式化规则<input id="fieldFormat" /></label
+            ><label
+              >是否显示<select id="fieldVisible">
+                <option value="true">显示</option>
+                <option value="false">隐藏</option>
+              </select></label
+            >
+          </div>
+        </aside>
+      </div>
+      <section class="card">
+        <div class="card-title"><h1>实时预览</h1></div>
+        <article class="paper template-preview">
+          <div id="previewHeader" class="preview-header"></div>
+          <header id="previewTitleArea">
+            <h2 id="previewTitle">原始记录</h2>
+            <div id="previewDescription"></div>
+          </header>
+          <div id="previewBasic" class="preview-basic"></div>
+          <div id="previewDetail" class="table-scroll">
+            <table>
+              <thead>
+                <tr id="previewHead"></tr>
+              </thead>
+              <tbody>
+                <tr id="previewRow"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="previewNotes" class="preview-notes"></div>
+          <div id="previewSignature" class="preview-signature"></div>
+          <div id="previewFooter" class="preview-footer"></div>
+        </article>
+      </section>
+    </main>
+    <div id="error" class="page is-hidden">未找到模板信息</div>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_sbbg_editor.js' %}?v=2026080403"></script>
+  </body>
+</html>

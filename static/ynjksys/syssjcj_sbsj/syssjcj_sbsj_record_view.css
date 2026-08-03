@@ -84,10 +84,11 @@ body {
 }
 
 .record-paper table {
-    width: 100%;
-    min-width: 980px;
+    width: max-content;
+    min-width: 100%;
     border-collapse: collapse
 }
+.template-region{white-space:pre-wrap}.template-header{text-align:center;color:#667181;padding-bottom:12px}.template-notes{padding:18px 0;border-top:1px solid #dfe5ed}.template-signature{text-align:right;padding:18px 0}.record-paper header p{white-space:pre-wrap}
 
 .record-paper th,
 .record-paper td {

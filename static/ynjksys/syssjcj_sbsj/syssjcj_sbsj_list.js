@@ -127,13 +127,19 @@
   function populateTemplates() {
     var departmentId = el("departmentSelect").value,
       deviceId = el("deviceSelect").value,
+      sampleCategory = el("sampleCategory").value,
       selected = el("templateSelect").value,
       instno = deviceId ? device(deviceId).instno : "";
     var list = templates.filter(function (item) {
       return (
         item.status === "启用" &&
         (!departmentId || item.departmentId === departmentId) &&
-        (!instno || item.deviceTypes.indexOf(instno) >= 0)
+        (!deviceId ||
+          (item.deviceIds && item.deviceIds.length
+            ? item.deviceIds.indexOf(deviceId) >= 0
+            : item.deviceTypes.indexOf(instno) >= 0)) &&
+        (!sampleCategory ||
+          (item.sampleCategories || []).indexOf(sampleCategory) >= 0)
       );
     });
     el("templateSelect").innerHTML =
@@ -676,7 +682,11 @@
       state.selected = {};
       renderData();
     };
-    el("sampleCategory").onchange = queryData;
+    el("sampleCategory").onchange = function () {
+      populateTemplates();
+      state.selected = {};
+      queryData();
+    };
     el("queryButton").onclick = queryData;
     el("resetButton").onclick = function () {
       [

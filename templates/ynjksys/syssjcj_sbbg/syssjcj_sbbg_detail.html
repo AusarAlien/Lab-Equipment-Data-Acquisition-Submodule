@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>模板详情</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sbbg_work.css' %}?v=2026080403">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080410"></script>
+</head>
+
+<body>
+    <main id="page" class="page">
+        <section class="card">
+            <div class="card-title">
+                <h1>模板基本信息</h1>
+            </div>
+            <div class="summary-grid">
+                <div><span>模板名称</span><strong id="name">--</strong></div>
+                <div><span>模板文件</span><strong id="fileName">--</strong></div>
+                <div><span>当前版本</span><strong id="version">--</strong></div>
+                <div><span>所属部门</span><strong id="department">--</strong></div>
+                <div><span>适用设备</span><strong id="devices">--</strong></div>
+                <div><span>样品类别</span><strong id="categories">--</strong></div>
+                <div><span>记录组织规则</span><strong id="rule">--</strong></div>
+                <div><span>模板状态</span><strong id="status">--</strong></div>
+                <div><span>数据源数量</span><strong id="sourceCount">--</strong></div>
+                <div><span>更新时间</span><strong id="updateTime">--</strong></div>
+                <div><span>更新人</span><strong id="updateUser">--</strong></div>
+                <div><span>引用记录数</span><strong id="recordCount">--</strong></div>
+                <div class="description"><span>模板说明</span><strong id="description">--</strong></div>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-title">
+                <h1>数据源摘要</h1>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>顺序</th>
+                            <th>数据源字段</th>
+                            <th>显示名称</th>
+                            <th>来源对象</th>
+                            <th>数据类型</th>
+                            <th>必填</th>
+                            <th>显示</th>
+                            <th>格式化规则</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows"></tbody>
+                </table>
+            </div>
+        </section>
+        <div class="page-actions"><button id="download" class="button button-primary">下载模板</button></div>
+    </main>
+    <div id="error" class="page is-hidden">未找到模板信息</div>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_sbbg_detail.js' %}?v=2026080410"></script>
+</body>
+
+</html>

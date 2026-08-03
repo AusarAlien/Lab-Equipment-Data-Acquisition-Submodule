@@ -1,7 +1,7 @@
 (function (global) {
   "use strict";
 
-  var VERSION = "20260804.3";
+  var VERSION = "20260804.4";
   var KEYS = {
     documents: "syssjcj_mock_documents_v1",
     records: "syssjcj_mock_records_v2",
@@ -328,6 +328,7 @@
       mode: "样品模式",
       departmentId: "DEPT-LH",
       deviceTypes: ["ICPMS"],
+      deviceIds: ["DEV-LH-ICPMS"],
       sampleCategories: ["ENV-WATER-DRINKING", "ENV-WATER-SURFACE", "ENV-WATER-GROUND"],
       fileName: "金属元素检测原始记录模板.xlsx",
       fileType: "Excel",
@@ -344,6 +345,7 @@
       mode: "项目模式",
       departmentId: "DEPT-LH",
       deviceTypes: ["AGILENT-1200"],
+      deviceIds: ["DEV-LH-HPLC"],
       sampleCategories: ["FOOD-GENERAL", "FOOD-BEVERAGE", "FOOD-ADDITIVE"],
       fileName: "液相色谱检测原始记录模板.xlsx",
       fileType: "Excel",
@@ -360,6 +362,7 @@
       mode: "样品模式",
       departmentId: "DEPT-JC",
       deviceTypes: ["LightCycler480"],
+      deviceIds: ["DEV-JC-PCR"],
       sampleCategories: ["BIO-THROAT-SWAB", "BIO-NASAL-SWAB", "MICRO-VIRUS"],
       fileName: "实时荧光PCR检测原始记录模板.docx",
       fileType: "Word",
@@ -376,6 +379,7 @@
       mode: "样品模式",
       departmentId: "DEPT-WSW",
       deviceTypes: ["MBY2", "ElisaTxt"],
+      deviceIds: ["DEV-WSW-MBY"],
       sampleCategories: ["BIO-SERUM", "BIO-PLASMA", "BIO-WHOLE-BLOOD"],
       fileName: "酶联免疫检测原始记录模板.xlsx",
       fileType: "Excel",
@@ -392,6 +396,7 @@
       mode: "样品模式",
       departmentId: "DEPT-JF",
       deviceTypes: ["GENEXPERT"],
+      deviceIds: ["DEV-JF-PCR"],
       sampleCategories: ["BIO-SPUTUM"],
       fileName: "结核分枝杆菌分子检测原始记录模板.docx",
       fileType: "Word",

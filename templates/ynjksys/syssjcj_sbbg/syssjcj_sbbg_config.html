@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <title>模板配置</title>
-    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sbbg_work.css' %}?v=2026080401">
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sbbg_work.css' %}?v=2026080403">
     <script src="{% static 'common/isvar.js' %}"></script>
-    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080407"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080410"></script>
 </head>
 
 <body>
@@ -26,6 +26,9 @@
                         <option>启用</option>
                         <option>停用</option>
                     </select></div>
+                <div class="form-item"><label for="department">所属部门</label><select id="department"></select></div>
+                <div class="form-item"><label>适用设备</label><div id="devicesSelect" class="tree-select"><button id="devicesTrigger" class="tree-trigger" type="button"><span>请选择适用设备</span><i>⌄</i></button><div id="devicesPanel" class="tree-panel is-hidden"><div id="devicesTree"></div></div></div></div>
+                <div class="form-item"><label>样品类别</label><div id="categoriesSelect" class="tree-select"><button id="categoriesTrigger" class="tree-trigger" type="button"><span>请选择样品类别</span><i>⌄</i></button><div id="categoriesPanel" class="tree-panel is-hidden"><div id="categoriesTree"></div></div></div></div>
                 <div class="form-item form-wide"><label for="description">模板说明</label><textarea
                         id="description"></textarea></div>
             </div>
@@ -72,7 +75,7 @@
         </div>
     </div>
     <div id="toast" class="toast is-hidden"></div>
-    <script src="{% static 'ynjksys/syssjcj_sbbg_config.js' %}?v=2026080402"></script>
+    <script src="{% static 'ynjksys/syssjcj_sbbg_config.js' %}?v=2026080411"></script>
 </body>
 
 </html>

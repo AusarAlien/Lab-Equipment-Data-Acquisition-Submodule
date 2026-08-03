@@ -33,6 +33,16 @@
       }[c];
     });
   }
+  function formatValue(value, format) {
+    var textValue = value == null ? "" : String(value), match;
+    if (!format) return textValue;
+    if (format.indexOf("yyyy-MM-dd") >= 0 && textValue.length >= 10) {
+      return format.indexOf("HH:mm:ss") >= 0 ? textValue.slice(0, 19) : textValue.slice(0, 10);
+    }
+    match = format.match(/^0\.(0+)$/);
+    if (match && textValue !== "" && !isNaN(Number(textValue))) return Number(textValue).toFixed(match[1].length);
+    return textValue;
+  }
   function closePage() {
     if (typeof global.closeModalDialog === "function") {
       global.closeModalDialog();
@@ -90,7 +100,20 @@
     text("experimentRange", range);
     text("dataCount", rows.length + " 条");
     el("recordName").value = defaultName;
-    text("paperTitle", targetTemplate.name);
+    var schema = targetTemplate.editorSchema || null;
+    text("paperTitle", schema && schema.title ? schema.title.text : targetTemplate.name);
+    text("paperDescription", schema && schema.title ? schema.title.description : targetTemplate.description || "");
+    if (schema) {
+      text("templateHeader", schema.header ? schema.header.text : "");
+      el("templateHeader").classList.toggle("is-hidden", !schema.header || !schema.header.visible);
+      el("paperTitle").parentElement.classList.toggle("is-hidden", schema.title && !schema.title.visible);
+      text("templateNotes", schema.notes ? schema.notes.text : "");
+      el("templateNotes").classList.toggle("is-hidden", !schema.notes || !schema.notes.visible);
+      text("templateSignature", schema.signature ? schema.signature.text : "");
+      el("templateSignature").classList.toggle("is-hidden", !schema.signature || !schema.signature.visible);
+      text("templateFooter", schema.footer ? schema.footer.text : "");
+      el("templateFooter").classList.toggle("is-hidden", !schema.footer || !schema.footer.visible);
+    }
     text("paperDepartment", department.name);
     text("paperDevice", targetDevice.name);
     text("paperModel", targetDevice.brand + " / " + targetDevice.model);
@@ -98,40 +121,29 @@
     text("paperTime", range);
     text("paperTemplate", targetTemplate.name);
     text("paperSampleCategory", categoryNames);
+    if (schema && schema.basic) {
+      var firstFile = find(documents, "fdiseq", rows[0].fdiseq) || {}, basicValue = function(field){ if(field==="deviceName")return targetDevice.name;if(field==="fileName")return firstFile.fileName;if(field==="collectTime")return firstFile.collectTime;if(field==="experimentTime")return range;return rows[0][field]; };
+      el("paperMeta").classList.toggle("is-hidden", !schema.basic.visible);
+      el("paperMeta").innerHTML = schema.basic.visible ? schema.basic.fields.filter(function(field){return field.visible}).map(function(field){var value=formatValue(basicValue(field.field),field.format);return '<div title="'+escapeHtml(value)+'">'+escapeHtml(field.label)+'：<strong>'+escapeHtml(value)+'</strong></div>'}).join("") : "";
+    }
+    var defaultDetailFields = [
+          { field: "sampleNo", label: "样品编号" },
+          { field: "sampleCategoryName", label: "样品类别" },
+          { field: "sampleName", label: "样品名称" },
+          { field: "projectName", label: "检测项目" },
+          { field: "result", label: "检测结果" },
+          { field: "unit", label: "单位" },
+          { field: "fileName", label: "数据来源" },
+        ];
+    var detailFields = schema && schema.detail
+      ? (schema.detail.visible ? schema.detail.fields.filter(function (field) { return field.visible; }) : [])
+      : defaultDetailFields;
+    el("previewHead").innerHTML = '<th>序号</th>' + detailFields.map(function (field) { return '<th title="' + escapeHtml(field.label) + '" style="width:'+escapeHtml(field.width||150)+'px;text-align:'+escapeHtml(field.align||"left")+'">' + escapeHtml(field.label) + '</th>'; }).join("");
+    function fieldValue(row, file, field) { if (field === "fileName") return file.fileName; if (field === "collectTime") return file.collectTime; if (field === "deviceName") return targetDevice.name; return row[field]; }
     el("previewRows").innerHTML = rows
       .map(function (row, index) {
         var file = find(documents, "fdiseq", row.fdiseq) || {};
-        return (
-          "<tr><td>" +
-          (index + 1) +
-          '</td><td title="' +
-          escapeHtml(row.sampleNo) +
-          '">' +
-          escapeHtml(row.sampleNo) +
-          '</td><td title="' +
-          escapeHtml(row.sampleCategoryName) +
-          '">' +
-          escapeHtml(row.sampleCategoryName) +
-          '</td><td title="' +
-          escapeHtml(row.sampleName) +
-          '">' +
-          escapeHtml(row.sampleName) +
-          '</td><td title="' +
-          escapeHtml(row.projectName) +
-          '">' +
-          escapeHtml(row.projectName) +
-          '</td><td title="' +
-          escapeHtml(row.result) +
-          '">' +
-          escapeHtml(row.result) +
-          "</td><td>" +
-          escapeHtml(row.unit) +
-          '</td><td title="' +
-          escapeHtml(file.fileName) +
-          '">' +
-          escapeHtml(file.fileName) +
-          "</td></tr>"
-        );
+        return "<tr><td>" + (index + 1) + "</td>" + detailFields.map(function (field) { var value = formatValue(fieldValue(row, file, field.field),field.format); return '<td title="' + escapeHtml(value) + '" style="width:'+escapeHtml(field.width||150)+'px;text-align:' + escapeHtml(field.align || "left") + '">' + escapeHtml(value) + '</td>'; }).join("") + "</tr>";
       })
       .join("");
   }
@@ -154,6 +166,8 @@
           recordId: "REC" + Date.now(),
           name: name,
           templateId: targetTemplate.templateId,
+          templateVersion: targetTemplate.version,
+          editorSchema: targetTemplate.editorSchema || null,
           mode: context.mode,
           departmentId: targetDevice.departmentId,
           deviceId: targetDevice.deviceId,

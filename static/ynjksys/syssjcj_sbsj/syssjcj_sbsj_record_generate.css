@@ -230,6 +230,7 @@ body {
 .is-hidden {
     display: none !important
 }
+.template-region{white-space:pre-wrap}.template-header{text-align:center;color:#667181;padding:0 0 12px}.template-description{text-align:center;color:#667181;margin-top:7px}.template-notes{padding:18px 0;border-top:1px solid #e1e6ed}.template-signature{text-align:right;padding:18px 0}.record-paper table{width:max-content;min-width:100%}
 
 @media(max-width:1000px) {
     .config-grid {
