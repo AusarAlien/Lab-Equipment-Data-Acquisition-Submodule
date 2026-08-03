@@ -4,7 +4,7 @@
     var PAGE_CONFIG = {
         mockMode: true,
         defaultDbnm: 'ynjk',
-        storageKey: 'syssjcj_cjwd_mock_documents_v4',
+        storageKey: global.SyssjcjMockData ? global.SyssjcjMockData.keys.documents : 'syssjcj_cjwd_mock_documents_v4',
         qids: { documentDetail: '' } // TODO 后续配置文件详情查询 qid
     };
     var fallbackDocument = {
@@ -102,6 +102,10 @@
         return documentItem;
     }
     function mockLoadDetail(fdiseq) {
+        if (global.SyssjcjMockData) {
+            var linked = global.SyssjcjMockData.getDocument(fdiseq);
+            return Promise.resolve(linked ? enrichDocument(linked) : null);
+        }
         var documents = [];
         try { documents = JSON.parse(global.sessionStorage.getItem(PAGE_CONFIG.storageKey) || '[]'); }
         catch (error) { console.warn('模拟文件信息读取失败：', error); }
