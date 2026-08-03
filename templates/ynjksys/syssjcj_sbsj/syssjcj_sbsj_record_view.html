@@ -1,0 +1,68 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>查阅原始记录</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'ynjksys/syssjcj_sbsj_record_view.css' %}?v=2026080401"
+    />
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080404"></script>
+  </head>
+
+  <body>
+    <main id="recordPage" class="page-container">
+      <section class="summary-panel">
+        <div><span>记录编号</span><strong id="recordId">--</strong></div>
+        <div>
+          <span>原始记录模板</span><strong id="templateName">--</strong>
+        </div>
+        <div><span>生成时间</span><strong id="createTime">--</strong></div>
+        <div><span>生成人</span><strong id="creator">--</strong></div>
+      </section>
+      <article class="record-paper">
+        <header>
+          <h1 id="recordTitle">原始记录</h1>
+          <p>实验室设备采集数据标准原始记录</p>
+        </header>
+        <div class="paper-meta">
+          <div>所属部门：<strong id="departmentName">--</strong></div>
+          <div>仪器设备：<strong id="deviceName">--</strong></div>
+          <div>品牌型号：<strong id="deviceModel">--</strong></div>
+          <div>固定资产编号：<strong id="assetNo">--</strong></div>
+          <div>记录生成方式：<strong id="recordMode">--</strong></div>
+          <div>样品类别：<strong id="sampleCategoryName">--</strong></div>
+          <div>实验时间：<strong id="experimentRange">--</strong></div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>样品编号</th>
+                <th>样品类别</th>
+                <th>样品名称</th>
+                <th>检测项目</th>
+                <th>检测结果</th>
+                <th>单位</th>
+                <th>来源文件</th>
+                <th>采集时间</th>
+              </tr>
+            </thead>
+            <tbody id="recordDataRows"></tbody>
+          </table>
+        </div>
+        <footer>
+          <span id="footerCreator">记录生成：--</span
+          ><span id="footerTime">生成时间：--</span><span>复核：________</span>
+        </footer>
+      </article>
+    </main>
+    <div id="pageError" class="page-error is-hidden">未找到对应的原始记录</div>
+    <script src="{% static 'ynjksys/syssjcj_sbsj_record_view.js' %}?v=2026080404"></script>
+  </body>
+</html>

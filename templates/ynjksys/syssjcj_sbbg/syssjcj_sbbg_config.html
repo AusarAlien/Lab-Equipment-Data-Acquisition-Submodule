@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>模板配置</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sbbg_work.css' %}?v=2026080401">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080407"></script>
+</head>
+
+<body>
+    <main id="page" class="page">
+        <section class="card">
+            <div class="card-title">
+                <h1>模板基本配置</h1>
+            </div>
+            <div class="form-grid">
+                <div class="form-item"><label for="name">模板名称</label><input id="name"></div>
+                <div class="form-item"><label for="rule">组织规则</label><select id="rule">
+                        <option value="样品模式">按单一样品生成</option>
+                        <option value="项目模式">按检测项目生成</option>
+                    </select></div>
+                <div class="form-item"><label for="status">模板状态</label><select id="status">
+                        <option>启用</option>
+                        <option>停用</option>
+                    </select></div>
+                <div class="form-item form-wide"><label for="description">模板说明</label><textarea
+                        id="description"></textarea></div>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-title">
+                <h1>数据源配置与顺序管理</h1>
+            </div>
+            <div class="toolbar"><button id="addSource" class="button">添加数据源</button><button id="restore"
+                    class="button">恢复默认</button></div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-action">操作</th>
+                            <th>顺序</th>
+                            <th>字段编码</th>
+                            <th>显示名称</th>
+                            <th>来源对象</th>
+                            <th>数据类型</th>
+                            <th>必填</th>
+                            <th>显示</th>
+                            <th>格式化规则</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows"></tbody>
+                </table>
+            </div>
+        </section>
+        <div class="page-actions"><button id="save" class="button button-primary">保存配置</button></div>
+    </main>
+    <div id="error" class="page is-hidden">未找到模板信息</div>
+    <div id="sourceModal" class="modal-mask is-hidden">
+        <div class="modal-box"><header><h2 id="sourceModalTitle">编辑数据源</h2><button id="sourceClose">×</button></header>
+            <div class="modal-content"><div class="form-grid">
+                <div class="form-item"><label for="sourceField">字段编码</label><input id="sourceField"></div>
+                <div class="form-item"><label for="sourceName">显示名称</label><input id="sourceName"></div>
+                <div class="form-item"><label for="sourceObject">来源对象</label><select id="sourceObject"><option>解析数据</option><option>采集文件</option><option>仪器设备</option></select></div>
+                <div class="form-item"><label for="sourceType">数据类型</label><select id="sourceType"><option>文本</option><option>数值/文本</option><option>日期时间</option></select></div>
+                <div class="form-item"><label for="sourceRequired">是否必填</label><select id="sourceRequired"><option value="false">否</option><option value="true">是</option></select></div>
+                <div class="form-item"><label for="sourceVisible">是否显示</label><select id="sourceVisible"><option value="true">是</option><option value="false">否</option></select></div>
+                <div class="form-item form-wide"><label for="sourceFormat">格式化规则</label><input id="sourceFormat" placeholder="例如 yyyy-MM-dd HH:mm:ss"></div>
+            </div></div><footer><button id="sourceSave" class="button button-primary">保存</button><button id="sourceCancel" class="button">取消</button></footer>
+        </div>
+    </div>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_sbbg_config.js' %}?v=2026080402"></script>
+</body>
+
+</html>

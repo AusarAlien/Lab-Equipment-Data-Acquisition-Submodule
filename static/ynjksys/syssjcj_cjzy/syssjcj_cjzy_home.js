@@ -79,6 +79,7 @@
             ['2026-07-28', 'AAS-04', 19, 1025, 6]
         ]
     };
+    if (global.SyssjcjMockData) { mockDatabase = global.SyssjcjMockData.getDashboardData(); }
 
     var trendChart = null;
     var activeMetric = 'file';
@@ -104,7 +105,7 @@
     }
 
     function setDefaultDateRange() {
-        var end = new Date(2026, 6, 28);
+        var end = new Date(2026, 7, 3);
         var start = new Date(end.getFullYear(), end.getMonth(), end.getDate() - 6);
         element('startDate').value = formatDate(start);
         element('endDate').value = formatDate(end);

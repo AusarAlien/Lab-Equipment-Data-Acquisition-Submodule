@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>设备报告管理</title>
+<link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sbbg_list.css' %}?v=2026080401">
+<script src="{% static 'common/isvar.js' %}"></script><script src="{% static 'common/isloadpage.js' %}"></script><script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080407"></script></head>
+<body><main class="page-container"><section class="query-panel"><div class="query-grid">
+<div class="form-item"><label for="templateName">模板名称</label><input id="templateName" placeholder="请输入模板名称"></div>
+<div class="form-item"><label for="departmentSelect">所属部门</label><select id="departmentSelect"><option value="">全部部门</option></select></div>
+<div class="form-item"><label for="deviceSelect">适用设备</label><select id="deviceSelect"><option value="">全部设备</option></select></div>
+<div class="form-item"><label for="sampleCategory">样品类别</label><select id="sampleCategory"><option value="">全部类别</option><option value="ENV-WATER-DRINKING">生活饮用水</option><option value="FOOD-BEVERAGE">饮料</option><option value="BIO-SERUM">血清</option><option value="BIO-THROAT-SWAB">咽拭子</option><option value="BIO-SPUTUM">痰液</option></select></div>
+<div class="form-item"><label for="statusSelect">模板状态</label><select id="statusSelect"><option value="">全部</option><option>启用</option><option>停用</option></select></div>
+<div class="form-item date-item"><label for="updateStart">更新时间</label><div class="date-range"><input id="updateStart" type="date"><span>至</span><input id="updateEnd" type="date"></div></div>
+<div class="query-actions"><button id="queryButton" class="button button-primary">查询</button><button id="resetButton" class="button">重置</button></div></div></section>
+<section class="list-panel"><div class="panel-title"><span class="title-mark"></span><h1>原始记录模板</h1><span id="resultSummary"></span><div class="panel-actions"><button id="uploadButton" class="button button-primary">上传模板</button></div></div>
+<div class="table-scroll"><table><thead><tr><th class="col-actions">操作</th><th>序号</th><th>模板名称</th><th>模板文件</th><th>版本</th><th>所属部门</th><th>适用设备</th><th>适用样品类别</th><th>记录组织规则</th><th>数据源数量</th><th>状态</th><th>更新时间</th><th>更新人</th></tr></thead><tbody id="templateRows"></tbody></table><div id="emptyState" class="empty is-hidden">暂无符合条件的模板</div></div>
+<div class="pagination"><button id="previous">‹</button><div id="pages"></div><button id="next">›</button><span id="pageSummary">共 0 页，10 条</span><label for="jump">跳至</label><input id="jump" type="number" min="1"><span>页</span></div></section></main>
+<div id="uploadModal" class="modal-mask is-hidden"><div class="modal-box"><header><h2>上传原始记录模板</h2><button id="uploadClose" aria-label="关闭">×</button></header><div class="modal-body"><div class="form-grid">
+<div class="form-item form-wide"><label for="uploadName"><i>*</i>模板名称</label><input id="uploadName" maxlength="100"></div>
+<div class="form-item form-wide"><label for="uploadFile"><i>*</i>模板文件</label><input id="uploadFile" type="file" accept=".xlsx,.xls,.docx,.doc"></div>
+<div class="form-item"><label for="uploadDepartment"><i>*</i>所属部门</label><select id="uploadDepartment"><option value="">请选择</option></select></div>
+<div class="form-item"><label for="uploadDevice"><i>*</i>适用设备</label><select id="uploadDevice"><option value="">请选择</option></select></div>
+<div class="form-item"><label for="uploadCategory"><i>*</i>样品类别</label><select id="uploadCategory"><option value="">请选择</option><option value="ENV-WATER-DRINKING">生活饮用水</option><option value="FOOD-BEVERAGE">饮料</option><option value="BIO-SERUM">血清</option><option value="BIO-THROAT-SWAB">咽拭子</option><option value="BIO-SPUTUM">痰液</option></select></div>
+<div class="form-item"><label for="uploadRule"><i>*</i>组织规则</label><select id="uploadRule"><option value="样品模式">按单一样品生成</option><option value="项目模式">按检测项目生成</option></select></div>
+<div class="form-item form-wide"><label for="uploadDescription">模板说明</label><textarea id="uploadDescription" maxlength="300"></textarea></div></div></div><footer><button id="uploadSave" class="button button-primary">保存</button><button id="uploadCancel" class="button">取消</button></footer></div></div>
+<div id="toast" class="toast is-hidden"></div><script src="{% static 'ynjksys/syssjcj_sbbg_list.js' %}?v=2026080401"></script></body></html>

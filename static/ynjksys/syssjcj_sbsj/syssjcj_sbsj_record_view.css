@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    color: #303133;
+    background: #f4f7fb
+}
+
+.page-container {
+    padding: 16px
+}
+
+.summary-panel {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    background: #fff;
+    border: 1px solid #dfe5ef;
+    padding: 18px 22px;
+    margin-bottom: 14px
+}
+
+.summary-panel div {
+    min-width: 0
+}
+
+.summary-panel span {
+    display: block;
+    color: #7a8595;
+    font-size: 14px;
+    margin-bottom: 6px
+}
+
+.summary-panel strong {
+    display: block;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.record-paper {
+    width: min(1160px, 100%);
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #bfc8d4;
+    padding: 34px 38px;
+    box-shadow: 0 2px 9px rgba(33, 48, 70, .08)
+}
+
+.record-paper header {
+    text-align: center;
+    margin-bottom: 24px
+}
+
+.record-paper h1 {
+    font-size: 27px;
+    margin: 0 0 7px
+}
+
+.record-paper header p {
+    margin: 0;
+    color: #6e798a
+}
+
+.paper-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 13px 34px;
+    margin-bottom: 20px
+}
+
+.paper-meta strong {
+    font-weight: 400
+}
+
+.table-scroll {
+    overflow: auto
+}
+
+.record-paper table {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse
+}
+
+.record-paper th,
+.record-paper td {
+    height: 46px;
+    border: 1px solid #8f99a6;
+    padding: 8px 10px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px
+}
+
+.record-paper th {
+    background: #f2f5f8
+}
+
+.record-paper footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px
+}
+
+.page-error {
+    padding: 120px;
+    text-align: center;
+    color: #8993a4
+}
+
+.is-hidden {
+    display: none !important
+}
+
+@media(max-width:900px) {
+    .summary-panel {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
