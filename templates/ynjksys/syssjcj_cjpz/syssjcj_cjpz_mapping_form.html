@@ -1,0 +1,63 @@
+{% load static %}<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>项目对照维护</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'ynjksys/syssjcj_cjpz_modal.css' %}?v=2026080401"
+    />
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080413"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_service.js' %}?v=2026080401"></script>
+  </head>
+  <body>
+    <main class="modal-page">
+      <section class="card">
+        <div class="card-title"><h1>项目对照信息</h1></div>
+        <div class="card-body form-grid">
+          <div class="form-item">
+            <label class="required">所属实验室</label
+            ><select id="departmentId"></select>
+          </div>
+          <div class="form-item">
+            <label class="required">仪器设备</label
+            ><select id="deviceId"></select>
+          </div>
+          <div class="form-item">
+            <label class="required">仪器项目编码</label
+            ><input id="sourceCode" />
+          </div>
+          <div class="form-item">
+            <label class="required">仪器项目名称</label
+            ><input id="sourceName" />
+          </div>
+          <div class="form-item">
+            <label class="required">标准项目编码</label
+            ><input id="standardCode" />
+          </div>
+          <div class="form-item">
+            <label class="required">标准项目名称</label
+            ><input id="standardName" />
+          </div>
+          <div class="form-item">
+            <label>默认单位</label><input id="unit" />
+          </div>
+          <div class="form-item">
+            <label>对照状态</label
+            ><select id="status">
+              <option>启用</option>
+              <option>停用</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      <footer id="footer" class="toolbar">
+        <button id="save" class="button button-primary">保存</button>
+      </footer>
+    </main>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_mapping_form.js' %}?v=2026080401"></script>
+  </body>
+</html>

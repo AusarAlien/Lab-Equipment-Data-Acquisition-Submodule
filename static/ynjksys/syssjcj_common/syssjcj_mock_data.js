@@ -1,13 +1,21 @@
 (function (global) {
   "use strict";
 
-  var VERSION = "20260804.4";
+  var VERSION = "20260804.7";
   var KEYS = {
     documents: "syssjcj_mock_documents_v1",
     records: "syssjcj_mock_records_v2",
     templates: "syssjcj_mock_templates_v1",
     selectedSpectrum: "syssjcj_mock_selected_spectrum_v1",
     generationContext: "syssjcj_mock_generation_context_v1",
+    clients: "syssjcj_mock_clients_v1",
+    clientLogs: "syssjcj_mock_client_logs_v2",
+    strategyLogs: "syssjcj_mock_strategy_logs_v1",
+    collectionStrategies: "syssjcj_mock_collection_strategies_v1",
+    strategyScripts: "syssjcj_mock_strategy_scripts_v1",
+    scriptDebugRecords: "syssjcj_mock_script_debug_records_v1",
+    projectMappings: "syssjcj_mock_project_mappings_v1",
+    configDataSources: "syssjcj_mock_config_data_sources_v1",
   };
   var departments = [
     { departmentId: "DEPT-LH", name: "检验中心理化室" },
@@ -628,6 +636,174 @@
       series: [2, 2, 3, 5, 12, 31, 68, 94],
     },
   ];
+  var clients = [
+    {
+      clientId: "LL-Agilent1200-01",
+      deviceId: "DEV-LH-HPLC",
+      labId: "YNCDC-LL",
+      clientType: "go",
+      clientVersion: "1.0.0",
+      osInfo: "Windows 7 32位",
+      installTime: "2026-08-01 08:20:16",
+      lastHeartbeat: "2026-08-04 10:35:42",
+      reportedStatus: "running",
+      runningMode: "http",
+      uploadSuccess: 186,
+      uploadFail: 3,
+      uptimeSec: 35642,
+      heartbeatInterval: 60,
+    },
+    {
+      clientId: "LW-NewAutofex-01",
+      deviceId: "DEV-WSW-MALDI",
+      labId: "YNCDC-LW",
+      clientType: "go",
+      clientVersion: "1.0.0",
+      osInfo: "Windows 7 32位",
+      installTime: "2026-08-01 09:10:08",
+      lastHeartbeat: "2026-08-04 10:34:58",
+      reportedStatus: "running",
+      runningMode: "http",
+      uploadSuccess: 94,
+      uploadFail: 1,
+      uptimeSec: 34191,
+      heartbeatInterval: 60,
+    },
+    {
+      clientId: "LL-IcaptqICPMS-01",
+      deviceId: "DEV-LH-ICPMS",
+      labId: "YNCDC-LL",
+      clientType: "python",
+      clientVersion: "2.0.0",
+      osInfo: "Windows 10 64位",
+      installTime: "2026-08-02 08:16:31",
+      lastHeartbeat: "2026-08-04 10:36:03",
+      reportedStatus: "running",
+      runningMode: "http",
+      uploadSuccess: 128,
+      uploadFail: 2,
+      uptimeSec: 31972,
+      heartbeatInterval: 60,
+    },
+    {
+      clientId: "JC-CFX96deep-01",
+      deviceId: "DEV-JC-PCR",
+      labId: "YNCDC-JC",
+      clientType: "python",
+      clientVersion: "2.0.0",
+      osInfo: "Windows 11 64位",
+      installTime: "2026-08-02 11:08:45",
+      lastHeartbeat: "2026-08-04 10:31:18",
+      reportedStatus: "stopped",
+      runningMode: "http",
+      uploadSuccess: 72,
+      uploadFail: 0,
+      uptimeSec: 28164,
+      heartbeatInterval: 60,
+    },
+    {
+      clientId: "LL-Agilent7890A-01",
+      deviceId: "DEV-LH-GC",
+      labId: "YNCDC-LL",
+      clientType: "python",
+      clientVersion: "2.0.0",
+      osInfo: "Windows 10 64位",
+      installTime: "2026-08-03 07:56:22",
+      lastHeartbeat: "2026-08-04 09:48:11",
+      reportedStatus: "running",
+      runningMode: "http",
+      uploadSuccess: 51,
+      uploadFail: 4,
+      uptimeSec: 17706,
+      heartbeatInterval: 60,
+    },
+  ];
+  var heartbeatLogs = [
+    ["LL-Agilent1200-01", "2026-08-04 10:31:42", "running", 181, 3, 35402],
+    ["LL-Agilent1200-01", "2026-08-04 10:32:42", "running", 183, 3, 35462],
+    ["LL-Agilent1200-01", "2026-08-04 10:33:42", "running", 184, 3, 35522],
+    ["LL-Agilent1200-01", "2026-08-04 10:34:42", "running", 185, 3, 35582],
+    ["LL-Agilent1200-01", "2026-08-04 10:35:42", "running", 186, 3, 35642],
+    ["LW-NewAutofex-01", "2026-08-04 10:30:58", "running", 91, 1, 33951],
+    ["LW-NewAutofex-01", "2026-08-04 10:31:58", "running", 92, 1, 34011],
+    ["LW-NewAutofex-01", "2026-08-04 10:32:58", "running", 93, 1, 34071],
+    ["LW-NewAutofex-01", "2026-08-04 10:33:58", "running", 93, 1, 34131],
+    ["LW-NewAutofex-01", "2026-08-04 10:34:58", "running", 94, 1, 34191],
+    ["LL-IcaptqICPMS-01", "2026-08-04 10:32:03", "running", 124, 2, 31732],
+    ["LL-IcaptqICPMS-01", "2026-08-04 10:33:03", "running", 125, 2, 31792],
+    ["LL-IcaptqICPMS-01", "2026-08-04 10:34:03", "running", 126, 2, 31852],
+    ["LL-IcaptqICPMS-01", "2026-08-04 10:35:03", "running", 127, 2, 31912],
+    ["LL-IcaptqICPMS-01", "2026-08-04 10:36:03", "running", 128, 2, 31972],
+    ["JC-CFX96deep-01", "2026-08-04 10:27:18", "running", 70, 0, 27924],
+    ["JC-CFX96deep-01", "2026-08-04 10:28:18", "running", 71, 0, 27984],
+    ["JC-CFX96deep-01", "2026-08-04 10:29:18", "running", 72, 0, 28044],
+    ["JC-CFX96deep-01", "2026-08-04 10:30:18", "running", 72, 0, 28104],
+    ["JC-CFX96deep-01", "2026-08-04 10:31:18", "stopped", 72, 0, 28164],
+    ["LL-Agilent7890A-01", "2026-08-04 09:44:11", "running", 49, 3, 17466],
+    ["LL-Agilent7890A-01", "2026-08-04 09:45:11", "running", 50, 3, 17526],
+    ["LL-Agilent7890A-01", "2026-08-04 09:46:11", "running", 50, 4, 17586],
+    ["LL-Agilent7890A-01", "2026-08-04 09:47:11", "running", 51, 4, 17646],
+    ["LL-Agilent7890A-01", "2026-08-04 09:48:11", "running", 51, 4, 17706],
+  ];
+  var clientLogs = [
+    { logId: "LOG202608040016", clientId: "LL-IcaptqICPMS-01", deviceId: "DEV-LH-ICPMS", eventTime: "2026-08-04 10:35:51", receiveTime: "2026-08-04 10:35:52", logType: "文件上传", level: "INFO", result: "成功", fileName: "ICPMS_金属元素批量检测结果.xlsx", fileSize: 284672, requestGuid: "REQ-ICPMS-0804-0016", fdiseq: "CJ202608030001", message: "成功读取文件：D:\\仪器数据\\ICPMS\\ICPMS_金属元素批量检测结果.xlsx", detail: "[2026-08-04 10:35:51] 成功读取文件：D:\\仪器数据\\ICPMS\\ICPMS_金属元素批量检测结果.xlsx" },
+    { logId: "LOG202608040015", clientId: "LL-Agilent1200-01", deviceId: "DEV-LH-HPLC", eventTime: "2026-08-04 10:34:26", receiveTime: "2026-08-04 10:34:27", logType: "文件上传", level: "INFO", result: "成功", fileName: "HPLC_食品添加剂检测报告.pdf", fileSize: 1857634, requestGuid: "REQ-HPLC-0804-0015", fdiseq: "CJ202608030002", message: "成功: HPLC_食品添加剂检测报告.pdf", detail: "[2026-08-04 10:34:26] 成功: HPLC_食品添加剂检测报告.pdf" },
+    { logId: "LOG202608040014", clientId: "LW-NewAutofex-01", deviceId: "DEV-WSW-MALDI", eventTime: "2026-08-04 10:33:08", receiveTime: "2026-08-04 10:33:09", logType: "运行状态", level: "INFO", result: "提示", fileName: "", fileSize: 0, requestGuid: "", fdiseq: "", message: "监听运行中 | 目录 12 个文件 | 上传 1 跳过 11 失败 0", detail: "监听运行中 | 目录 12 个文件 | 上传 1 跳过 11 失败 0" },
+    { logId: "LOG202608040013", clientId: "LL-Agilent7890A-01", deviceId: "DEV-LH-GC", eventTime: "2026-08-04 09:48:10", receiveTime: "2026-08-04 09:48:11", logType: "文件上传", level: "ERROR", result: "失败", fileName: "GCMS_室内空气检测.csv", fileSize: 276378, requestGuid: "REQ-GC-0804-0013", fdiseq: "", message: "失败: GCMS_室内空气检测.csv - 服务器返回失败", detail: "响应：{\"result\":\"error\",\"params\":{},\"errors\":{}}" },
+    { logId: "LOG202608040012", clientId: "JC-CFX96deep-01", deviceId: "DEV-JC-PCR", eventTime: "2026-08-04 10:31:18", receiveTime: "2026-08-04 10:31:19", logType: "监听停止", level: "INFO", result: "提示", fileName: "", fileSize: 0, requestGuid: "", fdiseq: "", message: "[HTTP] 监听已停止", detail: "stopped" },
+    { logId: "LOG202608040011", clientId: "LL-Agilent1200-01", deviceId: "DEV-LH-HPLC", eventTime: "2026-08-04 09:56:42", receiveTime: "2026-08-04 09:56:43", logType: "运行状态", level: "INFO", result: "提示", fileName: "", fileSize: 0, requestGuid: "", fdiseq: "", message: "监听运行中 | 目录 8 个文件 | 上传 0 跳过 8 失败 0", detail: "监听运行中 | 目录 8 个文件 | 上传 0 跳过 8 失败 0" },
+    { logId: "LOG202608040010", clientId: "LL-IcaptqICPMS-01", deviceId: "DEV-LH-ICPMS", eventTime: "2026-08-04 09:32:17", receiveTime: "2026-08-04 09:32:18", logType: "文件上传", level: "ERROR", result: "失败", fileName: "ICPMS_质控样检测结果.xlsx", fileSize: 238624, requestGuid: "REQ-ICPMS-0804-0010", fdiseq: "", message: "读取文件失败：服务器返回异常", detail: "[2026-08-04 09:32:17] 读取文件：D:\\仪器数据\\ICPMS\\ICPMS_质控样检测结果.xlsx  失败！服务器返回异常 | {\"result\":\"error\",\"params\":{},\"errors\":{}}" },
+    { logId: "LOG202608040009", clientId: "LW-NewAutofex-01", deviceId: "DEV-WSW-MALDI", eventTime: "2026-08-04 09:20:51", receiveTime: "2026-08-04 09:20:52", logType: "文件上传", level: "INFO", result: "成功", fileName: "Microflex_菌种鉴定结果.pdf", fileSize: 2279618, requestGuid: "REQ-MALDI-0804-0009", fdiseq: "CJ202608020004", message: "成功: Microflex_菌种鉴定结果.pdf", detail: "[2026-08-04 09:20:51] 成功: Microflex_菌种鉴定结果.pdf" },
+    { logId: "LOG202608040008", clientId: "JC-CFX96deep-01", deviceId: "DEV-JC-PCR", eventTime: "2026-08-04 08:58:13", receiveTime: "2026-08-04 08:58:14", logType: "文件上传", level: "INFO", result: "成功", fileName: "CFX96_呼吸道病毒检测结果.xlsx", fileSize: 956278, requestGuid: "REQ-PCR-0804-0008", fdiseq: "CJ202608020005", message: "成功读取文件：D:\\仪器数据\\CFX96\\CFX96_呼吸道病毒检测结果.xlsx", detail: "[2026-08-04 08:58:13] 成功读取文件：D:\\仪器数据\\CFX96\\CFX96_呼吸道病毒检测结果.xlsx" },
+    { logId: "LOG202608040007", clientId: "LL-Agilent1200-01", deviceId: "DEV-LH-HPLC", eventTime: "2026-08-04 08:42:09", receiveTime: "2026-08-04 08:42:10", logType: "客户端启动", level: "INFO", result: "提示", fileName: "", fileSize: 0, requestGuid: "", fdiseq: "", message: "==== instrument monitor (Go) started ====", detail: "config dir: D:\\instrument-monitor\\Agilent1200 | tray ready" },
+    { logId: "LOG202608030006", clientId: "LL-IcaptqICPMS-01", deviceId: "DEV-LH-ICPMS", eventTime: "2026-08-03 16:25:41", receiveTime: "2026-08-03 16:25:42", logType: "运行状态", level: "INFO", result: "提示", fileName: "", fileSize: 0, requestGuid: "", fdiseq: "", message: "监听运行中 | 目录 18 个文件 | 已追踪 18 个", detail: "监听运行中 | 目录 18 个文件 | 已追踪 18 个" },
+    { logId: "LOG202608030005", clientId: "LL-Agilent7890A-01", deviceId: "DEV-LH-GC", eventTime: "2026-08-03 15:51:24", receiveTime: "2026-08-03 15:51:25", logType: "文件上传", level: "INFO", result: "成功", fileName: "GCMS_农残检测批次20260803.csv", fileSize: 452812, requestGuid: "REQ-GC-0803-0005", fdiseq: "CJ202608020006", message: "成功读取文件：D:\\仪器数据\\GCMS\\GCMS_农残检测批次20260803.csv", detail: "[2026-08-03 15:51:24] 成功读取文件：D:\\仪器数据\\GCMS\\GCMS_农残检测批次20260803.csv" },
+    { logId: "LOG202608030004", clientId: "LW-NewAutofex-01", deviceId: "DEV-WSW-MALDI", eventTime: "2026-08-03 14:12:36", receiveTime: "2026-08-03 14:12:37", logType: "监听启动", level: "INFO", result: "提示", fileName: "", fileSize: 0, requestGuid: "", fdiseq: "", message: "开始监听目录: D:\\仪器数据\\NewAutoflex (间隔 20s)", detail: "[HTTP] 开始监听目录: D:\\仪器数据\\NewAutoflex (间隔 20s)" },
+    { logId: "LOG202608030003", clientId: "JC-CFX96deep-01", deviceId: "DEV-JC-PCR", eventTime: "2026-08-03 11:38:05", receiveTime: "2026-08-03 11:38:06", logType: "文件上传", level: "ERROR", result: "失败", fileName: "CFX96_甲型流感检测.xlsx", fileSize: 884736, requestGuid: "REQ-PCR-0803-0003", fdiseq: "", message: "读取文件失败：服务器返回异常", detail: "[2026-08-03 11:38:05] 读取文件：D:\\仪器数据\\CFX96\\CFX96_甲型流感检测.xlsx  失败！服务器返回异常 | {\"result\":\"error\",\"params\":{},\"errors\":{}}" },
+    { logId: "LOG202608020002", clientId: "LL-Agilent1200-01", deviceId: "DEV-LH-HPLC", eventTime: "2026-08-02 16:45:32", receiveTime: "2026-08-02 16:45:33", logType: "文件上传", level: "INFO", result: "成功", fileName: "6_液相色谱仪.pdf", fileSize: 1857634, requestGuid: "REQ-HPLC-0802-0002", fdiseq: "CJ202608030002", message: "成功: 6_液相色谱仪.pdf", detail: "[2026-08-02 16:45:32] 成功: 6_液相色谱仪.pdf" },
+    { logId: "LOG202608010001", clientId: "LL-IcaptqICPMS-01", deviceId: "DEV-LH-ICPMS", eventTime: "2026-08-01 08:16:31", receiveTime: "2026-08-01 08:16:32", logType: "追踪文件", level: "WARN", result: "失败", fileName: "", fileSize: 0, requestGuid: "", fdiseq: "", message: "读取追踪文件失败，将重新初始化", detail: "读取追踪文件失败，将重新初始化：D:\\instrument-monitor\\ICPMS\\uploaded_files.json" },
+  ];
+  var strategyLogs = [
+    { auditId: "AUD202608040007", strategyId: "STR-LL-HPLC-01", strategyName: "安捷伦1200文件夹监听策略", clientId: "LL-Agilent1200-01", deviceId: "DEV-LH-HPLC", operationType: "修改", operationTime: "2026-08-04 10:12:36", operator: "监*一", operationSource: "采集配置管理", syncResult: "同步成功", changeSummary: "扫描间隔由20秒调整为10秒", changes: [{ field: "扫描间隔", before: "20秒", after: "10秒" }] },
+    { auditId: "AUD202608040006", strategyId: "STR-LL-ICPMS-01", strategyName: "ICP-MS结果文件采集策略", clientId: "LL-IcaptqICPMS-01", deviceId: "DEV-LH-ICPMS", operationType: "启用", operationTime: "2026-08-04 09:28:14", operator: "监*一", operationSource: "采集配置管理", syncResult: "同步成功", changeSummary: "策略状态由停用调整为启用", changes: [{ field: "策略状态", before: "停用", after: "启用" }] },
+    { auditId: "AUD202608030005", strategyId: "STR-JC-PCR-01", strategyName: "CFX96结果文件采集策略", clientId: "JC-CFX96deep-01", deviceId: "DEV-JC-PCR", operationType: "修改", operationTime: "2026-08-03 16:42:08", operator: "赵*楠", operationSource: "采集配置管理", syncResult: "同步成功", changeSummary: "调整监听目录并启用文件追踪", changes: [{ field: "监听目录", before: "D:\\仪器数据\\CFX96_old\\", after: "D:\\仪器数据\\CFX96\\" }, { field: "文件追踪", before: "关闭", after: "启用" }] },
+    { auditId: "AUD202608030004", strategyId: "STR-LW-MALDI-01", strategyName: "布鲁克质谱报告采集策略", clientId: "LW-NewAutofex-01", deviceId: "DEV-WSW-MALDI", operationType: "修改", operationTime: "2026-08-03 14:08:52", operator: "杨*顺", operationSource: "采集配置管理", syncResult: "同步失败", changeSummary: "修改监听目录，客户端暂未完成同步", changes: [{ field: "监听目录", before: "D:\\仪器数据\\Autofex\\", after: "D:\\仪器数据\\NewAutofex\\" }] },
+    { auditId: "AUD202608020003", strategyId: "STR-LL-GC-01", strategyName: "气相色谱结果文件采集策略", clientId: "LL-Agilent7890A-01", deviceId: "DEV-LH-GC", operationType: "新增", operationTime: "2026-08-02 11:32:19", operator: "刘*辉", operationSource: "采集配置管理", syncResult: "同步成功", changeSummary: "新增文件夹监听采集策略", changes: [{ field: "采集方式", before: "--", after: "文件夹监听" }, { field: "扫描间隔", before: "--", after: "20秒" }] },
+    { auditId: "AUD202608020002", strategyId: "STR-JC-PCR-01", strategyName: "CFX96结果文件采集策略", clientId: "JC-CFX96deep-01", deviceId: "DEV-JC-PCR", operationType: "停用", operationTime: "2026-08-02 10:16:44", operator: "赵*楠", operationSource: "采集配置管理", syncResult: "同步成功", changeSummary: "暂停结果文件自动采集", changes: [{ field: "策略状态", before: "启用", after: "停用" }] },
+    { auditId: "AUD202608010001", strategyId: "STR-LL-HPLC-01", strategyName: "安捷伦1200文件夹监听策略", clientId: "LL-Agilent1200-01", deviceId: "DEV-LH-HPLC", operationType: "新增", operationTime: "2026-08-01 09:06:27", operator: "熊*菀", operationSource: "采集配置管理", syncResult: "同步成功", changeSummary: "建立客户端与仪器采集策略", changes: [{ field: "采集方式", before: "--", after: "文件夹监听" }, { field: "监听目录", before: "--", after: "D:\\仪器数据\\Agilent1200\\" }] },
+  ];
+  var collectionStrategies = [
+    { strategyId: "STR-LL-ICPMS-01", strategyName: "ICP-MS结果文件采集策略", departmentId: "DEPT-LH", deviceId: "DEV-LH-ICPMS", clientId: "LL-IcaptqICPMS-01", owner: "监*一", collectionMode: "HTTP文件夹监听", interfaceType: "http", filepath: "D:\\仪器数据\\IcaptqICPMS\\", frequency: 20, service: "8897", startrow: 1, sampcolflag: "样品名称", trackMode: "启用", heartbeatInterval: 60, archiveMode: "上传成功后记录追踪", outputDir: "", filenameTemplate: "{instno}_{datetime}_{seq}.csv", status: "启用", version: "V1.2", scriptId: "SCRIPT-ICPMS-01", updateTime: "2026-08-04 09:28:14" },
+    { strategyId: "STR-LL-HPLC-01", strategyName: "安捷伦1200文件夹监听策略", departmentId: "DEPT-LH", deviceId: "DEV-LH-HPLC", clientId: "LL-Agilent1200-01", owner: "熊*菀", collectionMode: "HTTP文件夹监听", interfaceType: "http", filepath: "D:\\仪器数据\\Agilent1200\\", frequency: 10, service: "8897", startrow: 1, sampcolflag: "Sample Name", trackMode: "启用", heartbeatInterval: 60, archiveMode: "上传成功后记录追踪", outputDir: "", filenameTemplate: "{instno}_{datetime}_{seq}.csv", status: "启用", version: "V1.3", scriptId: "SCRIPT-HPLC-01", updateTime: "2026-08-04 10:12:36" },
+    { strategyId: "STR-LW-MALDI-01", strategyName: "布鲁克质谱报告采集策略", departmentId: "DEPT-WSW", deviceId: "DEV-WSW-MALDI", clientId: "LW-NewAutofex-01", owner: "监*一", collectionMode: "HTTP文件夹监听", interfaceType: "http", filepath: "D:\\仪器数据\\NewAutofex\\", frequency: 20, service: "8897", startrow: 1, sampcolflag: "样品编号", trackMode: "启用", heartbeatInterval: 60, archiveMode: "上传成功后记录追踪", outputDir: "", filenameTemplate: "{instno}_{datetime}_{seq}.pdf", status: "启用", version: "V1.1", scriptId: "SCRIPT-MALDI-01", updateTime: "2026-08-03 14:08:52" },
+    { strategyId: "STR-JC-PCR-01", strategyName: "CFX96结果文件采集策略", departmentId: "DEPT-JC", deviceId: "DEV-JC-PCR", clientId: "JC-CFX96deep-01", owner: "赵*楠", collectionMode: "HTTP文件夹监听", interfaceType: "http", filepath: "D:\\仪器数据\\CFX96\\", frequency: 20, service: "8897", startrow: 1, sampcolflag: "Sample", trackMode: "启用", heartbeatInterval: 60, archiveMode: "上传成功后记录追踪", outputDir: "", filenameTemplate: "{instno}_{datetime}_{seq}.xlsx", status: "停用", version: "V2.0", scriptId: "SCRIPT-PCR-01", updateTime: "2026-08-03 16:42:08" },
+    { strategyId: "STR-LL-GC-01", strategyName: "气相色谱结果文件采集策略", departmentId: "DEPT-LH", deviceId: "DEV-LH-GC", clientId: "LL-Agilent7890A-01", owner: "监*一", collectionMode: "USB存储采集", interfaceType: "usb", filepath: "D:\\仪器数据\\Agilent7890A\\", frequency: 20, service: "8897", startrow: 1, sampcolflag: "Sample", trackMode: "启用", heartbeatInterval: 60, archiveMode: "本地复制后上传", usbMode: "mass_storage", usbPollInterval: 5, outputDir: "D:\\仪器数据\\Agilent7890A\\", filenameTemplate: "{instno}_{datetime}_{seq}.csv", status: "启用", version: "V1.0", scriptId: "", updateTime: "2026-08-02 11:32:19" }
+  ];
+  var strategyScripts = [
+    { scriptId: "SCRIPT-ICPMS-01", strategyId: "STR-LL-ICPMS-01", scriptName: "ICP-MS文件解析前置规则", scriptType: "采集规则脚本", version: "V1.2", status: "启用", updateBy: "监*一", updateTime: "2026-08-04 09:20:11", content: "function prepare(file) {\n  return { instno: 'ICPMS', startrow: 1, sampleColumn: '样品名称' };\n}" },
+    { scriptId: "SCRIPT-HPLC-01", strategyId: "STR-LL-HPLC-01", scriptName: "安捷伦液相文件筛选规则", scriptType: "文件筛选脚本", version: "V1.3", status: "启用", updateBy: "熊*菀", updateTime: "2026-08-04 10:08:04", content: "function accept(file) {\n  return /\\.(pdf|xlsx|csv)$/i.test(file.name);\n}" },
+    { scriptId: "SCRIPT-MALDI-01", strategyId: "STR-LW-MALDI-01", scriptName: "布鲁克报告归档规则", scriptType: "归档规则脚本", version: "V1.1", status: "启用", updateBy: "杨*顺", updateTime: "2026-08-03 14:03:20", content: "function archive(file) {\n  return { directory: 'NewAutofex', keepOriginal: true };\n}" },
+    { scriptId: "SCRIPT-PCR-01", strategyId: "STR-JC-PCR-01", scriptName: "CFX96结果文件识别规则", scriptType: "文件筛选脚本", version: "V2.0", status: "停用", updateBy: "赵*楠", updateTime: "2026-08-03 16:35:28", content: "function accept(file) {\n  return /CFX96.*\\.xlsx$/i.test(file.name);\n}" }
+  ];
+  var scriptDebugRecords = [
+    { debugId: "DEBUG-20260804001", scriptId: "SCRIPT-ICPMS-01", debugTime: "2026-08-04 09:22:36", operator: "监*一", inputFile: "ICPMS_金属元素批量检测结果.xlsx", result: "成功", output: "识别仪器编号 ICPMS，数据起始行 1。" },
+    { debugId: "DEBUG-20260804002", scriptId: "SCRIPT-HPLC-01", debugTime: "2026-08-04 10:09:18", operator: "熊*菀", inputFile: "HPLC_食品添加剂检测报告.pdf", result: "成功", output: "文件扩展名 pdf，符合采集规则。" }
+  ];
+  var projectMappings = [
+    { mappingId: "MAP-ICPMS-PB", departmentId: "DEPT-LH", deviceId: "DEV-LH-ICPMS", sourceCode: "Pb", sourceName: "铅(Pb)", standardCode: "JCXM-PB", standardName: "铅", unit: "mg/L", status: "启用", updateBy: "监*一", updateTime: "2026-08-04 09:15:30" },
+    { mappingId: "MAP-ICPMS-CD", departmentId: "DEPT-LH", deviceId: "DEV-LH-ICPMS", sourceCode: "Cd", sourceName: "镉(Cd)", standardCode: "JCXM-CD", standardName: "镉", unit: "mg/L", status: "启用", updateBy: "监*一", updateTime: "2026-08-04 09:16:08" },
+    { mappingId: "MAP-ICPMS-AS", departmentId: "DEPT-LH", deviceId: "DEV-LH-ICPMS", sourceCode: "As", sourceName: "砷(As)", standardCode: "JCXM-AS", standardName: "砷", unit: "mg/L", status: "启用", updateBy: "监*一", updateTime: "2026-08-04 09:16:42" },
+    { mappingId: "MAP-HPLC-BHA", departmentId: "DEPT-LH", deviceId: "DEV-LH-HPLC", sourceCode: "BHA", sourceName: "丁基羟基茴香醚", standardCode: "JCXM-BHA", standardName: "丁基羟基茴香醚", unit: "mg/kg", status: "启用", updateBy: "熊*菀", updateTime: "2026-08-03 16:20:17" },
+    { mappingId: "MAP-HPLC-BHT", departmentId: "DEPT-LH", deviceId: "DEV-LH-HPLC", sourceCode: "BHT", sourceName: "二丁基羟基甲苯", standardCode: "JCXM-BHT", standardName: "二丁基羟基甲苯", unit: "mg/kg", status: "启用", updateBy: "熊*菀", updateTime: "2026-08-03 16:21:09" },
+    { mappingId: "MAP-PCR-CT", departmentId: "DEPT-JC", deviceId: "DEV-JC-PCR", sourceCode: "Ct", sourceName: "Ct值", standardCode: "JCXM-PCR-CT", standardName: "循环阈值", unit: "", status: "停用", updateBy: "赵*楠", updateTime: "2026-08-02 10:18:32" }
+  ];
+  var configDataSources = [
+    { sourceId: "DS-ICPMS-RESULT", sourceName: "ICP-MS检测结果数据源", sourceType: "Oracle", purpose: "原始记录生成", departmentId: "DEPT-LH", connectionString: "oracle://htlis:******@lisdb", sql: "select sampno, itemseq, rslt, unit from lis_instdata_new where fguid = :fguid", status: "启用", description: "按采集文件标识查询ICP-MS解析结果。", references: ["TPL-ICPMS-01"], updateBy: "监*一", updateTime: "2026-08-04 09:10:12" },
+    { sourceId: "DS-HPLC-RESULT", sourceName: "液相色谱检测结果数据源", sourceType: "Oracle", purpose: "原始记录生成", departmentId: "DEPT-LH", connectionString: "oracle://htlis:******@lisdb", sql: "select sampno, itemseq, rslt from lis_instdata_new where finstno = :instno and fguid = :fguid", status: "启用", description: "液相色谱原始记录数据源。", references: ["TPL-HPLC-01"], updateBy: "熊*菀", updateTime: "2026-08-03 15:48:21" },
+    { sourceId: "DS-PROJECT-MAP", sourceName: "仪器项目标准对照数据源", sourceType: "平台查询", purpose: "项目对照", departmentId: "DEPT-LH", connectionString: "ynjk/project-mapping", sql: "select source_code, standard_code, standard_name, unit from syssjcj_project_mapping where status = '启用'", status: "启用", description: "提供仪器项目与标准项目对应关系。", references: ["TPL-ICPMS-01", "TPL-HPLC-01"], updateBy: "监*一", updateTime: "2026-08-02 11:05:33" },
+    { sourceId: "DS-PCR-RESULT", sourceName: "PCR结果数据源", sourceType: "Oracle", purpose: "报告模板", departmentId: "DEPT-JC", connectionString: "oracle://htlis:******@lisdb", sql: "select sampno, rslt1, rslt2, rsltdesc from lis_instdata_new where fguid = :fguid", status: "停用", description: "PCR检测结果查询。", references: [], updateBy: "赵*楠", updateTime: "2026-08-01 14:28:09" }
+  ];
+
   var records = [
     {
       recordId: "REC202608030001",
@@ -732,6 +908,54 @@
   function setTemplates(value) {
     write(KEYS.templates, value);
   }
+  function getClients() {
+    return read(KEYS.clients, clients);
+  }
+  function setClients(value) {
+    write(KEYS.clients, value);
+  }
+  function getClientLogs() {
+    return read(KEYS.clientLogs, clientLogs);
+  }
+  function setClientLogs(value) {
+    write(KEYS.clientLogs, value);
+  }
+  function getStrategyLogs() {
+    return read(KEYS.strategyLogs, strategyLogs);
+  }
+  function setStrategyLogs(value) {
+    write(KEYS.strategyLogs, value);
+  }
+  function getCollectionStrategies() {
+    return read(KEYS.collectionStrategies, collectionStrategies);
+  }
+  function setCollectionStrategies(value) {
+    write(KEYS.collectionStrategies, value);
+  }
+  function getStrategyScripts() {
+    return read(KEYS.strategyScripts, strategyScripts);
+  }
+  function setStrategyScripts(value) {
+    write(KEYS.strategyScripts, value);
+  }
+  function getScriptDebugRecords() {
+    return read(KEYS.scriptDebugRecords, scriptDebugRecords);
+  }
+  function setScriptDebugRecords(value) {
+    write(KEYS.scriptDebugRecords, value);
+  }
+  function getProjectMappings() {
+    return read(KEYS.projectMappings, projectMappings);
+  }
+  function setProjectMappings(value) {
+    write(KEYS.projectMappings, value);
+  }
+  function getConfigDataSources() {
+    return read(KEYS.configDataSources, configDataSources);
+  }
+  function setConfigDataSources(value) {
+    write(KEYS.configDataSources, value);
+  }
   function getDashboardData() {
     var docs = getDocuments(),
       recordList = getRecords(),
@@ -781,6 +1005,25 @@
     setDocuments: setDocuments,
     getTemplates: getTemplates,
     setTemplates: setTemplates,
+    getClients: getClients,
+    setClients: setClients,
+    getClientLogs: getClientLogs,
+    setClientLogs: setClientLogs,
+    getHeartbeatLogs: function () {
+      return clone(heartbeatLogs);
+    },
+    getStrategyLogs: getStrategyLogs,
+    setStrategyLogs: setStrategyLogs,
+    getCollectionStrategies: getCollectionStrategies,
+    setCollectionStrategies: setCollectionStrategies,
+    getStrategyScripts: getStrategyScripts,
+    setStrategyScripts: setStrategyScripts,
+    getScriptDebugRecords: getScriptDebugRecords,
+    setScriptDebugRecords: setScriptDebugRecords,
+    getProjectMappings: getProjectMappings,
+    setProjectMappings: setProjectMappings,
+    getConfigDataSources: getConfigDataSources,
+    setConfigDataSources: setConfigDataSources,
     getDataRows: function () {
       return clone(dataRows);
     },

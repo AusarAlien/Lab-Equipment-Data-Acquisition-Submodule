@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>采集策略维护日志详情</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sjrq_detail.css' %}?v=2026080401">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080412"></script>
+</head>
+
+<body>
+    <main id="page" class="page">
+        <section class="card">
+            <div class="card-title"><h1>策略维护信息</h1></div>
+            <div class="summary-grid">
+                <div><span>审计日志编号</span><strong id="auditId">--</strong></div>
+                <div><span>策略编号</span><strong id="strategyId">--</strong></div>
+                <div class="wide"><span>策略名称</span><strong id="strategyName">--</strong></div>
+                <div><span>实验室</span><strong id="department">--</strong></div>
+                <div><span>仪器设备</span><strong id="deviceName">--</strong></div>
+                <div><span>解析接口编号</span><strong id="instno">--</strong></div>
+                <div><span>采集客户端</span><strong id="clientId">--</strong></div>
+                <div><span>操作类型</span><strong id="operationType">--</strong></div>
+                <div><span>操作时间</span><strong id="operationTime">--</strong></div>
+                <div><span>操作人员</span><strong id="operator">--</strong></div>
+                <div><span>操作来源</span><strong id="operationSource">--</strong></div>
+                <div><span>客户端同步结果</span><strong id="syncResult">--</strong></div>
+                <div class="wide"><span>变更摘要</span><strong id="changeSummary">--</strong></div>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-title"><h1>配置变更内容</h1></div>
+            <div class="table-scroll">
+                <table><thead><tr><th>配置项</th><th>修改前</th><th>修改后</th></tr></thead><tbody id="changeRows"></tbody></table>
+            </div>
+        </section>
+    </main>
+    <div id="error" class="empty is-hidden">未找到采集策略维护日志</div>
+    <script src="{% static 'ynjksys/syssjcj_sjrq_service.js' %}?v=2026080401"></script>
+    <script src="{% static 'ynjksys/syssjcj_sjrq_strategy_detail.js' %}?v=2026080401"></script>
+</body>
+
+</html>

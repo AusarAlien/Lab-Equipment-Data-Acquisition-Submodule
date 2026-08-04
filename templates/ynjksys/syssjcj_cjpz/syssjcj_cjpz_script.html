@@ -1,0 +1,75 @@
+{% load static %}<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>脚本调试</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'ynjksys/syssjcj_cjpz_modal.css' %}?v=2026080401"
+    />
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080413"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_service.js' %}?v=2026080401"></script>
+  </head>
+  <body>
+    <main class="modal-page">
+      <section class="card">
+        <div class="card-title"><h1>脚本基本信息</h1></div>
+        <div id="scriptMeta" class="card-body info-grid"></div>
+      </section>
+      <section class="card">
+        <div class="card-title"><h1>脚本内容</h1></div>
+        <div class="card-body form-grid">
+          <div class="form-item full">
+            <label>脚本内容</label
+            ><textarea id="content" class="code" disabled></textarea>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-title"><h1>脚本调试</h1></div>
+        <div class="card-body form-grid">
+          <div class="form-item">
+            <label>模拟文件</label
+            ><input id="inputFile" value="ICPMS_金属元素批量检测结果.xlsx" />
+          </div>
+          <div class="form-item">
+            <label>调试参数</label><input id="debugParams" value="startrow=1" />
+          </div>
+          <div class="form-item full">
+            <label>调试结果</label>
+            <div id="debugResult" class="result-box">尚未执行调试</div>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-title"><h1>最近调试记录</h1></div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>调试时间</th>
+                <th>输入文件</th>
+                <th>执行结果</th>
+                <th>操作人员</th>
+                <th>输出摘要</th>
+              </tr>
+            </thead>
+            <tbody id="debugRows"></tbody>
+          </table>
+        </div>
+      </section>
+      <footer class="toolbar">
+        <button id="editScript" class="button">编辑脚本</button
+        ><button id="saveScript" class="button is-hidden">保存脚本</button
+        ><button id="runDebug" class="button button-primary">执行调试</button>
+      </footer>
+    </main>
+    <div id="mask" class="mask is-hidden">
+      <div class="mask-box">正在调试脚本，请稍候…</div>
+    </div>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_script.js' %}?v=2026080401"></script>
+  </body>
+</html>

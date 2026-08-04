@@ -1,0 +1,277 @@
+{% load static %} <!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>采集配置管理</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'ynjksys/syssjcj_cjpz_list.css' %}?v=2026080401"
+    />
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080413"></script>
+  </head>
+  <body>
+    <main class="page-container">
+      <nav class="page-tabs">
+        <button class="page-tab is-active" data-tab="strategy">采集策略</button
+        ><button class="page-tab" data-tab="mapping">项目对照表</button
+        ><button class="page-tab" data-tab="source">数据源管理</button>
+      </nav>
+
+      <section id="strategyQuery" class="query-panel">
+        <div class="query-grid">
+          <div class="form-item">
+            <label>策略名称</label
+            ><input id="strategyName" placeholder="请输入策略名称" />
+          </div>
+          <div class="form-item">
+            <label>实验室</label
+            ><select id="strategyDepartment">
+              <option value="">全部实验室</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>仪器设备</label
+            ><select id="strategyDevice">
+              <option value="">全部设备</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>采集客户端</label
+            ><select id="strategyClient">
+              <option value="">全部客户端</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>采集方式</label
+            ><select id="strategyMode">
+              <option value="">全部方式</option>
+              <option>HTTP文件夹监听</option>
+              <option>USB存储采集</option>
+              <option>串口采集</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>策略状态</label
+            ><select id="strategyStatus">
+              <option value="">全部状态</option>
+              <option>启用</option>
+              <option>停用</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>策略范围</label
+            ><select id="strategyScope">
+              <option value="all">全部策略</option>
+              <option value="mine">我的策略</option>
+            </select>
+          </div>
+          <div class="query-actions">
+            <button id="strategyReset" class="button">重置</button
+            ><button id="strategySearch" class="button button-primary">
+              查询
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="mappingQuery" class="query-panel is-hidden">
+        <div class="query-grid">
+          <div class="form-item">
+            <label>实验室</label
+            ><select id="mappingDepartment">
+              <option value="">全部实验室</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>仪器设备</label
+            ><select id="mappingDevice">
+              <option value="">全部设备</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>仪器项目</label
+            ><input id="mappingSource" placeholder="请输入仪器项目" />
+          </div>
+          <div class="form-item">
+            <label>标准项目</label
+            ><input id="mappingStandard" placeholder="请输入标准项目" />
+          </div>
+          <div class="form-item">
+            <label>对照状态</label
+            ><select id="mappingStatus">
+              <option value="">全部状态</option>
+              <option>启用</option>
+              <option>停用</option>
+            </select>
+          </div>
+          <div class="query-actions">
+            <button id="mappingReset" class="button">重置</button
+            ><button id="mappingSearch" class="button button-primary">
+              查询
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="sourceQuery" class="query-panel is-hidden">
+        <div class="query-grid">
+          <div class="form-item">
+            <label>数据源名称</label
+            ><input id="sourceName" placeholder="请输入数据源名称" />
+          </div>
+          <div class="form-item">
+            <label>数据源类型</label
+            ><select id="sourceType">
+              <option value="">全部类型</option>
+              <option>Oracle</option>
+              <option>平台查询</option>
+              <option>静态字典</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>数据源用途</label
+            ><select id="sourcePurpose">
+              <option value="">全部用途</option>
+              <option>原始记录生成</option>
+              <option>项目对照</option>
+              <option>报告模板</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>实验室</label
+            ><select id="sourceDepartment">
+              <option value="">全部实验室</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>使用状态</label
+            ><select id="sourceStatus">
+              <option value="">全部状态</option>
+              <option>启用</option>
+              <option>停用</option>
+            </select>
+          </div>
+          <div class="query-actions">
+            <button id="sourceReset" class="button">重置</button
+            ><button id="sourceSearch" class="button button-primary">
+              查询
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="strategyPanel" class="list-panel">
+        <header class="panel-title">
+          <span></span>
+          <h1>采集策略列表</h1>
+          <em id="strategySummary"></em>
+        </header>
+        <div class="table-scroll">
+          <table class="strategy-table">
+            <thead>
+              <tr>
+                <th class="actions">操作</th>
+                <th>序号</th>
+                <th>策略名称</th>
+                <th>实验室</th>
+                <th>仪器设备</th>
+                <th>采集客户端</th>
+                <th>客户端</th>
+                <th>采集方式</th>
+                <th>采集目录/端口</th>
+                <th>扫描间隔</th>
+                <th>状态</th>
+                <th>版本</th>
+                <th>配置人员</th>
+                <th>最后修改时间</th>
+              </tr>
+            </thead>
+            <tbody id="strategyRows"></tbody>
+          </table>
+          <div id="strategyEmpty" class="empty is-hidden">
+            暂无符合条件的采集策略
+          </div>
+        </div>
+        <div id="strategyPager" class="pagination"></div>
+      </section>
+
+      <section id="mappingPanel" class="list-panel is-hidden">
+        <header class="panel-title">
+          <span></span>
+          <h1>项目对照表</h1>
+          <em id="mappingSummary"></em
+          ><button id="mappingAdd" class="button button-primary title-action">
+            新增对照
+          </button>
+        </header>
+        <div class="table-scroll">
+          <table class="mapping-table">
+            <thead>
+              <tr>
+                <th class="actions">操作</th>
+                <th>序号</th>
+                <th>实验室</th>
+                <th>仪器设备</th>
+                <th>仪器项目编码</th>
+                <th>仪器项目名称</th>
+                <th>标准项目编码</th>
+                <th>标准项目名称</th>
+                <th>默认单位</th>
+                <th>状态</th>
+                <th>修改人员</th>
+                <th>修改时间</th>
+              </tr>
+            </thead>
+            <tbody id="mappingRows"></tbody>
+          </table>
+          <div id="mappingEmpty" class="empty is-hidden">
+            暂无符合条件的项目对照
+          </div>
+        </div>
+        <div id="mappingPager" class="pagination"></div>
+      </section>
+
+      <section id="sourcePanel" class="list-panel is-hidden">
+        <header class="panel-title">
+          <span></span>
+          <h1>数据源列表</h1>
+          <em id="sourceSummary"></em
+          ><button id="sourceAdd" class="button button-primary title-action">
+            新增数据源
+          </button>
+        </header>
+        <div class="table-scroll">
+          <table class="source-table">
+            <thead>
+              <tr>
+                <th class="actions source-actions">操作</th>
+                <th>序号</th>
+                <th>数据源名称</th>
+                <th>类型</th>
+                <th>用途</th>
+                <th>实验室</th>
+                <th>连接字符摘要</th>
+                <th>引用模板数</th>
+                <th>状态</th>
+                <th>修改人员</th>
+                <th>修改时间</th>
+              </tr>
+            </thead>
+            <tbody id="sourceRows"></tbody>
+          </table>
+          <div id="sourceEmpty" class="empty is-hidden">
+            暂无符合条件的数据源
+          </div>
+        </div>
+        <div id="sourcePager" class="pagination"></div>
+      </section>
+    </main>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_service.js' %}?v=2026080401"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_list.js' %}?v=2026080401"></script>
+  </body>
+</html>

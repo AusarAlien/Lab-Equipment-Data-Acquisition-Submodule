@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>采集数据日志</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sjrq_list.css' %}?v=2026080404">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080412"></script>
+    <!-- 趋势图暂不展示，恢复时解除下面的脚本引用及趋势图区域注释。 -->
+    <!-- <script src="{% static 'lib/echarts/echarts.min.js' %}"></script> -->
+</head>
+
+<body>
+    <main class="page-container">
+        <nav class="page-tabs" aria-label="日志类型">
+            <button class="page-tab is-active" data-tab="client" type="button">客户端消息日志</button>
+            <button class="page-tab" data-tab="strategy" type="button">采集策略维护日志</button>
+        </nav>
+
+        <section id="clientQuery" class="query-panel">
+            <div class="query-grid">
+                <div class="form-item date-item"><label for="clientStart">日志时间</label>
+                    <div class="date-range"><input id="clientStart" type="date"><span>至</span><input id="clientEnd"
+                            type="date"></div>
+                </div>
+                <div class="form-item"><label for="clientDepartment">实验室</label><select id="clientDepartment">
+                        <option value="">全部实验室</option>
+                    </select></div>
+                <div class="form-item"><label for="clientDevice">仪器设备</label><select id="clientDevice">
+                        <option value="">全部设备</option>
+                    </select></div>
+                <div class="form-item"><label for="clientSelect">采集客户端</label><select id="clientSelect">
+                        <option value="">全部客户端</option>
+                    </select></div>
+                <div class="form-item"><label for="clientLogType">消息类型</label><select id="clientLogType">
+                        <option value="">全部类型</option>
+                    </select></div>
+                <div class="form-item"><label for="clientLevel">日志级别</label><select id="clientLevel">
+                        <option value="">全部级别</option>
+                        <option value="INFO">信息</option>
+                        <option value="WARN">警告</option>
+                        <option value="ERROR">错误</option>
+                    </select></div>
+                <div class="form-item"><label for="clientResult">执行结果</label><select id="clientResult">
+                        <option value="">全部结果</option>
+                        <option value="成功">成功</option>
+                        <option value="失败">失败</option>
+                        <option value="提示">提示</option>
+                    </select></div>
+                <div class="query-actions"><button id="clientResetButton" class="button"
+                        type="button">重置</button><button id="clientQueryButton" class="button button-primary"
+                        type="button">查询</button></div>
+            </div>
+        </section>
+
+        <section id="strategyQuery" class="query-panel is-hidden">
+            <div class="query-grid">
+                <div class="form-item date-item"><label for="strategyStart">操作时间</label>
+                    <div class="date-range"><input id="strategyStart" type="date"><span>至</span><input
+                            id="strategyEnd" type="date"></div>
+                </div>
+                <div class="form-item"><label for="strategyDepartment">实验室</label><select id="strategyDepartment">
+                        <option value="">全部实验室</option>
+                    </select></div>
+                <div class="form-item"><label for="strategyDevice">仪器设备</label><select id="strategyDevice">
+                        <option value="">全部设备</option>
+                    </select></div>
+                <div class="form-item"><label for="strategyClient">采集客户端</label><select id="strategyClient">
+                        <option value="">全部客户端</option>
+                    </select></div>
+                <div class="form-item"><label for="operationType">操作类型</label><select id="operationType">
+                        <option value="">全部操作</option>
+                        <option value="新增">新增</option>
+                        <option value="修改">修改</option>
+                        <option value="启用">启用</option>
+                        <option value="停用">停用</option>
+                        <option value="删除">删除</option>
+                    </select></div>
+                <div class="form-item"><label for="syncResult">同步结果</label><select id="syncResult">
+                        <option value="">全部结果</option>
+                        <option value="同步成功">同步成功</option>
+                        <option value="同步失败">同步失败</option>
+                        <option value="待同步">待同步</option>
+                    </select></div>
+                <div class="form-item"><label for="operator">操作人员</label><input id="operator"
+                        placeholder="请输入操作人员"></div>
+                <div class="query-actions"><button id="strategyResetButton" class="button"
+                        type="button">重置</button><button id="strategyQueryButton" class="button button-primary"
+                        type="button">查询</button></div>
+            </div>
+        </section>
+
+        <section class="metric-table-panel" aria-label="日志统计">
+            <table class="metric-table">
+                <thead>
+                    <tr>
+                        <th id="metricLabel1">客户端数量</th>
+                        <th id="metricLabel2">在线客户端</th>
+                        <th id="metricLabel3">上传成功</th>
+                        <th id="metricLabel4">上传失败</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong id="metricValue1">--</strong><span id="metricUnit1">个</span></td>
+                        <td><strong id="metricValue2">--</strong><span id="metricUnit2">个</span></td>
+                        <td><strong id="metricValue3">--</strong><span id="metricUnit3">次</span></td>
+                        <td><strong id="metricValue4">--</strong><span id="metricUnit4">次</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 趋势统计暂不展示，保留结构供后续启用。
+        <section class="chart-panel">
+            <div class="panel-title"><span class="title-mark"></span><h1 id="chartTitle">客户端消息趋势</h1></div>
+            <div id="trendChart" class="trend-chart"></div>
+            <div id="chartEmpty" class="chart-empty is-hidden">暂无符合条件的统计数据</div>
+        </section>
+        -->
+
+        <section id="clientListPanel" class="list-panel">
+            <div class="panel-title"><span class="title-mark"></span><h1>客户端消息日志</h1><span
+                    id="clientSummary"></span></div>
+            <div class="table-scroll">
+                <table class="client-table">
+                    <thead><tr><th class="col-actions">操作</th><th class="col-index">序号</th><th>日志时间</th><th>实验室</th><th>仪器设备</th><th>采集客户端</th><th>客户端类型</th><th>消息类型</th><th>日志级别</th><th>执行结果</th><th>文件名称</th><th>消息摘要</th></tr></thead>
+                    <tbody id="clientRows"></tbody>
+                </table>
+                <div id="clientEmpty" class="empty is-hidden">暂无符合条件的客户端消息日志</div>
+            </div>
+            <div class="pagination"><button id="clientPrevious">‹</button><div id="clientPages"></div><button
+                    id="clientNext">›</button><span id="clientPageSummary">共 0 页，10 条</span><label
+                    for="clientJump">跳至</label><input id="clientJump" type="number" min="1"><span>页</span></div>
+        </section>
+
+        <section id="strategyListPanel" class="list-panel is-hidden">
+            <div class="panel-title"><span class="title-mark"></span><h1>采集策略维护日志</h1><span
+                    id="strategySummary"></span></div>
+            <div class="table-scroll">
+                <table class="strategy-table">
+                    <thead><tr><th class="col-actions">操作</th><th class="col-index">序号</th><th>操作时间</th><th>实验室</th><th>仪器设备</th><th>采集客户端</th><th>策略名称</th><th>操作类型</th><th>变更摘要</th><th>操作人员</th><th>同步结果</th></tr></thead>
+                    <tbody id="strategyRows"></tbody>
+                </table>
+                <div id="strategyEmpty" class="empty is-hidden">暂无符合条件的策略维护日志</div>
+            </div>
+            <div class="pagination"><button id="strategyPrevious">‹</button><div id="strategyPages"></div><button
+                    id="strategyNext">›</button><span id="strategyPageSummary">共 0 页，10 条</span><label
+                    for="strategyJump">跳至</label><input id="strategyJump" type="number" min="1"><span>页</span>
+            </div>
+        </section>
+    </main>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_sjrq_service.js' %}?v=2026080401"></script>
+    <script src="{% static 'ynjksys/syssjcj_sjrq_list.js' %}?v=2026080404"></script>
+</body>
+
+</html>

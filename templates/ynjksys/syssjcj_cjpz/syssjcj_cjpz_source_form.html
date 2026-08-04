@@ -1,0 +1,113 @@
+{% load static %}<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>数据源维护</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'ynjksys/syssjcj_cjpz_modal.css' %}?v=2026080401"
+    />
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080413"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_service.js' %}?v=2026080401"></script>
+  </head>
+  <body>
+    <main class="modal-page">
+      <section class="card">
+        <div class="card-title"><h1>数据源基本信息</h1></div>
+        <div class="card-body form-grid">
+          <div class="form-item">
+            <label class="required">数据源名称</label><input id="sourceName" />
+          </div>
+          <div class="form-item">
+            <label class="required">数据源类型</label
+            ><select id="sourceType">
+              <option>Oracle</option>
+              <option>平台查询</option>
+              <option>静态字典</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label class="required">数据源用途</label
+            ><select id="purpose">
+              <option>原始记录生成</option>
+              <option>项目对照</option>
+              <option>报告模板</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label class="required">所属实验室</label
+            ><select id="departmentId"></select>
+          </div>
+          <div class="form-item">
+            <label>使用状态</label
+            ><select id="status">
+              <option>启用</option>
+              <option>停用</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>数据源编号</label><input id="sourceId" disabled />
+          </div>
+          <div class="form-item full">
+            <label class="required">连接字符</label
+            ><input id="connectionString" />
+          </div>
+          <div class="form-item full">
+            <label class="required">执行语句 SQL</label
+            ><textarea id="sql" class="code"></textarea>
+          </div>
+          <div class="form-item full">
+            <label>数据源说明</label><textarea id="description"></textarea>
+          </div>
+        </div>
+      </section>
+      <section id="previewCard" class="card is-hidden">
+        <div class="card-title"><h1>查询结果预览</h1></div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>样品编号</th>
+                <th>项目编码</th>
+                <th>检测结果</th>
+                <th>单位</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>26S0803001</td>
+                <td>Pb</td>
+                <td>0.012</td>
+                <td>mg/L</td>
+              </tr>
+              <tr>
+                <td>26S0803002</td>
+                <td>Cd</td>
+                <td>0.019</td>
+                <td>mg/L</td>
+              </tr>
+              <tr>
+                <td>26S0803003</td>
+                <td>As</td>
+                <td>0.026</td>
+                <td>mg/L</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <footer id="footer" class="toolbar">
+        <button id="test" class="button">测试连接</button
+        ><button id="preview" class="button">预览数据</button
+        ><button id="save" class="button button-primary">保存</button>
+      </footer>
+    </main>
+    <div id="mask" class="mask is-hidden">
+      <div class="mask-box">正在执行测试，请稍候…</div>
+    </div>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_source_form.js' %}?v=2026080401"></script>
+  </body>
+</html>

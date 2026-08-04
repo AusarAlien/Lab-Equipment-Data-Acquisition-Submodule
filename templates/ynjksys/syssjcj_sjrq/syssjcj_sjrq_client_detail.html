@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>客户端消息日志详情</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sjrq_detail.css' %}?v=2026080401">
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+    <script src="{% static 'common/isloadpage.js' %}"></script>
+    <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080412"></script>
+    <script src="{% static 'lib/echarts/echarts.min.js' %}"></script>
+</head>
+
+<body>
+    <main id="page" class="page">
+        <section class="card">
+            <div class="card-title"><h1>消息基本信息</h1><div class="card-actions"><button id="fileDetail"
+                        class="button button-primary is-hidden" type="button">查看采集文件</button></div></div>
+            <div class="summary-grid">
+                <div><span>日志编号</span><strong id="logId">--</strong></div>
+                <div><span>发生时间</span><strong id="eventTime">--</strong></div>
+                <div><span>服务端接收时间</span><strong id="receiveTime">--</strong></div>
+                <div><span>消息类型</span><strong id="logType">--</strong></div>
+                <div><span>日志级别</span><strong id="level">--</strong></div>
+                <div><span>执行结果</span><strong id="result">--</strong></div>
+                <div class="wide"><span>消息摘要</span><strong id="message">--</strong></div>
+            </div>
+            <div class="message-box"><h2>详细内容</h2><p id="detail">--</p></div>
+        </section>
+        <section class="card">
+            <div class="card-title"><h1>实验室、仪器与客户端</h1></div>
+            <div class="summary-grid">
+                <div><span>实验室</span><strong id="department">--</strong></div>
+                <div><span>仪器设备</span><strong id="deviceName">--</strong></div>
+                <div><span>仪器型号</span><strong id="deviceModel">--</strong></div>
+                <div><span>解析接口编号</span><strong id="instno">--</strong></div>
+                <div><span>客户端编号</span><strong id="clientId">--</strong></div>
+                <div><span>客户端类型</span><strong id="clientType">--</strong></div>
+                <div><span>客户端版本</span><strong id="clientVersion">--</strong></div>
+                <div><span>运行状态</span><strong id="clientStatus">--</strong></div>
+                <div><span>运行模式</span><strong id="runningMode">--</strong></div>
+                <div><span>最近心跳</span><strong id="lastHeartbeat">--</strong></div>
+                <div class="wide"><span>操作系统</span><strong id="osInfo">--</strong></div>
+            </div>
+        </section>
+        <section id="fileCard" class="card is-hidden">
+            <div class="card-title"><h1>关联文件信息</h1></div>
+            <div class="summary-grid">
+                <div class="wide"><span>文件名称</span><strong id="fileName">--</strong></div>
+                <div><span>文件大小</span><strong id="fileSize">--</strong></div>
+                <div><span>文件标识</span><strong id="fdiseq">--</strong></div>
+                <div class="wide"><span>上传请求标识</span><strong id="requestGuid">--</strong></div>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-title"><h1>客户端运行轨迹</h1></div>
+            <div id="heartbeatChart" class="trend-chart"></div>
+            <div id="heartbeatEmpty" class="empty is-hidden">暂无客户端心跳记录</div>
+        </section>
+    </main>
+    <div id="error" class="empty is-hidden">未找到客户端消息日志</div>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="{% static 'ynjksys/syssjcj_sjrq_service.js' %}?v=2026080401"></script>
+    <script src="{% static 'ynjksys/syssjcj_sjrq_client_detail.js' %}?v=2026080401"></script>
+</body>
+
+</html>
