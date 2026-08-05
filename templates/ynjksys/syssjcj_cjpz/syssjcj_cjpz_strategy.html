@@ -18,8 +18,10 @@
       <nav class="subtabs">
         <button class="subtab is-active" data-tab="basic">基本信息</button
         ><button class="subtab" data-tab="rule">采集规则</button
-        ><button class="subtab" data-tab="archive">归档规则</button
-        ><button class="subtab" data-tab="script">关联脚本</button>
+        ><button class="subtab" data-tab="archive">归档规则</button>
+        <!-- 当前阶段隐藏脚本功能，具备在线脚本管理前提后恢复。
+        <button class="subtab" data-tab="script">关联脚本</button>
+        -->
       </nav>
       <section id="basicPanel" class="card">
         <div class="card-title"><h1>策略基本信息</h1></div>
@@ -178,6 +180,7 @@
           </div>
         </div>
       </section>
+      <!-- 当前阶段隐藏关联脚本及调试入口，页面结构保留供后续恢复。
       <section id="scriptPanel" class="card is-hidden">
         <div class="card-title"><h1>关联脚本</h1></div>
         <div class="card-body">
@@ -189,6 +192,7 @@
           </div>
         </div>
       </section>
+      -->
       <footer class="toolbar">
         <button id="download" class="button">下载配置</button
         ><button id="edit" class="button">进入修改</button
@@ -197,6 +201,6 @@
       </footer>
     </main>
     <div id="toast" class="toast is-hidden"></div>
-    <script src="{% static 'ynjksys/syssjcj_cjpz_strategy.js' %}?v=2026080402"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_strategy.js' %}?v=2026080403"></script>
   </body>
 </html>

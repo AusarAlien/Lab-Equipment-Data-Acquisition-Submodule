@@ -175,7 +175,10 @@
           path =
             x.collectionMode === "串口采集"
               ? x.comPort || "--"
-              : x.filepath || "--";
+              : x.filepath || "--",
+          scriptAction = "";
+        // 当前系统尚无在线脚本管理和调试通路，前提满足后解除注释恢复入口。
+        // scriptAction = '<button class="action" data-act="script" data-id="' + x.strategyId + '">脚本</button>';
         return (
           '<tr><td><button class="action" data-act="view" data-id="' +
           x.strategyId +
@@ -183,9 +186,9 @@
           x.strategyId +
           '">下载</button><button class="action" data-act="edit" data-id="' +
           x.strategyId +
-          '">修改</button><button class="action" data-act="script" data-id="' +
-          x.strategyId +
-          '">脚本</button></td><td>' +
+          '">修改</button>' +
+          scriptAction +
+          "</td><td>" +
           ((state.page.strategy - 1) * PAGE + i + 1) +
           "</td><td" +
           title(x.strategyName) +
@@ -565,6 +568,7 @@
           1450,
           900,
         );
+      /* 当前阶段隐藏脚本功能，服务端具备脚本管理前提后恢复。
       else if (a === "script") {
         if (!x.scriptId) toast("当前策略未关联脚本");
         else
@@ -575,7 +579,9 @@
             1350,
             860,
           );
-      } else if (a === "download") downloadStrategy(x);
+      }
+      */
+      else if (a === "download") downloadStrategy(x);
     };
     el("mappingRows").onclick = function (e) {
       var a = e.target.dataset.act,

@@ -111,6 +111,7 @@
     });
     value("instno", d.instno);
     dynamic();
+    /* 当前阶段隐藏关联脚本展示，具备数据库、服务端执行及版本管理能力后恢复。
     el("scriptInfo").innerHTML = s.scriptId
       ? [
           "脚本名称|" + s.scriptName,
@@ -131,6 +132,7 @@
           .join("")
       : '<div class="info-box"><span>关联状态</span><strong>当前策略未关联脚本</strong></div>';
     el("openScript").disabled = !s.scriptId;
+    */
     disabled(param("mode") !== "edit");
   }
   function collect() {
@@ -264,7 +266,9 @@
         document.querySelectorAll(".subtab").forEach(function (x) {
           x.classList.toggle("is-active", x === n);
         });
-        ["basic", "rule", "archive", "script"].forEach(function (x) {
+        var visibleTabs = ["basic", "rule", "archive"];
+        // visibleTabs.push("script"); // 在线脚本功能具备实际通路后恢复。
+        visibleTabs.forEach(function (x) {
           el(x + "Panel").classList.toggle("is-hidden", x !== n.dataset.tab);
         });
       };
@@ -282,6 +286,7 @@
     };
     el("save").onclick = save;
     el("download").onclick = download;
+    /* 当前阶段隐藏脚本调试入口，保留跳转代码供后续恢复。
     el("openScript").onclick = function () {
       var s = find(state.scripts, "scriptId", state.target.scriptId);
       if (!s.scriptId) return;
@@ -301,6 +306,7 @@
           height: 860,
         });
     };
+    */
   }
   function init() {
     if (typeof global.initGlobalParams === "function")
