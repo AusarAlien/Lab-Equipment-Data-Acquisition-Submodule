@@ -13,7 +13,11 @@ begin
   bsql := q'~select t.fguid 唯一标识, t.finstno 仪器编号, t.sampno 样品编号,
        t.itemseq 检测项目编号, t.rslt 主结果, t.rslt1 结果1, t.rslt2 结果2,
        t.rslt3 结果3, t.rslt4 结果4, t.rslt5 结果5, t.rslt6 结果6,
-       t.mw 单位, to_char(t.fopdt,'yyyy-mm-dd hh24:mi:ss') 解析时间, t.fempid 操作人
+       case t.finstno
+         when 'AGILENT-1200' then 'mAU*s'
+         when 'BRUKER-MICROFLEX' then '无量纲'
+         else trim(t.mw) end 单位,
+       to_char(t.fopdt,'yyyy-mm-dd hh24:mi:ss') 解析时间, t.fempid 操作人
   from htlis.lis_instdata_new t
  where t.fdiseq=?
    and exists (select 1

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>实验室设备数据管理</title>
-    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sbsj_list.css' %}?v=2026080406">
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_sbsj_list.css' %}?v=2026080602">
     <script src="{% static 'common/isvar.js' %}"></script>
     <script src="{% static 'common/isqrydata.js' %}"></script>
     <script src="{% static 'common/issubmit.js' %}"></script>
@@ -22,77 +22,28 @@
         <section id="dataTab" class="tab-page">
             <section class="query-panel">
                 <div class="query-grid">
-                    <div class="form-item"><label for="sampleCategory">样品类别</label><select id="sampleCategory">
-                            <option value="">全部类别</option>
-                            <optgroup label="环境样品">
-                                <option value="ENV-WATER-DRINKING">生活饮用水</option>
-                                <option value="ENV-WATER-SURFACE">地表水</option>
-                                <option value="ENV-WATER-GROUND">地下水</option>
-                                <option value="ENV-AIR-WORKPLACE">工作场所空气</option>
-                                <option value="ENV-AIR-AMBIENT">环境空气</option>
-                                <option value="ENV-SOIL">土壤或沉积物</option>
-                            </optgroup>
-                            <optgroup label="食品及相关产品">
-                                <option value="FOOD-GENERAL">食品</option>
-                                <option value="FOOD-BEVERAGE">饮料</option>
-                                <option value="FOOD-ADDITIVE">食品添加剂</option>
-                                <option value="FOOD-CONTACT">食品接触材料</option>
-                            </optgroup>
-                            <optgroup label="生物样本">
-                                <option value="BIO-SERUM">血清</option>
-                                <option value="BIO-PLASMA">血浆</option>
-                                <option value="BIO-WHOLE-BLOOD">全血</option>
-                                <option value="BIO-URINE">尿液</option>
-                                <option value="BIO-SPUTUM">痰液</option>
-                                <option value="BIO-THROAT-SWAB">咽拭子</option>
-                                <option value="BIO-NASAL-SWAB">鼻拭子</option>
-                                <option value="BIO-FECES">粪便</option>
-                                <option value="BIO-OTHER">其他人体样本</option>
-                            </optgroup>
-                            <optgroup label="微生物样本">
-                                <option value="MICRO-CULTURE">菌株或培养物</option>
-                                <option value="MICRO-VIRUS">病毒样本</option>
-                                <option value="MICRO-ISOLATE">微生物分离物</option>
-                            </optgroup>
-                            <optgroup label="职业与放射卫生">
-                                <option value="OCC-COLLECTED">职业卫生采集样品</option>
-                                <option value="RAD-DOSIMETER">个人剂量计</option>
-                                <option value="RAD-SAMPLE">放射性监测样品</option>
-                            </optgroup>
-                            <optgroup label="质量控制样品">
-                                <option value="QC-REFERENCE">标准物质</option>
-                                <option value="QC-CONTROL">质控样品</option>
-                                <option value="QC-BLANK">空白样品</option>
-                                <option value="QC-PT">能力验证样品</option>
-                            </optgroup>
-                            <option value="OTHER">其他样品</option>
-                        </select></div>
                     <div class="form-item"><label for="departmentSelect">所属部门</label><select id="departmentSelect">
                             <option value="">全部部门</option>
                         </select></div>
                     <div class="form-item"><label for="deviceSelect">仪器设备</label><select id="deviceSelect">
                             <option value="">全部设备</option>
                         </select></div>
-                    <div class="form-item"><label for="templateSelect">项目模板</label><select id="templateSelect">
-                            <option value="">请选择模板</option>
-                        </select></div>
                     <div id="sampleField" class="form-item"><label for="sampleKeyword">样品编号</label><input
                             id="sampleKeyword" type="text" placeholder="请输入样品编号"></div>
                     <div id="projectField" class="form-item"><label for="projectKeyword">检测项目</label><input
                             id="projectKeyword" type="text" placeholder="请输入检测项目"></div>
-                    <div class="form-item date-item"><label for="startDate">实验时间</label>
+                    <div class="form-item date-item"><label for="startDate">数据入库时间</label>
                         <div class="date-range"><input id="startDate" type="date"><span>至</span><input id="endDate"
                                 type="date"></div>
                     </div>
-                    <div class="query-actions"><button id="queryButton" class="button button-primary"
-                            type="button">查询</button><button id="resetButton" class="button button-secondary"
-                            type="button">重置</button></div>
+                    <div class="query-actions"><button id="resetButton" class="button button-secondary"
+                            type="button">重置</button><button id="queryButton" class="button button-primary"
+                            type="button">查询</button></div>
                 </div>
                 <div id="deviceContext" class="device-context is-hidden">
                     <div><span>品牌型号</span><strong id="contextModel">--</strong></div>
                     <div><span>固定资产编号</span><strong id="contextAsset">--</strong></div>
                     <div><span>所在位置</span><strong id="contextLocation">--</strong></div>
-                    <div><span>负责人</span><strong id="contextOwner">--</strong></div>
                     <div><span>数据采集类型</span><strong id="contextCollectType">--</strong></div>
                 </div>
             </section>
@@ -110,14 +61,11 @@
                                 <th class="col-check"><input id="selectAll" type="checkbox" aria-label="全选当前页"></th>
                                 <th class="col-index">序号</th>
                                 <th>样品编号</th>
-                                <th>样品类别</th>
-                                <th>样品名称</th>
                                 <th>检测项目</th>
                                 <th>结果摘要</th>
                                 <th>单位</th>
                                 <th>仪器设备</th>
-                                <th>所属部门</th>
-                                <th>实验时间</th>
+                                <th>数据入库时间</th>
                                 <th>采集时间</th>
                                 <th>来源文件</th>
                             </tr>
@@ -194,7 +142,7 @@
         </div>
     </div>
     <div id="toast" class="toast is-hidden"></div>
-    <script src="{% static 'ynjksys/syssjcj_sbsj_list.js' %}?v=2026080410"></script>
+    <script src="{% static 'ynjksys/syssjcj_sbsj_list.js' %}?v=2026080603"></script>
 </body>
 
 </html>

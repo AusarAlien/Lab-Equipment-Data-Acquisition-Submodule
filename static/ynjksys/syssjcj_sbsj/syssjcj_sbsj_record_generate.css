@@ -67,13 +67,51 @@ body {
     color: #687386
 }
 
-.form-item input {
+.form-item input,
+.form-item select {
     width: 100%;
     height: 42px;
     border: 1px solid #d2dae6;
     border-radius: 3px;
     padding: 0 13px;
-    font-size: 16px
+    font-size: 16px;
+    background: #fff
+}
+
+.form-item select:disabled {
+    color: #98a1af;
+    background: #f5f7fa
+}
+
+.form-span-all {
+    grid-column: 1 / -1
+}
+
+.constraint-message {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 9px 13px;
+    border-left: 4px solid #8d99aa;
+    background: #f5f7fa;
+    color: #687386
+}
+
+.constraint-message.is-valid {
+    border-left-color: #16a27f;
+    background: #edf9f5;
+    color: #087b60
+}
+
+.constraint-message.is-error {
+    border-left-color: #f05a5a;
+    background: #fff2f2;
+    color: #d64545
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: .55
 }
 
 .info-item strong {

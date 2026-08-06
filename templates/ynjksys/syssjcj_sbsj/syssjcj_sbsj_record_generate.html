@@ -7,9 +7,10 @@
     <title>生成原始记录</title>
     <link
       rel="stylesheet"
-      href="{% static 'ynjksys/syssjcj_sbsj_record_generate.css' %}?v=2026080409"
+      href="{% static 'ynjksys/syssjcj_sbsj_record_generate.css' %}?v=2026080603"
     />
     <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
     <script src="{% static 'common/issubmit.js' %}"></script>
     <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080410"></script>
   </head>
@@ -26,14 +27,23 @@
             <label for="recordName">原始记录名称</label
             ><input id="recordName" type="text" maxlength="120" />
           </div>
-          <div class="info-item">
-            <span>原始记录模板</span><strong id="templateName">--</strong>
+          <div class="form-item">
+            <label for="sampleCategorySelect">样品类别</label
+            ><select id="sampleCategorySelect">
+              <option value="">请选择样品类别</option>
+            </select>
           </div>
-          <div class="info-item">
-            <span>记录生成方式</span><strong id="recordMode">--</strong>
+          <div class="form-item">
+            <label for="templateSelect">原始记录模板</label
+            ><select id="templateSelect" disabled>
+              <option value="">请先选择样品类别</option>
+            </select>
           </div>
-          <div class="info-item">
-            <span>样品类别</span><strong id="sampleCategoryName">--</strong>
+          <div class="form-item">
+            <label for="recordModeSelect">记录生成方式</label
+            ><select id="recordModeSelect" disabled>
+              <option value="">请先选择原始记录模板</option>
+            </select>
           </div>
           <div class="info-item">
             <span>所属部门</span><strong id="departmentName">--</strong>
@@ -46,6 +56,9 @@
           </div>
           <div class="info-item">
             <span>数据数量</span><strong id="dataCount">--</strong>
+          </div>
+          <div id="constraintMessage" class="constraint-message form-span-all">
+            请选择样品类别和原始记录模板，系统将校验所选数据是否符合模板组织规则。
           </div>
         </div>
       </section>
@@ -101,6 +114,6 @@
       </div>
     </div>
     <div id="toast" class="toast is-hidden"></div>
-    <script src="{% static 'ynjksys/syssjcj_sbsj_record_generate.js' %}?v=2026080410"></script>
+    <script src="{% static 'ynjksys/syssjcj_sbsj_record_generate.js' %}?v=2026080604"></script>
   </body>
 </html>

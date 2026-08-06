@@ -1,22 +1,33 @@
 (function (global) {
   "use strict";
   var CONFIG = {
-    mockMode: true,
+    mockMode: false,
     pageSize: 10,
     defaultDbnm: "ynjk",
-    qids: { dataList: "", recordList: "", generateRecord: "" },
+    qids: {
+      dataList: "ynjksys_03001q",
+      deviceOptions: "ynjksys_03002q",
+      departmentOptions: "ynjksys_03003q",
+      templateOptions: "ynjksys_03005q",
+      recordList: "ynjksys_03007q",
+    },
   };
   var mock = global.SyssjcjMockData;
-  var departments = mock ? mock.getDepartments() : [],
-    devices = mock ? mock.getDevices() : [],
+  var mockDepartments = mock ? mock.getDepartments() : [],
+    mockDevices = mock ? mock.getDevices() : [],
+    mockData = mock ? mock.getDataRows() : [];
+  var departments = CONFIG.mockMode && mock ? mock.getDepartments() : [],
+    devices = CONFIG.mockMode && mock ? mock.getDevices() : [],
     documents = mock ? mock.getDocuments() : [],
     templates = mock ? mock.getTemplates() : [],
-    allData = mock ? mock.getDataRows() : [];
+    allData = CONFIG.mockMode && mock ? mock.getDataRows() : [];
   var state = {
     data: [],
+    dataTotal: 0,
     dataPage: 1,
     selected: {},
     records: [],
+    recordTotal: 0,
     recordPage: 1,
   };
   function el(id) {
@@ -54,8 +65,135 @@
   function unique(values) {
     return Array.from(new Set(values));
   }
+  function rowsFromResult(result) {
+    if (!result || !Array.isArray(result.data)) return [];
+    if (!result.data.length || !Array.isArray(result.data[0])) return result.data;
+    if (
+      global.isqrydata &&
+      typeof global.isqrydata.convertDataToObject === "function"
+    ) {
+      return global.isqrydata.convertDataToObject(
+        result.data,
+        result.title || [],
+      );
+    }
+    return result.data.map(function (values) {
+      var row = {};
+      (result.title || []).forEach(function (title, index) {
+        row[title] = values[index];
+      });
+      return row;
+    });
+  }
+  function commonParams() {
+    var params =
+      typeof global.buildCommonParams === "function"
+        ? global.buildCommonParams() || {}
+        : {};
+    params.hp = params.hp || "ynjksys";
+    if (!params.dbnm || /^(none|null|undefined)$/i.test(String(params.dbnm))) {
+      params.dbnm = CONFIG.defaultDbnm;
+    }
+    return params;
+  }
+  function queryPlatform(qid, businessParams) {
+    return new Promise(function (resolve, reject) {
+      if (!qid) return reject(new Error("平台查询号尚未配置"));
+      if (!global.isqrydata || typeof global.isqrydata.query !== "function") {
+        return reject(new Error("平台查询组件 isqrydata.js 未加载"));
+      }
+      var params = commonParams();
+      Object.keys(businessParams || {}).forEach(function (key) {
+        params[key] = businessParams[key];
+      });
+      global.isqrydata.query({
+        qid: qid,
+        data: params,
+        successCallback: resolve,
+        errorCallback: reject,
+      });
+    });
+  }
+  function safeDecode(value) {
+    var text = String(value == null ? "" : value).replace(/\+/g, "%20");
+    try {
+      return decodeURIComponent(text);
+    } catch (error) {
+      return String(value == null ? "" : value);
+    }
+  }
+  function normalizeActualRow(row) {
+    return {
+      dataId: String(row["数据标识"] || ""),
+      fdiseq: String(row["文件序号"] || ""),
+      deviceId: String(row["仪器编号"] || ""),
+      instno: String(row["仪器编号"] || ""),
+      deviceName: row["仪器设备"] || row["仪器编号"] || "--",
+      sampleNo: row["样品编号"] || "--",
+      sampleSeq: row["样品序号"] || "",
+      sampleCategory: "",
+      sampleCategoryName: "--",
+      sampleName: "--",
+      projectCode: row["检测项目编号"] || "",
+      projectName: row["检测项目"] || row["检测项目编号"] || "--",
+      result: row["结果摘要"] == null ? "--" : row["结果摘要"],
+      unit: row["单位"] || "--",
+      experimentTime: row["数据入库时间"] || "--",
+      collectTime: row["采集时间"] || "--",
+      fileName: safeDecode(row["来源文件"] || ""),
+      departmentId: String(row["部门编号"] || ""),
+      departmentName: row["部门名称"] || "--",
+      total: Number(row["总数"] || 0),
+    };
+  }
+  function normalizeActualRecord(row) {
+    var modeCode = String(row["生成方式代码"] || ""),
+      categoryNames = String(row["样品类别"] || "")
+        .split("、")
+        .filter(function (value) {
+          return value && value !== "--";
+        });
+    return {
+      recordId: String(row["原始记录标识"] || ""),
+      recordNo: row["原始记录编号"] || "--",
+      name: row["原始记录名称"] || "--",
+      status: row["记录状态"] || "--",
+      mode: {
+        FILE: "来源文件模式",
+        SAMPLE: "样品模式",
+        ITEM: "项目模式",
+      }[modeCode] || modeCode,
+      templateId: String(row["模板编号"] || ""),
+      templateName: row["模板名称"] || "--",
+      templateVersion: row["模板版本"] || "",
+      deviceId: String(row["仪器编号"] || ""),
+      device: {
+        deviceId: String(row["仪器编号"] || ""),
+        instno: String(row["仪器编号"] || ""),
+        name: row["仪器设备"] || "--",
+      },
+      departmentId: String(row["部门编号"] || ""),
+      departmentName: row["部门名称"] || "--",
+      sampleCategoryNames: categoryNames,
+      sampleCount: Number(row["样品数量"] || 0),
+      projectCount: Number(row["项目数量"] || 0),
+      dataCount: Number(row["数据数量"] || 0),
+      sourceFileCount: Number(row["来源文件数量"] || 0),
+      experimentRange:
+        (row["实验开始时间"] || "--") +
+        " 至 " +
+        (row["实验结束时间"] || "--"),
+      createTime: row["生成时间"] || "--",
+      creator: row["生成人"] || row["生成人账号"] || "--",
+      total: Number(row["总数"] || 0),
+    };
+  }
   function departmentName(id) {
     var item = find(departments, "departmentId", id);
+    return item ? item.name : "--";
+  }
+  function recordDepartmentName(id) {
+    var item = find(mockDepartments, "departmentId", id);
     return item ? item.name : "--";
   }
   function device(id) {
@@ -88,7 +226,9 @@
         return option(item.departmentId, item.name);
       })
       .join("");
-    el("departmentSelect").insertAdjacentHTML("beforeend", html);
+    el("departmentSelect").innerHTML =
+      '<option value="">全部部门</option>' + html;
+    el("departmentSelect").disabled = false;
   }
   function populateDevices() {
     var departmentId = el("departmentSelect").value,
@@ -103,12 +243,10 @@
           return option(
             item.deviceId,
             item.name +
-              " / " +
-              item.brand +
-              " " +
-              item.model +
-              " / " +
-              item.assetNo,
+              (item.brand || item.model
+                ? " / " + (item.brand || "") + " " + (item.model || "")
+                : "") +
+              (item.assetNo ? " / " + item.assetNo : ""),
           );
         })
         .join("");
@@ -122,40 +260,9 @@
       el("deviceSelect").value = "";
     }
     renderDeviceContext();
-    populateTemplates();
+    populateRecordTemplates();
   }
-  function populateTemplates() {
-    var departmentId = el("departmentSelect").value,
-      deviceId = el("deviceSelect").value,
-      sampleCategory = el("sampleCategory").value,
-      selected = el("templateSelect").value,
-      instno = deviceId ? device(deviceId).instno : "";
-    var list = templates.filter(function (item) {
-      return (
-        item.status === "启用" &&
-        (!departmentId || item.departmentId === departmentId) &&
-        (!deviceId ||
-          (item.deviceIds && item.deviceIds.length
-            ? item.deviceIds.indexOf(deviceId) >= 0
-            : item.deviceTypes.indexOf(instno) >= 0)) &&
-        (!sampleCategory ||
-          (item.sampleCategories || []).indexOf(sampleCategory) >= 0)
-      );
-    });
-    el("templateSelect").innerHTML =
-      '<option value="">请选择模板</option>' +
-      list
-        .map(function (item) {
-          return option(item.templateId, item.name);
-        })
-        .join("");
-    if (
-      list.some(function (item) {
-        return item.templateId === selected;
-      })
-    ) {
-      el("templateSelect").value = selected;
-    }
+  function populateRecordTemplates() {
     el("recordTemplate").innerHTML =
       '<option value="">全部模板</option>' +
       templates
@@ -173,51 +280,58 @@
     setTitle("contextModel", item.brand + " / " + item.model);
     setTitle("contextAsset", item.assetNo);
     setTitle("contextLocation", item.location);
-    setTitle("contextOwner", item.owner);
     setTitle("contextCollectType", item.collectType);
   }
-  function updateSampleCategories() {
+  function queryData(resetPage) {
     var departmentId = el("departmentSelect").value,
-      deviceId = el("deviceSelect").value,
-      available = {};
-    allData.forEach(function (row) {
-      var dev = device(row.deviceId);
-      if (
-        (!departmentId || dev.departmentId === departmentId) &&
-        (!deviceId || row.deviceId === deviceId)
-      ) {
-        available[row.sampleCategory] = true;
-      }
-    });
-    Array.from(el("sampleCategory").options).forEach(function (item) {
-      if (item.value) {
-        item.disabled = !available[item.value];
-      }
-    });
-    if (
-      el("sampleCategory").selectedOptions[0] &&
-      el("sampleCategory").selectedOptions[0].disabled
-    ) {
-      el("sampleCategory").value = "";
-    }
-  }
-  function queryData() {
-    var sampleCategory = el("sampleCategory").value,
-      departmentId = el("departmentSelect").value,
       deviceId = el("deviceSelect").value,
       sample = el("sampleKeyword").value.trim().toLowerCase(),
       project = el("projectKeyword").value.trim().toLowerCase(),
       start = el("startDate").value,
       end = el("endDate").value;
     if (start && end && start > end) {
-      showToast("实验开始日期不能晚于结束日期");
+      showToast("数据入库开始日期不能晚于结束日期");
       return;
     }
+    if (!CONFIG.mockMode) {
+      if (resetPage !== false) {
+        state.dataPage = 1;
+        state.selected = {};
+      }
+      el("queryButton").disabled = true;
+      queryPlatform(CONFIG.qids.dataList, {
+        department_sql_equal: departmentId,
+        instno_sql_equal: deviceId,
+        sampno_sql_equal: el("sampleKeyword").value.trim(),
+        item_keyword_sql_equal: el("projectKeyword").value.trim(),
+        start_date_sql_equal: start,
+        end_date_sql_equal: end,
+        page_sql_equal: state.dataPage,
+        page_size_sql_equal: CONFIG.pageSize,
+      })
+        .then(function (result) {
+          state.data = rowsFromResult(result).map(normalizeActualRow);
+          state.dataTotal = state.data.length ? state.data[0].total : 0;
+          allData = state.data.slice();
+          renderData();
+        })
+        .catch(function (error) {
+          state.data = [];
+          state.dataTotal = 0;
+          renderData();
+          console.error("设备采集数据查询失败：", error);
+          showToast("设备采集数据查询失败，请稍后重试");
+        })
+        .finally(function () {
+          el("queryButton").disabled = false;
+        });
+      return;
+    }
+    /* 模拟数据查询降级区：恢复 mockMode 后使用。 */
     state.data = allData.filter(function (row) {
       var dev = device(row.deviceId),
         day = row.experimentTime.slice(0, 10);
       return (
-        (!sampleCategory || row.sampleCategory === sampleCategory) &&
         (!departmentId || dev.departmentId === departmentId) &&
         (!deviceId || row.deviceId === deviceId) &&
         (!sample || row.sampleNo.toLowerCase().indexOf(sample) >= 0) &&
@@ -232,11 +346,15 @@
         a.projectName.localeCompare(b.projectName)
       );
     });
-    state.dataPage = 1;
-    state.selected = {};
+    if (resetPage !== false) {
+      state.dataPage = 1;
+      state.selected = {};
+    }
+    state.dataTotal = state.data.length;
     renderData();
   }
   function currentDataRows() {
+    if (!CONFIG.mockMode) return state.data;
     var start = (state.dataPage - 1) * CONFIG.pageSize;
     return state.data.slice(start, start + CONFIG.pageSize);
   }
@@ -246,12 +364,13 @@
     el("dataRows").innerHTML = rows
       .map(function (row, index) {
         var dev = device(row.deviceId),
-          dep = departmentName(dev.departmentId),
-          file = documentItem(row.fdiseq);
+          file = CONFIG.mockMode ? documentItem(row.fdiseq) : row;
         return (
           '<tr><td><button class="action-link" data-action="detail" data-id="' +
           escapeHtml(row.dataId) +
-          '" type="button">查看数据</button></td><td class="col-check"><input data-action="select" data-id="' +
+          '" type="button">查看数据</button> <button class="action-link" data-action="source" data-id="' +
+          escapeHtml(row.dataId) +
+          '" type="button">来源文件</button></td><td class="col-check"><input data-action="select" data-id="' +
           escapeHtml(row.dataId) +
           '" type="checkbox"' +
           (state.selected[row.dataId] ? " checked" : "") +
@@ -261,14 +380,6 @@
           escapeHtml(row.sampleNo) +
           '">' +
           escapeHtml(row.sampleNo) +
-          '</td><td title="' +
-          escapeHtml(row.sampleCategoryName) +
-          '">' +
-          escapeHtml(row.sampleCategoryName) +
-          '</td><td title="' +
-          escapeHtml(row.sampleName) +
-          '">' +
-          escapeHtml(row.sampleName) +
           '</td><td title="' +
           escapeHtml(row.projectName) +
           '">' +
@@ -280,13 +391,9 @@
           "</td><td>" +
           escapeHtml(row.unit) +
           '</td><td title="' +
-          escapeHtml(dev.name) +
+          escapeHtml(dev.name || row.deviceName) +
           '">' +
-          escapeHtml(dev.name) +
-          '</td><td title="' +
-          escapeHtml(dep) +
-          '">' +
-          escapeHtml(dep) +
+          escapeHtml(dev.name || row.deviceName) +
           '</td><td title="' +
           escapeHtml(row.experimentTime) +
           '">' +
@@ -294,29 +401,31 @@
           '</td><td title="' +
           escapeHtml(file.collectTime) +
           '">' +
-          escapeHtml(file.collectTime) +
+          escapeHtml(file.collectTime || row.collectTime) +
           '</td><td title="' +
-          escapeHtml(file.fileName) +
+          escapeHtml(file.fileName || row.fileName) +
           '">' +
-          escapeHtml(file.fileName) +
+          escapeHtml(file.fileName || row.fileName) +
           "</td></tr>"
         );
       })
       .join("");
-    el("dataEmpty").classList.toggle("is-hidden", state.data.length !== 0);
-    el("dataSummary").textContent = "（当前查询 " + state.data.length + " 条）";
+    var total = CONFIG.mockMode ? state.data.length : state.dataTotal;
+    el("dataEmpty").classList.toggle("is-hidden", total !== 0);
+    el("dataSummary").textContent = "（当前查询 " + total + " 条）";
     var ids = Object.keys(state.selected).filter(function (id) {
       return state.selected[id];
     });
     el("selectedSummary").textContent = "已选择 " + ids.length + " 条";
     el("generateButton").disabled = !ids.length;
     var pageRows = currentDataRows();
-    el("selectAll").checked =
-      pageRows.length > 0 &&
-      pageRows.every(function (row) {
+    var selectedOnPage = pageRows.filter(function (row) {
         return state.selected[row.dataId];
-      });
-    renderPagination("data", state.data.length, state.dataPage);
+      }).length,
+      allSelected = pageRows.length > 0 && selectedOnPage === pageRows.length;
+    el("selectAll").checked = allSelected;
+    el("selectAll").indeterminate = selectedOnPage > 0 && !allSelected;
+    renderPagination("data", total, state.dataPage);
   }
   function renderPagination(prefix, total, page) {
     var pages = Math.ceil(total / CONFIG.pageSize),
@@ -339,61 +448,51 @@
     el(prefix + "PageSummary").textContent = "共 " + pages + " 页，10 条";
   }
   function canSelectTogether(first, row) {
-    var selectedTemplate = template(el("templateSelect").value),
-      mode = selectedTemplate.mode;
     if (first.deviceId !== row.deviceId) {
       return "生成同一份原始记录时不能混选不同仪器设备的数据";
-    }
-    if (first.sampleCategory !== row.sampleCategory) {
-      return "生成同一份原始记录时不能混选不同样品类别的数据";
-    }
-    if (mode === "样品模式" && first.sampleNo !== row.sampleNo) {
-      return "按单一样品生成时，只能选择同一样品编号的数据";
-    }
-    if (mode === "项目模式" && first.projectName !== row.projectName) {
-      return "按检测项目生成时，只能选择同一检测项目的数据";
     }
     return "";
   }
   function toggleSelection(id, checked) {
-    var row = find(allData, "dataId", id),
-      selectedRows = Object.keys(state.selected)
-        .filter(function (key) {
-          return state.selected[key];
-        })
-        .map(function (key) {
-          return find(allData, "dataId", key);
-        })
-        .filter(Boolean),
+    var row = find(currentDataRows(), "dataId", id),
+      rows = selectedRows(),
       message =
-        checked && selectedRows.length
-          ? canSelectTogether(selectedRows[0], row)
+        checked && rows.length && row
+          ? canSelectTogether(rows[0], row)
           : "";
+    if (!row) {
+      showToast("未找到对应的采集数据，请重新查询");
+      renderData();
+      return;
+    }
     if (message) {
       showToast(message);
       renderData();
       return;
     }
-    state.selected[id] = checked;
+    if (checked) {
+      state.selected[id] = row;
+    } else {
+      delete state.selected[id];
+    }
     renderData();
   }
   function detailPairs(row) {
     var dev = device(row.deviceId),
-      dep = departmentName(dev.departmentId),
-      file = documentItem(row.fdiseq);
+      file = CONFIG.mockMode ? documentItem(row.fdiseq) : row;
     return [
       ["样品编号", row.sampleNo],
-      ["样品类别", row.sampleCategoryName],
-      ["样品名称", row.sampleName],
+      ["样品序号", row.sampleSeq || "--"],
+      ["检测项目编号", row.projectCode],
       ["检测项目", row.projectName],
       ["检测结果", row.result],
       ["结果单位", row.unit],
-      ["所属部门", dep],
-      ["仪器设备", dev.name],
-      ["品牌型号", dev.brand + " / " + dev.model],
-      ["实验时间", row.experimentTime],
-      ["采集时间", file.collectTime],
-      ["来源文件", file.fileName],
+      ["仪器编号", row.instno || row.deviceId],
+      ["仪器设备", dev.name || row.deviceName],
+      [CONFIG.mockMode ? "实验时间" : "数据入库时间", row.experimentTime],
+      ["采集时间", file.collectTime || row.collectTime],
+      ["来源文件", file.fileName || row.fileName],
+      ["文件序号", row.fdiseq],
       ["数据标识", row.dataId],
     ];
   }
@@ -421,11 +520,8 @@
   }
   function selectedRows() {
     return Object.keys(state.selected)
-      .filter(function (id) {
-        return state.selected[id];
-      })
       .map(function (id) {
-        return find(allData, "dataId", id);
+        return state.selected[id];
       })
       .filter(Boolean);
   }
@@ -476,23 +572,16 @@
       showToast(invalid);
       return;
     }
-    var templateId = el("templateSelect").value,
-      target = template(templateId),
-      dev = device(rows[0].deviceId);
-    if (!templateId) {
-      showToast("请先选择项目模板");
-      return;
-    }
-    if (target.deviceTypes.indexOf(dev.instno) < 0) {
-      showToast("所选模板不适用于当前仪器设备");
-      return;
-    }
+    var dev = device(rows[0].deviceId),
+      contextKey = mock && mock.keys
+        ? mock.keys.generationContext
+        : "syssjcj_mock_generation_context_v1";
     global.sessionStorage.setItem(
-      mock.keys.generationContext,
+      contextKey,
       JSON.stringify({
-        templateId: templateId,
-        mode: target.mode,
         deviceId: dev.deviceId,
+        device: dev,
+        rows: rows,
         dataIds: rows.map(function (row) {
           return row.dataId;
         }),
@@ -500,14 +589,38 @@
     );
     openPage("syssjcj_sbsj_record_generate", {}, "生成原始记录", 1380, 860);
   }
-  function queryRecords() {
+  function queryRecords(resetPage) {
     var templateId = el("recordTemplate").value,
       start = el("recordStart").value,
       end = el("recordEnd").value;
+    if (resetPage !== false) state.recordPage = 1;
     if (start && end && start > end) {
       showToast("生成开始日期不能晚于结束日期");
       return;
     }
+    if (!CONFIG.mockMode) {
+      queryPlatform(CONFIG.qids.recordList, {
+        template_id_sql_equal: templateId,
+        start_date_sql_equal: start,
+        end_date_sql_equal: end,
+        page_sql_equal: state.recordPage,
+        page_size_sql_equal: CONFIG.pageSize,
+      })
+        .then(function (result) {
+          state.records = rowsFromResult(result).map(normalizeActualRecord);
+          state.recordTotal = state.records.length ? state.records[0].total : 0;
+          renderRecords();
+        })
+        .catch(function (error) {
+          state.records = [];
+          state.recordTotal = 0;
+          renderRecords();
+          console.error("原始记录列表查询失败：", error);
+          showToast("原始记录列表查询失败，请稍后重试");
+        });
+      return;
+    }
+    /* 模拟记录查询降级区：仅在 CONFIG.mockMode=true 时使用。 */
     state.records = mock.getRecords().filter(function (item) {
       var day = item.createTime.slice(0, 10);
       return (
@@ -516,20 +629,27 @@
         (!end || day <= end)
       );
     });
-    state.recordPage = 1;
+    state.recordTotal = state.records.length;
     renderRecords();
   }
   function modeName(mode) {
-    return mode === "样品模式" ? "按单一样品生成" : "按检测项目生成";
+    return {
+      来源文件模式: "按来源文件生成",
+      样品模式: "按样品生成",
+      项目模式: "按检测项目生成",
+    }[mode] || mode || "--";
   }
   function recordCategoryNames(record) {
+    if (record.sampleCategoryNames && record.sampleCategoryNames.length) {
+      return record.sampleCategoryNames.join("、");
+    }
     return Array.from(
       new Set(
-        record.dataIds
+        (record.dataRows || record.dataIds
           .map(function (id) {
-            return find(allData, "dataId", id);
+            return find(mockData, "dataId", id);
           })
-          .filter(Boolean)
+          .filter(Boolean))
           .map(function (row) {
             return row.sampleCategoryName;
           }),
@@ -538,11 +658,17 @@
   }
   function renderRecords() {
     var start = (state.recordPage - 1) * CONFIG.pageSize,
-      rows = state.records.slice(start, start + CONFIG.pageSize);
+      rows = CONFIG.mockMode
+        ? state.records.slice(start, start + CONFIG.pageSize)
+        : state.records,
+      total = CONFIG.mockMode ? state.records.length : state.recordTotal;
     el("recordRows").innerHTML = rows
       .map(function (row, index) {
         var tpl = template(row.templateId),
-          dev = device(row.deviceId);
+          dev = row.device || device(row.deviceId) ||
+            find(mockDevices, "deviceId", row.deviceId) || {},
+          templateName = row.templateName || tpl.name || "--",
+          department = row.departmentName || recordDepartmentName(row.departmentId);
         return (
           '<tr><td><button class="action-link" data-action="record" data-id="' +
           escapeHtml(row.recordId) +
@@ -553,9 +679,9 @@
           '">' +
           escapeHtml(row.name) +
           '</td><td title="' +
-          escapeHtml(tpl.name) +
+          escapeHtml(templateName) +
           '">' +
-          escapeHtml(tpl.name) +
+          escapeHtml(templateName) +
           '</td><td title="' +
           modeName(row.mode) +
           '">' +
@@ -565,9 +691,9 @@
           '">' +
           escapeHtml(recordCategoryNames(row)) +
           '</td><td title="' +
-          escapeHtml(departmentName(row.departmentId)) +
+          escapeHtml(department) +
           '">' +
-          escapeHtml(departmentName(row.departmentId)) +
+          escapeHtml(department) +
           '</td><td title="' +
           escapeHtml(dev.name) +
           '">' +
@@ -590,10 +716,10 @@
         );
       })
       .join("");
-    el("recordEmpty").classList.toggle("is-hidden", state.records.length !== 0);
+    el("recordEmpty").classList.toggle("is-hidden", total !== 0);
     el("recordSummary").textContent =
-      "（当前查询 " + state.records.length + " 条）";
-    renderPagination("record", state.records.length, state.recordPage);
+      "（当前查询 " + total + " 条）";
+    renderPagination("record", total, state.recordPage);
   }
   function openRecord(id) {
     openPage(
@@ -631,26 +757,40 @@
         return;
       }
       state[prefix + "Page"] = Number(button.dataset.page);
-      prefix === "data" ? renderData() : renderRecords();
+      prefix === "data" ? queryData(false) : queryRecords(false);
     };
     el(prefix + "Previous").onclick = function () {
       if (state[prefix + "Page"] > 1) {
         state[prefix + "Page"] -= 1;
-        prefix === "data" ? renderData() : renderRecords();
+        prefix === "data" ? queryData(false) : queryRecords(false);
       }
     };
     el(prefix + "Next").onclick = function () {
-      var total = prefix === "data" ? state.data.length : state.records.length;
+      var total =
+        prefix === "data"
+          ? CONFIG.mockMode
+            ? state.data.length
+            : state.dataTotal
+          : CONFIG.mockMode
+            ? state.records.length
+            : state.recordTotal;
       if (state[prefix + "Page"] * CONFIG.pageSize < total) {
         state[prefix + "Page"] += 1;
-        prefix === "data" ? renderData() : renderRecords();
+        prefix === "data" ? queryData(false) : queryRecords(false);
       }
     };
     el(prefix + "Jump").onkeydown = function (event) {
       if (event.key !== "Enter") {
         return;
       }
-      var total = prefix === "data" ? state.data.length : state.records.length,
+      var total =
+          prefix === "data"
+            ? CONFIG.mockMode
+              ? state.data.length
+              : state.dataTotal
+            : CONFIG.mockMode
+              ? state.records.length
+              : state.recordTotal,
         pages = Math.ceil(total / CONFIG.pageSize),
         page = Number(this.value);
       if (page < 1 || page > pages) {
@@ -659,8 +799,61 @@
       }
       state[prefix + "Page"] = page;
       this.value = "";
-      prefix === "data" ? renderData() : renderRecords();
+      prefix === "data" ? queryData(false) : queryRecords(false);
     };
+  }
+  function loadDictionary(qid, label) {
+    return queryPlatform(qid, {})
+      .then(rowsFromResult)
+      .catch(function (error) {
+        console.error(label + "加载失败：", error);
+        showToast(label + "加载失败");
+        return [];
+      });
+  }
+  function loadActualDictionaries() {
+    return Promise.all([
+      loadDictionary(CONFIG.qids.departmentOptions, "部门词典"),
+      loadDictionary(CONFIG.qids.deviceOptions, "仪器设备词典"),
+      loadDictionary(CONFIG.qids.templateOptions, "原始记录模板词典"),
+    ]).then(function (resultSets) {
+      departments = resultSets[0].map(function (row) {
+        return {
+          departmentId: String(row["部门编号"] || ""),
+          name: row["部门名称"] || "--",
+        };
+      });
+      devices = resultSets[1]
+        .map(function (row) {
+          return {
+            deviceId: String(row["仪器编号"] || ""),
+            instno: String(row["仪器编号"] || ""),
+            name: row["仪器设备"] || row["仪器编号"] || "--",
+            departmentId: String(row["部门编号"] || ""),
+            departmentName: row["部门名称"] || "--",
+            brand: row["品牌"] || "",
+            model: row["型号"] || "",
+            assetNo: row["固定资产编号"] || "",
+            location: row["位置"] || "",
+            collectType: "接口监听自动采集",
+          };
+        })
+        .filter(function (item) {
+          return item.deviceId;
+        });
+      templates = resultSets[2].map(function (row) {
+        return {
+          templateId: String(row["模板编号"] || ""),
+          name: row["模板名称"] || "--",
+          mode: row["默认组织规则"] || row["组织规则"] || "",
+          version: row["模板版本"] || "",
+          status: "启用",
+        };
+      });
+      populateDepartments();
+      populateDevices();
+      populateRecordTemplates();
+    });
   }
   function bind() {
     document.querySelector(".business-tabs").onclick = function (event) {
@@ -671,29 +864,17 @@
     };
     el("departmentSelect").onchange = function () {
       populateDevices();
-      updateSampleCategories();
     };
     el("deviceSelect").onchange = function () {
       renderDeviceContext();
-      populateTemplates();
-      updateSampleCategories();
     };
-    el("templateSelect").onchange = function () {
-      state.selected = {};
-      renderData();
+    el("queryButton").onclick = function () {
+      queryData(true);
     };
-    el("sampleCategory").onchange = function () {
-      populateTemplates();
-      state.selected = {};
-      queryData();
-    };
-    el("queryButton").onclick = queryData;
     el("resetButton").onclick = function () {
       [
         "departmentSelect",
         "deviceSelect",
-        "templateSelect",
-        "sampleCategory",
         "sampleKeyword",
         "projectKeyword",
         "startDate",
@@ -702,9 +883,7 @@
         el(id).value = "";
       });
       populateDevices();
-      populateTemplates();
-      updateSampleCategories();
-      queryData();
+      queryData(true);
     };
     el("dataRows").onclick = function (event) {
       var target = event.target.closest("[data-action]");
@@ -714,6 +893,18 @@
       if (target.dataset.action === "detail") {
         openDataDetail(target.dataset.id);
       }
+      if (target.dataset.action === "source") {
+        var sourceRow = find(allData, "dataId", target.dataset.id);
+        if (sourceRow && sourceRow.fdiseq) {
+          openPage(
+            "syssjcj_cjwd_detail",
+            { fdiseq: sourceRow.fdiseq },
+            "采集文件详情",
+            1460,
+            900,
+          );
+        }
+      }
       if (target.dataset.action === "select") {
         toggleSelection(target.dataset.id, target.checked);
       }
@@ -722,12 +913,12 @@
       var checked = this.checked;
       currentDataRows().forEach(function (row) {
         if (!checked) {
-          state.selected[row.dataId] = false;
+          delete state.selected[row.dataId];
           return;
         }
         var selected = selectedRows();
         if (!selected.length || !canSelectTogether(selected[0], row)) {
-          state.selected[row.dataId] = true;
+          state.selected[row.dataId] = row;
         }
       });
       renderData();
@@ -774,17 +965,23 @@
     if (typeof global.initGlobalParams === "function") {
       global.initGlobalParams();
     }
-    if (!mock) {
+    if (CONFIG.mockMode && !mock) {
       showToast("标准模拟数据未加载");
       return;
     }
     populateDepartments();
-    populateDevices();
-    populateTemplates();
-    updateSampleCategories();
+    populateRecordTemplates();
     bind();
-    queryData();
     queryRecords();
+    if (CONFIG.mockMode) {
+      populateDevices();
+      queryData(true);
+      return;
+    }
+    el("generateButton").title = "选择采集数据后进入原始记录生成设置";
+    loadActualDictionaries().finally(function () {
+      queryData(true);
+    });
   }
   global.syssjcjSbsjRefresh = function () {
     state.selected = {};

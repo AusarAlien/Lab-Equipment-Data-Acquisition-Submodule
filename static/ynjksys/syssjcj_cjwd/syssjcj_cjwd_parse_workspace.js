@@ -38,7 +38,7 @@
       sampleFlag: "样品名称",
       fields: [
         ["sampno", "样品编号"], ["item", "组分名称"], ["rt", "保留时间"],
-        ["type", "类型"], ["rslt", "峰面积"], ["ratio", "含量/峰面积"],
+        ["type", "类型"], ["rslt", "峰面积"], ["unit", "峰面积单位"], ["ratio", "含量/峰面积"],
         ["content", "含量"]
       ],
       items: []
@@ -48,7 +48,7 @@
       sampleFlag: "Analyte ID",
       fields: [
         ["sampno", "样品编号"], ["organism1", "最佳匹配菌种"],
-        ["rslt", "最佳Score"], ["ncbi", "NCBI ID"], ["confidence", "置信度"],
+        ["rslt", "最佳Score"], ["unit", "Score单位"], ["ncbi", "NCBI ID"], ["confidence", "置信度"],
         ["organism2", "第二匹配菌种"], ["score2", "第二Score"]
       ],
       items: []
@@ -412,7 +412,7 @@
   }
   function adaptLiveRow(row, instno) {
     var raw = global.SyssjcjDocumentService.normalizeParseRow(row);
-    var common = { fguid: raw.fguid, sampno: raw.sampleNo };
+    var common = { fguid: raw.fguid, sampno: raw.sampleNo, unit: raw.unit };
     if (instno === "AGILENT-1200") {
       common.item = raw.result6 || raw.itemSeq;
       common.rt = raw.result1;
