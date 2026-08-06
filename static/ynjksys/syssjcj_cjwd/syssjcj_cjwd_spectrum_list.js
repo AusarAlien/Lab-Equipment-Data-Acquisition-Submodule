@@ -1,12 +1,13 @@
 (function (global) {
   "use strict";
   var CONFIG = {
-    mockMode: true,
+    mockMode: false,
     defaultDbnm: "ynjk",
     pageSize: 12,
-    qids: { spectrumList: "" },
+    qids: { spectrumList: "ynjksys_01005q" },
     imagePage: "syssjcj_cjwd_image_view",
   };
+  /* 模拟图谱降级数据：恢复模拟模式时取消本段注释。
   var rows = [
     {
       spectrumId: "TP202608030001",
@@ -156,6 +157,8 @@
   if (global.SyssjcjMockData) {
     rows = global.SyssjcjMockData.getSpectra();
   }
+  */
+  var rows = [];
   var state = { filtered: [], page: 1, selectedId: "" };
   function el(id) {
     return document.getElementById(id);
@@ -187,18 +190,28 @@
     if (CONFIG.mockMode) {
       return Promise.resolve(rows.slice());
     }
-    return Promise.reject(new Error("图谱查询 qid 尚未配置"));
+    return global.SyssjcjDocumentService
+      .query(CONFIG.qids.spectrumList, {
+        sample_no_sql_equal: el("sampleNo").value.trim(),
+        start_date_sql_equal: el("startDate").value,
+        end_date_sql_equal: el("endDate").value,
+        page_sql_equal: 1,
+        page_size_sql_equal: 1000,
+      })
+      .then(function (result) {
+        rows = global.SyssjcjDocumentService.rowsFromResult(result).map(
+          global.SyssjcjDocumentService.normalizeSpectrum,
+        );
+        return rows.slice();
+      });
   }
   function populateDevices() {
-    var seen = {};
-    rows.forEach(function (r) {
-      seen[r.instno] = r.device;
-    });
-    Object.keys(seen).forEach(function (k) {
+    var known = { "AGILENT-1200": "安捷伦1200液相色谱仪" };
+    Object.keys(known).forEach(function (k) {
       var o = document.createElement("option");
       o.value = k;
-      o.textContent = seen[k];
-      o.title = seen[k];
+      o.textContent = known[k];
+      o.title = known[k];
       el("deviceSelect").appendChild(o);
     });
   }
@@ -232,6 +245,13 @@
     });
   }
   function thumbnailSvg(item) {
+    if (!CONFIG.mockMode && item.fdiseq) {
+      return (
+        '<img src="' +
+        esc(global.SyssjcjDocumentService.pageImageUrl(item.fdiseq, item.page, 96)) +
+        '" alt="' + esc(item.name) + '" style="width:100%;height:100%;object-fit:contain;background:#fff">'
+      );
+    }
     var values = item.series || [],
       left = 16,
       right = 284,
@@ -329,9 +349,7 @@
   }
   function openImage(item) {
     if (!item) return;
-    var key = global.SyssjcjMockData
-      ? global.SyssjcjMockData.keys.selectedSpectrum
-      : "syssjcj_cjwd_selected_spectrum_v1";
+    var key = "syssjcj_cjwd_selected_spectrum_v1";
     global.sessionStorage.setItem(key, JSON.stringify(item));
     el("imageModalTitle").textContent = "图谱原图 - " + item.name;
     el("imageModalFrame").src = imageUrl(item);

@@ -2,7 +2,7 @@
   "use strict";
 
   var CONFIG = {
-    mockMode: true,
+    mockMode: false,
     defaultDbnm: "ynjk",
     documentKey: global.SyssjcjMockData
       ? global.SyssjcjMockData.keys.documents
@@ -10,14 +10,15 @@
     parseDataKey: "syssjcj_cjwd_mock_parse_data_v1",
     parseInfoKey: "syssjcj_cjwd_mock_parse_info_v1",
     qids: {
-      document: "",
-      parseRows: "",
+      document: "ynjksys_01002q",
+      parseRows: "ynjksys_01003q",
       parseInfo: "",
-      deleteRows: "",
+      deleteRows: "ynjksys_01007q",
       reparse: "",
       reparseStatus: "",
     },
   };
+  /* 模拟数据降级区：恢复模拟模式时取消本段注释。
   var fallbackDocument = {
     fdiseq: "CJ202608030001",
     fileName: "ICPMS_金属元素批量检测结果.xlsx",
@@ -29,6 +30,31 @@
     parseStatus: "解析成功",
     dataCount: 128,
   };
+  */
+  var fallbackDocument = { fdiseq: "" };
+  var profiles = {
+    "AGILENT-1200": {
+      parser: "Agilent1200",
+      sampleFlag: "样品名称",
+      fields: [
+        ["sampno", "样品编号"], ["item", "组分名称"], ["rt", "保留时间"],
+        ["type", "类型"], ["rslt", "峰面积"], ["ratio", "含量/峰面积"],
+        ["content", "含量"]
+      ],
+      items: []
+    },
+    "BRUKER-MICROFLEX": {
+      parser: "BrukerMicroflex",
+      sampleFlag: "Analyte ID",
+      fields: [
+        ["sampno", "样品编号"], ["organism1", "最佳匹配菌种"],
+        ["rslt", "最佳Score"], ["ncbi", "NCBI ID"], ["confidence", "置信度"],
+        ["organism2", "第二匹配菌种"], ["score2", "第二Score"]
+      ],
+      items: []
+    }
+  };
+  /* 以下为旧版多仪器模拟字段及模拟行，保留用于降级。
   var profiles = {
     ICPMS: {
       parser: "ExcelICPMS",
@@ -317,6 +343,7 @@
       ],
     },
   };
+  */
   var state = {
     document: null,
     profile: null,
@@ -382,6 +409,69 @@
         items: [["检测项目", "--"]],
       }
     );
+  }
+  function adaptLiveRow(row, instno) {
+    var raw = global.SyssjcjDocumentService.normalizeParseRow(row);
+    var common = { fguid: raw.fguid, sampno: raw.sampleNo };
+    if (instno === "AGILENT-1200") {
+      common.item = raw.result6 || raw.itemSeq;
+      common.rt = raw.result1;
+      common.type = raw.result2;
+      common.rslt = raw.result3 || raw.result;
+      common.ratio = raw.result4;
+      common.content = raw.result5;
+      return common;
+    }
+    if (instno === "BRUKER-MICROFLEX") {
+      common.organism1 = raw.result1;
+      common.rslt = raw.result2 || raw.result;
+      common.ncbi = raw.result3;
+      common.confidence = raw.result4;
+      common.organism2 = raw.result5;
+      common.score2 = raw.result6;
+      return common;
+    }
+    common.item = raw.itemSeq;
+    common.rslt = raw.result;
+    return common;
+  }
+  function loadLiveData(fdiseq) {
+    var service = global.SyssjcjDocumentService;
+    return service
+      .query(CONFIG.qids.document, { fdiseq_sql_equal: fdiseq })
+      .then(function (detailResult) {
+        var detailRow = service.rowsFromResult(detailResult)[0];
+        if (!detailRow) return null;
+        var documentItem = service.normalizeDocument(detailRow);
+        return service
+          .query(CONFIG.qids.parseRows, { fdiseq_sql_equal: fdiseq })
+          .then(function (rowsResult) {
+            var rawRows = service.rowsFromResult(rowsResult);
+            var rows = rawRows.map(function (row) {
+              return adaptLiveRow(row, documentItem.instno);
+            });
+            return {
+              document: documentItem,
+              rows: rows,
+              info: {
+                startTime: documentItem.firstParseTime,
+                endTime: documentItem.lastParseTime,
+                result: documentItem.parseStatus,
+                rawCount: rows.length,
+                successCount: rows.length,
+                skipCount: 0,
+                error:
+                  documentItem.parseStatus === "解析成功"
+                    ? "--"
+                    : documentItem.parseMessage || "未生成解析入库数据",
+                reason: "--",
+                operator: rawRows.length
+                  ? service.normalizeParseRow(rawRows[0]).operator || "系统自动采集"
+                  : "系统自动采集",
+              },
+            };
+          });
+      });
   }
   function makeRows(documentItem, forceParse) {
     var profile = profileFor(documentItem.instno),
@@ -662,8 +752,64 @@
     });
   }
   function openDelete(ids) {
+    ids = ids || [];
+    if (!ids.length) {
+      showToast("请先选择需要删除的解析数据");
+      return;
+    }
+    if (!CONFIG.mockMode) {
+      var params = global.SyssjcjDocumentService.commonParams();
+      params.hp = "common";
+      params.message = encodeURIComponent(
+        "确认删除选中的" + ids.length + "条解析数据吗？删除后不可恢复。",
+      );
+      params.qid = CONFIG.qids.deleteRows;
+      params.data = encodeURIComponent(
+        JSON.stringify({ fdiseq: Number(state.document.fdiseq), fguids: ids }),
+      );
+      params.action = "custom";
+      global.isloadpage.openModal({
+        hp: "common",
+        hf: "common_confirm",
+        params: params,
+        title: "确认删除",
+        width: 400,
+        height: 250,
+        showCloseBtn: false,
+        successCallback: function (result) {
+          if (result && result.success === true) deleteLiveRows(ids);
+        },
+      });
+      return;
+    }
     state.pendingSingle = ids && ids.length === 1 ? ids[0] : "";
     el("deleteDialog").classList.remove("is-hidden");
+  }
+  function deleteLiveRows(ids) {
+    global.SyssjcjDocumentService
+      .deleteParseRows(state.document.fdiseq, ids)
+      .then(function () {
+        return loadLiveData(state.document.fdiseq);
+      })
+      .then(function (payload) {
+        if (!payload) throw new Error("删除后未找到采集文件");
+        state.document = payload.document;
+        state.profile = profileFor(state.document.instno);
+        state.allRows = payload.rows.slice();
+        state.filteredRows = state.allRows.slice();
+        state.selected = {};
+        state.page = 1;
+        renderSummary();
+        renderHead();
+        renderRows();
+        renderPagination();
+        renderInfo(payload.info);
+        showToast("解析数据删除成功");
+      })
+      .catch(function (error) {
+        console.error("解析数据删除失败：", error);
+        showToast(error.message || "解析数据删除失败");
+      });
   }
   function submitDelete() {
     var ids = state.pendingSingle ? [state.pendingSingle] : selectedIds();
@@ -723,6 +869,11 @@
     var reason = el("reparseReason").value.trim();
     if (!reason) {
       el("reasonError").classList.remove("is-hidden");
+      return;
+    }
+    if (!CONFIG.mockMode) {
+      closeDialog("reasonDialog");
+      showToast("重新解析服务端接口尚未配置，当前未执行解析操作");
       return;
     }
     closeDialog("reasonDialog");
@@ -853,24 +1004,29 @@
     if (typeof global.initGlobalParams === "function") {
       global.initGlobalParams();
     }
-    var fdiseq = queryParam("fdiseq") || fallbackDocument.fdiseq;
-    state.document = loadDocument(fdiseq);
-    if (!state.document) {
-      showToast("未找到对应的采集文件");
-      return;
-    }
-    state.profile = profileFor(state.document.instno);
-    var mock = loadMockData(state.document);
-    state.allRows = mock.rows.slice();
-    state.filteredRows = state.allRows.slice();
-    state.document.lastParseTime =
-      state.document.lastParseTime || state.document.collectTime;
     bindEvents();
-    renderSummary();
-    renderHead();
-    renderRows();
-    renderPagination();
-    renderInfo(mock.info);
+    var fdiseq = queryParam("fdiseq");
+    if (!fdiseq) { showToast("缺少采集文件标识"); return; }
+    var loader = CONFIG.mockMode
+      ? Promise.resolve((function () {
+          var documentItem = loadDocument(fdiseq);
+          if (!documentItem) return null;
+          var mock = loadMockData(documentItem);
+          return { document: documentItem, rows: mock.rows, info: mock.info };
+        })())
+      : loadLiveData(fdiseq);
+    loader.then(function (payload) {
+      if (!payload) { showToast("未找到对应的采集文件"); return; }
+      state.document = payload.document;
+      state.profile = profileFor(state.document.instno);
+      state.allRows = payload.rows.slice();
+      state.filteredRows = state.allRows.slice();
+      state.document.lastParseTime = state.document.lastParseTime || state.document.collectTime;
+      renderSummary(); renderHead(); renderRows(); renderPagination(); renderInfo(payload.info);
+    }).catch(function (error) {
+      console.error("解析工作页加载失败：", error);
+      showToast("解析数据加载失败，请返回列表后重试");
+    });
   }
   global.addEventListener("load", initialize);
 })(window);

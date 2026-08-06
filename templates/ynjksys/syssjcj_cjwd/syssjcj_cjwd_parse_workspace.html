@@ -10,7 +10,10 @@
     <script src="{% static 'common/isqrydata.js' %}"></script>
     <script src="{% static 'common/issubmit.js' %}"></script>
     <script src="{% static 'common/isloadpage.js' %}"></script>
+    <!-- 模拟数据降级入口（真实查询启用期间停用）
     <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080401"></script>
+    -->
+    <script src="{% static 'ynjksys/syssjcj_cjwd_service.js' %}?v=2026080605"></script>
 </head>
 <body>
 <main class="page-container">
@@ -108,6 +111,6 @@
     <div class="processing-box"><span class="spinner"></span><strong>正在重新解析</strong><p>请稍候，当前页面暂不可操作</p></div>
 </div>
 <div id="toast" class="toast is-hidden" role="status" aria-live="polite"></div>
-<script src="{% static 'ynjksys/syssjcj_cjwd_parse_workspace.js' %}?v=2026080401"></script>
+<script src="{% static 'ynjksys/syssjcj_cjwd_parse_workspace.js' %}?v=2026080603"></script>
 </body>
 </html>

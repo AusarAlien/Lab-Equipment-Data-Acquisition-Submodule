@@ -2,16 +2,16 @@
   "use strict";
 
   var PAGE_CONFIG = {
-    mockMode: true,
+    mockMode: false,
     defaultDbnm: "ynjk",
     storageKey: global.SyssjcjMockData
       ? global.SyssjcjMockData.keys.documents
       : "syssjcj_cjwd_mock_documents_v4",
     filterKey: "syssjcj_cjwd_list_filters_v1",
     qids: {
-      documentList: "", // TODO 后续配置采集文档列表查询 qid
-      deviceOptions: "", // TODO 后续配置仪器设备下拉查询 qid
-      deleteDocument: "", // TODO 后续配置归档文件删除 qid
+      documentList: "ynjksys_01001q",
+      deviceOptions: "ynjksys_01004q",
+      deleteDocument: "ynjksys_01006q",
     },
     pages: {
       detail: "syssjcj_cjwd_detail",
@@ -25,6 +25,7 @@
     },
   };
 
+  /* 模拟数据降级区：恢复模拟模式时取消本段注释，并将 mockMode 改为 true。
   var initialDocuments = [
     {
       fdiseq: "CJ202608030001",
@@ -186,6 +187,8 @@
   if (global.SyssjcjMockData) {
     initialDocuments = global.SyssjcjMockData.getDocuments();
   }
+  */
+  var initialDocuments = [];
 
   var state = {
     page: 1,
@@ -400,9 +403,12 @@
       if (PAGE_CONFIG.mockMode) {
         return mockQueryDocuments(filters, page, pageSize);
       }
-      // 正式对接位置：查询 ib_tbs_detailedinf / ib_tbs_tbldat / lis_instdata_new，使用 fdiseq 关联。
+      // 正式查询：HII 文件归档表与 HTLIS 解析结果表按 fdiseq 关联。
       return queryPlatform(PAGE_CONFIG.qids.documentList, {
         file_name_sql_equal: filters.fileName,
+        file_name_encoded_sql_equal: filters.fileName
+          ? encodeURIComponent(filters.fileName)
+          : "",
         instno_sql_equal: filters.deviceCode,
         file_type_sql_equal: filters.fileType,
         parse_status_sql_equal: filters.parseStatus,
@@ -411,11 +417,11 @@
         page_sql_equal: page,
         page_size_sql_equal: pageSize,
       }).then(function (result) {
-        var rows = rowsFromResult(result);
+        var service = global.SyssjcjDocumentService;
+        var rows = rowsFromResult(result).map(service.normalizeDocument);
         return {
           rows: rows,
-          total:
-            Number(result.total || (rows[0] && rows[0]["总数"])) || rows.length,
+          total: rows.length ? rows[0].total : 0,
         };
       });
     },
@@ -423,30 +429,35 @@
       if (PAGE_CONFIG.mockMode) {
         return mockDeleteDocument(fdiseq);
       }
-      // 正式对接位置：通过 common_confirm + issubmit.remove 调用删除 qid，服务端校验权限和关联数据。
-      return Promise.reject(new Error("归档文件删除接口尚未配置：" + fdiseq));
+      return global.SyssjcjDocumentService.deleteDocument(fdiseq);
     },
     downloadDocument: function (item) {
       if (PAGE_CONFIG.mockMode) {
         return Promise.resolve();
       }
-      // 正式对接位置：调用平台 BLOB 下载接口，业务主键只传 fdiseq。
-      return Promise.reject(new Error("文件下载接口尚未配置：" + item.fdiseq));
+      global.SyssjcjDocumentService.triggerDownload(item.fdiseq);
+      return Promise.resolve();
     },
   };
 
   function fillDeviceOptions() {
-    var devices = {};
-    initialDocuments.forEach(function (item) {
-      devices[item.instno] = item.deviceName;
-    });
-    Object.keys(devices)
-      .sort()
-      .forEach(function (code) {
+    queryPlatform(PAGE_CONFIG.qids.deviceOptions, {})
+      .then(function (result) {
+        return rowsFromResult(result).map(
+          global.SyssjcjDocumentService.normalizeDevice,
+        );
+      })
+      .then(function (devices) {
+        devices.forEach(function (item) {
         var option = document.createElement("option");
-        option.value = code;
-        option.textContent = devices[code];
+          option.value = item.instno;
+          option.textContent = item.deviceName;
+          option.title = item.deviceName;
         el("deviceSelect").appendChild(option);
+      });
+      })
+      .catch(function (error) {
+        console.error("采集设备选项加载失败：", error);
       });
   }
   function formatFileSize(bytes) {
@@ -688,12 +699,44 @@
       showPlatformMessage("文件正在解析，暂时不能删除", "info");
       return;
     }
+    if (!PAGE_CONFIG.mockMode) {
+      var params = commonParams();
+      params.hp = "common";
+      params.message = encodeURIComponent(
+        "确认删除归档文件“" + item.fileName + "”吗？该文件的解析数据将一并删除。",
+      );
+      params.qid = PAGE_CONFIG.qids.deleteDocument;
+      params.data = encodeURIComponent(JSON.stringify({ fdiseq: Number(item.fdiseq) }));
+      params.action = "custom";
+      global.isloadpage.openModal({
+        hp: "common",
+        hf: "common_confirm",
+        params: params,
+        title: "确认删除",
+        width: 400,
+        height: 250,
+        showCloseBtn: false,
+        successCallback: function (result) {
+          if (!result || result.success !== true) return;
+          dataService
+            .deleteDocument(item.fdiseq)
+            .then(function () {
+              showPlatformMessage("文件删除成功", "success");
+              queryList();
+            })
+            .catch(function (error) {
+              console.error("文件删除失败：", error);
+              showPlatformMessage(error.message || "文件删除失败", "error");
+            });
+        },
+      });
+      return;
+    }
     state.pendingDelete = item;
     el("confirmMessage").textContent =
-      "确认删除归档文件“" + item.fileName + "”吗？删除后不可恢复。";
+      "确认删除归档文件“" + item.fileName + "”吗？该文件的解析数据将一并删除。";
     el("mockConfirm").classList.remove("is-hidden");
     el("confirmSubmit").focus();
-    // 正式对接时替换为 common_confirm，传 fdiseq、删除 qid 和 action=remove。
   }
   function closeDeleteConfirm() {
     state.pendingDelete = null;

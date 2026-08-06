@@ -1,7 +1,7 @@
 (function (global) {
   "use strict";
   var CONFIG = {
-    mockMode: true,
+    mockMode: false,
     defaultDbnm: "ynjk",
     storageKey: global.SyssjcjMockData
       ? global.SyssjcjMockData.keys.selectedSpectrum
@@ -34,23 +34,20 @@
     el(id).title = t;
   }
   function load() {
-    if (CONFIG.mockMode) {
-      try {
-        var item = JSON.parse(
-          global.sessionStorage.getItem(CONFIG.storageKey) || "null",
-        );
-        return Promise.resolve(
-          item &&
-            (!queryParam("spectrumId") ||
-              item.spectrumId === queryParam("spectrumId"))
-            ? item
-            : null,
-        );
-      } catch (e) {
-        return Promise.resolve(null);
-      }
+    try {
+      var item = JSON.parse(
+        global.sessionStorage.getItem(CONFIG.storageKey) || "null",
+      );
+      return Promise.resolve(
+        item &&
+          (!queryParam("spectrumId") ||
+            item.spectrumId === queryParam("spectrumId"))
+          ? item
+          : null,
+      );
+    } catch (e) {
+      return Promise.resolve(null);
     }
-    return Promise.reject(new Error("图谱原图查询 qid 尚未配置"));
   }
   function points(series) {
     var values = series && series.length ? series : [5, 12, 28, 72, 32, 18, 9],
@@ -66,6 +63,15 @@
     });
   }
   function renderSvg(item) {
+    if (!CONFIG.mockMode && item.fdiseq) {
+      el("spectrumSvg").innerHTML =
+        '<rect width="1200" height="650" fill="#fff"/>' +
+        '<image href="' +
+        esc(global.SyssjcjDocumentService.pageImageUrl(item.fdiseq, item.page, 150)) +
+        '" x="0" y="0" width="1200" height="650" preserveAspectRatio="xMidYMid meet"/>';
+      return;
+    }
+    /* 模拟曲线绘制降级实现：真实原图接口启用期间不执行。 */
     var p = points(item.series),
       poly = p
         .map(function (x) {

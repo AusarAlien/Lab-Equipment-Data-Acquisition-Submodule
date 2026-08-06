@@ -9,7 +9,10 @@
     <script src="{% static 'common/isvar.js' %}"></script>
     <script src="{% static 'common/isqrydata.js' %}"></script>
     <script src="{% static 'common/isloadpage.js' %}"></script>
+    <!-- 模拟数据降级入口（真实查询启用期间停用）
     <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080401"></script>
+    -->
+    <script src="{% static 'ynjksys/syssjcj_cjwd_service.js' %}?v=2026080605"></script>
 </head>
 <body>
 <main class="page-container">
@@ -40,6 +43,6 @@
     </div>
 </div>
 <div id="toast" class="toast is-hidden"></div>
-<script src="{% static 'ynjksys/syssjcj_cjwd_spectrum_list.js' %}?v=2026080401"></script>
+<script src="{% static 'ynjksys/syssjcj_cjwd_spectrum_list.js' %}?v=2026080601"></script>
 </body>
 </html>

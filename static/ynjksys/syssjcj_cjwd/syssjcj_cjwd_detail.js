@@ -2,11 +2,12 @@
     'use strict';
 
     var PAGE_CONFIG = {
-        mockMode: true,
+        mockMode: false,
         defaultDbnm: 'ynjk',
         storageKey: global.SyssjcjMockData ? global.SyssjcjMockData.keys.documents : 'syssjcj_cjwd_mock_documents_v4',
-        qids: { documentDetail: '' } // TODO 后续配置文件详情查询 qid
+        qids: { documentDetail: 'ynjksys_01002q' }
     };
+    /* 模拟数据降级区：恢复模拟模式时取消本段注释。
     var fallbackDocument = {
         fdiseq: 'CJ202608030001', fileName: 'ICPMS_金属元素批量检测结果.xlsx', fileType: 'Excel',
         instno: 'ICPMS', deviceName: 'ICP-MS金属元素分析仪', parserClass: 'ExcelICPMS', fileSize: 284672,
@@ -61,6 +62,12 @@
         DIONEXICS5000: { parserClass: 'ExcelDIONEXICS5000', sheetName: '检测结果', columns: ['样品编号', '离子项目', '保留时间', '结果', '单位'], rows: [['26S0803081', 'Cl-', '4.152', '12.48', 'mg/L'], ['26S0803081', 'NO3-', '6.328', '4.16', 'mg/L']] },
         SZJS: { parserClass: 'ExcelSZJS', sheetName: '检测数据', columns: ['Sample Id', '元素', '结果', '单位'], rows: [['26S0803091', 'Pb', '0.012', 'mg/L'], ['26S0803091', 'Cd', '0.002', 'mg/L'], ['26S0803091', 'As', '0.008', 'mg/L']] },
         'AGILENT-7890A': { parserClass: 'Agilent7890A', reportTitle: '安捷伦7890A气相色谱分析报告', columns: ['样品编号', '保留时间', '类型', '峰面积', '含量/峰面积', '含量', '名称'], rows: [['26S0803101', '2.865', 'MM', '16842', '0.00412', '8.63', '苯'], ['26S0803101', '4.217', 'MM', '12458', '0.00306', '6.41', '甲苯']] }
+    };
+    */
+    var fallbackDocument = { fdiseq: '' };
+    var interfaceProfiles = {
+        'AGILENT-1200': { parserClass: 'Agilent1200', reportTitle: '安捷伦1200液相色谱分析报告', columns: [], rows: [] },
+        'BRUKER-MICROFLEX': { parserClass: 'BrukerMicroflex', reportTitle: 'Microflex微生物鉴定报告', columns: [], rows: [] }
     };
     var currentDocument = null, pdfPage = 1, imageScale = 1;
 
@@ -117,12 +124,15 @@
         loadDetail: function (fdiseq) {
             if (PAGE_CONFIG.mockMode) { return mockLoadDetail(fdiseq); }
             // 正式对接位置：按 fdiseq 查询文件头、采集信息和 lis_instdata_new 汇总，不按文件名定位。
-            return queryPlatform(PAGE_CONFIG.qids.documentDetail, { fdiseq_sql_equal: fdiseq }).then(function (result) { return enrichDocument(rowsFromResult(result)[0] || null); });
+            return queryPlatform(PAGE_CONFIG.qids.documentDetail, { fdiseq_sql_equal: fdiseq }).then(function (result) {
+                var row = rowsFromResult(result)[0];
+                return enrichDocument(row ? global.SyssjcjDocumentService.normalizeDocument(row) : null);
+            });
         },
         download: function (item) {
             if (PAGE_CONFIG.mockMode) { return Promise.resolve(); }
-            // 正式对接位置：调用平台 BLOB 查看/下载接口，传入 fdiseq。
-            return Promise.reject(new Error('文件下载接口尚未配置：' + item.fdiseq));
+            global.SyssjcjDocumentService.triggerDownload(item.fdiseq);
+            return Promise.resolve();
         }
     };
     function formatFileSize(bytes) {
@@ -161,6 +171,14 @@
         tab.setAttribute('title', tab.textContent);
     }
     function renderPdfPage() {
+        if (!PAGE_CONFIG.mockMode) {
+            el('pdfPaper').innerHTML = '<iframe title="PDF文件预览" src="' +
+                escapeHtml(global.SyssjcjDocumentService.blobUrl(currentDocument.fdiseq)) +
+                '" style="width:100%;height:680px;border:0;background:#fff"></iframe>';
+            el('pdfPage').textContent = '1'; el('pdfTotal').textContent = '1';
+            el('pdfPrevious').disabled = true; el('pdfNext').disabled = true;
+            return;
+        }
         var profile = profileFor(currentDocument);
         var resultTable = '<table><tr>' + profile.columns.map(function (column) { return '<td><strong>' + escapeHtml(column) + '</strong></td>'; }).join('') + '</tr>'
             + profile.rows.map(function (row) { return '<tr>' + row.map(function (value) { return '<td>' + escapeHtml(value) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>';
@@ -208,7 +226,8 @@
     }
     function showError(message) { el('pageLoading').classList.add('is-hidden'); el('detailContent').classList.add('is-hidden'); el('pageError').classList.remove('is-hidden'); setText('errorText', message); el('downloadButton').disabled = true; }
     function loadPage() {
-        var fdiseq = queryParam('fdiseq') || fallbackDocument.fdiseq;
+        var fdiseq = queryParam('fdiseq');
+        if (!fdiseq) { showError('缺少采集文件标识，请返回列表后重新进入'); return; }
         dataService.loadDetail(fdiseq).then(function (item) {
             if (!item) { showError('未找到对应的采集文件，文件可能已被删除'); return; }
             currentDocument = item; renderInfo(item); renderPreview(item); el('pageLoading').classList.add('is-hidden'); el('detailContent').classList.remove('is-hidden');
