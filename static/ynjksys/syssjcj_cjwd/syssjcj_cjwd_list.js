@@ -9,9 +9,9 @@
       : "syssjcj_cjwd_mock_documents_v4",
     filterKey: "syssjcj_cjwd_list_filters_v1",
     qids: {
-      documentList: "ynjksys_01001q",
-      deviceOptions: "ynjksys_01004q",
-      deleteDocument: "ynjksys_01006q",
+      documentList: "ynjksys_02001q",
+      deviceOptions: "ynjksys_02004q",
+      deleteDocument: "ynjksys_02006q",
     },
     pages: {
       detail: "syssjcj_cjwd_detail",

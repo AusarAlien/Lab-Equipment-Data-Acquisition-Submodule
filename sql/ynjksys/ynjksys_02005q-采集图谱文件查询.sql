@@ -4,7 +4,7 @@ declare
   resulttype varchar2(8); header varchar2(5000); footer varchar2(5000); bsql clob;
   bsql_pv varchar2(4000); bsql_pt varchar2(4000);
 begin
-  id := 'ynjksys_01005q'; name := '采集图谱文件查询'; direct := '0';
+  id := 'ynjksys_02005q'; name := '采集图谱文件查询'; direct := '0';
   cndxml := '<?xml version="1.0" encoding="GB2312"?><EprSelect></EprSelect>';
   cndxsl := ''; thesql := ''; dispsql := ''; param := ''; cfgxml := ''; resulttype := 'ntable'; header := ''; footer := '';
   delete from query_tbs_dispfmt where fid=id and fband in ('HEADER','FOOTER','DETAILS'); delete from query_vws_cnd where fid=id;

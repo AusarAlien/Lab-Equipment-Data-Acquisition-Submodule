@@ -3,7 +3,7 @@ declare
   thesql varchar2(5000); dispsql varchar2(5000); param varchar2(400); cfgxml varchar2(5000);
   resulttype varchar2(8); header varchar2(5000); footer varchar2(5000); bsql clob;
 begin
-  id := 'ynjksys_01004q'; name := '采集设备选项查询'; direct := '0';
+  id := 'ynjksys_01001q'; name := '采集主页设备选项查询'; direct := '0';
   cndxml := '<?xml version="1.0" encoding="GB2312"?><EprSelect></EprSelect>';
   cndxsl := ''; thesql := ''; dispsql := ''; param := ''; cfgxml := ''; resulttype := 'ntable'; header := ''; footer := '';
   delete from query_tbs_dispfmt where fid=id and fband in ('HEADER','FOOTER','DETAILS'); delete from query_vws_cnd where fid=id;
@@ -20,4 +20,3 @@ begin
 end;
 /
 commit;
-

@@ -2,13 +2,13 @@
   "use strict";
 
   var QUERY_IDS = {
-    documentList: "ynjksys_01001q",
-    documentDetail: "ynjksys_01002q",
-    parseRows: "ynjksys_01003q",
-    deviceOptions: "ynjksys_01004q",
-    spectrumList: "ynjksys_01005q",
-    documentDelete: "ynjksys_01006q",
-    parseRowsDelete: "ynjksys_01007q",
+    documentList: "ynjksys_02001q",
+    documentDetail: "ynjksys_02002q",
+    parseRows: "ynjksys_02003q",
+    deviceOptions: "ynjksys_02004q",
+    spectrumList: "ynjksys_02005q",
+    documentDelete: "ynjksys_02006q",
+    parseRowsDelete: "ynjksys_02007q",
   };
 
   function commonParams() {

@@ -2,12 +2,12 @@
     'use strict';
 
     var PAGE_CONFIG = {
-        mockMode: true,
+        mockMode: false,
         defaultDbnm: 'ynjk',
         qids: {
-            deviceOptions: '',
-            summary: '',
-            trend: ''
+            deviceOptions: 'ynjksys_01001q',
+            summary: 'ynjksys_01002q',
+            trend: 'ynjksys_01003q'
         }
     };
 
@@ -41,6 +41,7 @@
         }
     };
 
+    /* 模拟数据降级区：恢复模拟模式时取消本段注释，并将 mockMode 改为 true。
     var mockDatabase = {
         devices: [
             ['ICPMS-01', '电感耦合等离子体质谱仪'],
@@ -80,6 +81,7 @@
         ]
     };
     if (global.SyssjcjMockData) { mockDatabase = global.SyssjcjMockData.getDashboardData(); }
+    */
 
     var trendChart = null;
     var activeMetric = 'file';
@@ -105,7 +107,7 @@
     }
 
     function setDefaultDateRange() {
-        var end = new Date(2026, 7, 3);
+        var end = new Date();
         var start = new Date(end.getFullYear(), end.getMonth(), end.getDate() - 6);
         element('startDate').value = formatDate(start);
         element('endDate').value = formatDate(end);
@@ -185,6 +187,7 @@
         return '';
     }
 
+    /* 模拟查询降级区：正式模式不执行。
     function filterMockRows(filters) {
         return mockDatabase.daily.filter(function (row) {
             var dateMatched = row[0] >= filters.startDate && row[0] <= filters.endDate;
@@ -231,32 +234,27 @@
             })
         });
     }
+    */
 
     var dataProvider = {
         loadDeviceOptions: function () {
-            if (PAGE_CONFIG.mockMode) {
-                return mockDeviceOptions();
-            }
+            // if (PAGE_CONFIG.mockMode) return mockDeviceOptions();
             return queryPlatform(PAGE_CONFIG.qids.deviceOptions, {});
         },
         loadSummary: function (filters) {
-            if (PAGE_CONFIG.mockMode) {
-                return mockSummary(filters);
-            }
+            // if (PAGE_CONFIG.mockMode) return mockSummary(filters);
             return queryPlatform(PAGE_CONFIG.qids.summary, {
                 start_date_sql_equal: filters.startDate,
                 end_date_sql_equal: filters.endDate,
-                device_code_sql_equal: filters.deviceCode
+                instno_sql_equal: filters.deviceCode
             });
         },
         loadTrend: function (filters) {
-            if (PAGE_CONFIG.mockMode) {
-                return mockTrend(filters);
-            }
+            // if (PAGE_CONFIG.mockMode) return mockTrend(filters);
             return queryPlatform(PAGE_CONFIG.qids.trend, {
                 start_date_sql_equal: filters.startDate,
                 end_date_sql_equal: filters.endDate,
-                device_code_sql_equal: filters.deviceCode
+                instno_sql_equal: filters.deviceCode
             });
         }
     };
@@ -292,8 +290,10 @@
             var fragment = document.createDocumentFragment();
             rows.forEach(function (row) {
                 var option = document.createElement('option');
-                option.value = row['设备编号'] || '';
-                option.textContent = row['设备名称'] || row['设备编号'] || '';
+                option.value = row['仪器编号'] || row['设备编号'] || '';
+                option.textContent = row['仪器设备'] || row['设备名称']
+                    || row['仪器编号'] || row['设备编号'] || '';
+                option.title = option.textContent;
                 fragment.appendChild(option);
             });
             select.appendChild(fragment);
@@ -303,6 +303,9 @@
     }
 
     function formatNumber(value) {
+        if (value === null || value === undefined || value === '') {
+            return '--';
+        }
         var number = Number(value);
         return Number.isFinite(number) ? number.toLocaleString('zh-CN') : '--';
     }
@@ -343,7 +346,11 @@
         element('chartTitle').textContent = metric.title;
         element('chartEmpty').textContent = metric.emptyText;
         element('fileTrendChart').setAttribute('aria-label', metric.title + '折线图');
-        if (!rows.length) {
+        var hasMetricData = rows.some(function (row) {
+            var value = row[metric.field];
+            return value !== null && value !== undefined && value !== '';
+        });
+        if (!rows.length || !hasMetricData) {
             if (trendChart) {
                 trendChart.clear();
             }
@@ -399,7 +406,12 @@
                 smooth: true,
                 symbol: 'circle',
                 symbolSize: 7,
-                data: rows.map(function (row) { return Number(row[metric.field]) || 0; }),
+                data: rows.map(function (row) {
+                    var value = row[metric.field];
+                    return value === null || value === undefined || value === ''
+                        ? null
+                        : Number(value);
+                }),
                 lineStyle: { width: 3 },
                 itemStyle: { borderColor: '#fff', borderWidth: 2 },
                 areaStyle: {

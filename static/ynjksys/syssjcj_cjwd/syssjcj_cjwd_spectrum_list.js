@@ -4,7 +4,7 @@
     mockMode: false,
     defaultDbnm: "ynjk",
     pageSize: 12,
-    qids: { spectrumList: "ynjksys_01005q" },
+    qids: { spectrumList: "ynjksys_02005q" },
     imagePage: "syssjcj_cjwd_image_view",
   };
   /* 模拟图谱降级数据：恢复模拟模式时取消本段注释。

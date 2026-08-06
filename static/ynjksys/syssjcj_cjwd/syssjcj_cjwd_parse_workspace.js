@@ -10,10 +10,10 @@
     parseDataKey: "syssjcj_cjwd_mock_parse_data_v1",
     parseInfoKey: "syssjcj_cjwd_mock_parse_info_v1",
     qids: {
-      document: "ynjksys_01002q",
-      parseRows: "ynjksys_01003q",
+      document: "ynjksys_02002q",
+      parseRows: "ynjksys_02003q",
       parseInfo: "",
-      deleteRows: "ynjksys_01007q",
+      deleteRows: "ynjksys_02007q",
       reparse: "",
       reparseStatus: "",
     },
