@@ -435,6 +435,16 @@
       if (PAGE_CONFIG.mockMode) {
         return Promise.resolve();
       }
+      if (item.instno === "AXIOIMAGERZ2") {
+        if (!global.SyssjcjAxioDocument) {
+          return Promise.reject(new Error("AXIO合并文档组件未加载"));
+        }
+        return global.SyssjcjAxioDocument
+          .load(item)
+          .then(function (model) {
+            return global.SyssjcjAxioDocument.download(model);
+          });
+      }
       global.SyssjcjDocumentService.triggerDownload(item.fdiseq);
       return Promise.resolve();
     },
@@ -549,11 +559,15 @@
       : "";
     el("previousPage").disabled = state.page <= 1;
     el("nextPage").disabled = state.page >= totalPages;
-    var start = Math.max(1, state.page - 2),
-      end = Math.min(totalPages, start + 4);
-    start = Math.max(1, end - 4);
     var html = "";
-    for (var page = start; page <= end; page += 1) {
+    global.SyssjcjPagination
+      .items(totalPages, state.page, 5)
+      .forEach(function (page) {
+      if (page === global.SyssjcjPagination.ELLIPSIS) {
+        html +=
+          '<button class="page-number page-ellipsis" type="button" disabled aria-hidden="true">...</button>';
+        return;
+      }
       html +=
         '<button class="page-number' +
         (page === state.page ? " is-active" : "") +
@@ -562,7 +576,7 @@
         '" type="button">' +
         page +
         "</button>";
-    }
+    });
     el("pageNumbers").innerHTML = html;
   }
   function setLoading(loading) {
@@ -686,8 +700,13 @@
   function handleDownload(item) {
     dataService
       .downloadDocument(item)
-      .then(function () {
-        showPlatformMessage("文件下载已触发：" + item.fileName, "success");
+      .then(function (generatedFileName) {
+        showPlatformMessage(
+          item.instno === "AXIOIMAGERZ2"
+            ? "合并文档已生成：" + generatedFileName
+            : "文件下载已触发：" + item.fileName,
+          "success",
+        );
       })
       .catch(function (error) {
         console.error(error);

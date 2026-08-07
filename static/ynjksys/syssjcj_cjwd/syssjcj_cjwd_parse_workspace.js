@@ -673,11 +673,15 @@
     el("nextPage").disabled = state.page >= pages;
     el("pageSummary").textContent =
       "共 " + (state.filteredRows.length ? pages : 0) + " 页，10 条";
-    var start = Math.max(1, state.page - 2),
-      end = Math.min(pages, start + 4),
-      html = "";
-    start = Math.max(1, end - 4);
-    for (var page = start; page <= end; page += 1) {
+    var html = "";
+    global.SyssjcjPagination
+      .items(pages, state.page, 5)
+      .forEach(function (page) {
+      if (page === global.SyssjcjPagination.ELLIPSIS) {
+        html +=
+          '<button class="page-number page-ellipsis" type="button" disabled aria-hidden="true">...</button>';
+        return;
+      }
       html +=
         '<button class="page-number' +
         (page === state.page ? " is-active" : "") +
@@ -686,7 +690,7 @@
         '" type="button">' +
         page +
         "</button>";
-    }
+    });
     el("pageNumbers").innerHTML = html;
   }
   function applyQuery() {

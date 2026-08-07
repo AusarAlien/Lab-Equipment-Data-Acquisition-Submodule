@@ -20,6 +20,10 @@ begin
   select 'BRUKER-MICROFLEX', 'DEPT-WSW',
          '检验中心微生物室', '飞行时间质谱（含电脑、UPS、打印机）'
     from dual
+  union all
+  select 'AXIOIMAGERZ2', 'DEPT-DL',
+         '检验中心毒理室', '卡尔蔡司AxioImagerZ2染色体扫描仪'
+    from dual
 ), inst_file as (
   select distinct b.fdiseq
     from hii.ib_tbs_tbldat b
@@ -27,7 +31,8 @@ begin
      and trim(b.fpkseq2) = 'F'
 ), item_map as (
   select upper(trim(m.instno)) instno, trim(m.itemsysseq) itemsysseq,
-         max(nvl(trim(m.itemname), trim(m.instchkitemnm))) item_name
+         max(nvl(trim(m.itemname),
+                 nvl(trim(m.instchkitemnm), trim(m.instchkitem)))) item_name
     from htlis.lp_tbc_instchkitem m
    group by upper(trim(m.instno)), trim(m.itemsysseq)
 ), base_data as (
@@ -40,9 +45,17 @@ begin
          case t.finstno
            when 'AGILENT-1200' then 'mAU*s'
            when 'BRUKER-MICROFLEX' then '无量纲'
+           when 'AXIOIMAGERZ2' then
+             case when i.item_name = '畸变率' then '--' else '个' end
            else trim(t.mw) end result_unit,
          t.fopdt data_time,
-         d.fopdt collect_time, d.ffilenm, dd.device_name
+         d.fopdt collect_time, d.ffilenm, dd.device_name,
+         case when t.finstno = 'AXIOIMAGERZ2' and instr(t.sampno, '_') > 0
+              then '逐细胞数据'
+              when t.finstno = 'AXIOIMAGERZ2' then '玻片汇总数据'
+              else '仪器解析数据' end data_type,
+         t.rslt1 x_cor, t.rslt2 y_cor, t.rslt3 z_cor,
+         t.rslt4 object_no, t.rslt5 slide_no, t.rslt6 group_name
     from htlis.lis_instdata_new t
     join device_dict dd on dd.instno = upper(trim(t.finstno))
     join inst_file f on f.fdiseq = t.fdiseq
@@ -74,7 +87,10 @@ select fguid 数据标识, fdiseq 文件序号, finstno 仪器编号, device_nam
        project_name 检测项目, result_value 结果摘要, result_unit 单位,
        to_char(data_time,'yyyy-mm-dd hh24:mi:ss') 数据入库时间,
        to_char(collect_time,'yyyy-mm-dd hh24:mi:ss') 采集时间,
-       ffilenm 来源文件, total_count 总数
+       ffilenm 来源文件, data_type 数据类型,
+       x_cor X坐标, y_cor Y坐标, z_cor Z坐标,
+       object_no 对象编号, slide_no 玻片号, group_name 组别,
+       total_count 总数
   from numbered
  where rn between ((nvl(?,1)-1)*nvl(?,10)+1) and (nvl(?,1)*nvl(?,10))
  order by rn~';

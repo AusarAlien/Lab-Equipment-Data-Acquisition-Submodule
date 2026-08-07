@@ -493,6 +493,120 @@ button {
     margin: 8px 0 20px;
 }
 
+.axio-preview {
+    padding: 0;
+    background: #f1f4f8;
+}
+
+.axio-state {
+    display: flex;
+    min-height: 280px;
+    align-items: center;
+    justify-content: center;
+    color: #7a8493;
+    background: #fff;
+}
+
+.axio-state.is-error {
+    color: #f04444;
+}
+
+.axio-document-meta {
+    display: flex;
+    min-height: 56px;
+    align-items: center;
+    gap: 28px;
+    padding: 0 20px;
+    border-bottom: 1px solid #dfe5ee;
+    background: #fff;
+    color: #5e6876;
+}
+
+.axio-document-meta strong {
+    color: #202938;
+    font-size: 18px;
+}
+
+.axio-document-meta span {
+    max-width: 520px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.axio-table-scroll {
+    overflow: auto;
+    max-height: 720px;
+    padding: 22px;
+}
+
+.axio-document-paper {
+    box-sizing: border-box;
+    min-width: 1420px;
+    padding: 28px;
+    border: 1px solid #d8dee8;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(38, 52, 75, .08);
+}
+
+.axio-document-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    color: #27313f;
+    font-size: 14px;
+}
+
+.axio-document-table th,
+.axio-document-table td {
+    overflow: hidden;
+    padding: 8px 6px;
+    border: 1px solid #9fa9b8;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.axio-document-table th {
+    background: #edf2f8;
+    font-weight: 600;
+    white-space: normal;
+}
+
+.axio-summary-table {
+    margin-bottom: 24px;
+}
+
+.axio-summary-table th:first-child,
+.axio-summary-table td:first-child {
+    width: 260px;
+    text-align: left;
+}
+
+.axio-summary-table tr.is-total td {
+    background: #f6f8fb;
+    font-weight: 600;
+}
+
+.axio-detail-table th:nth-child(1),
+.axio-detail-table td:nth-child(1) {
+    width: 62px;
+}
+
+.axio-detail-table th:nth-child(2),
+.axio-detail-table td:nth-child(2) {
+    width: 86px;
+}
+
+.axio-detail-table tbody tr:nth-child(even) {
+    background: #fafbfd;
+}
+
+.axio-detail-table tr.is-total td {
+    background: #f0f4f9;
+    font-weight: 600;
+}
+
 .page-state {
     display: flex;
     min-height: 520px;

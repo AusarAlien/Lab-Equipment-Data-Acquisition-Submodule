@@ -23,9 +23,11 @@ select d.fdiseq 文件序号, d.ffilenm 文件名称,
        to_char(d.fopdt,'yyyy-mm-dd hh24:mi:ss') 采集时间,
        p.finstno 仪器编号,
        case p.finstno when 'AGILENT-1200' then '安捷伦1200液相色谱仪'
-         when 'BRUKER-MICROFLEX' then '布鲁克飞行时间质谱仪' else '--' end 仪器设备,
+         when 'BRUKER-MICROFLEX' then '布鲁克飞行时间质谱仪'
+         when 'AXIOIMAGERZ2' then '卡尔蔡司AxioImagerZ2染色体扫描仪' else '--' end 仪器设备,
        case p.finstno when 'AGILENT-1200' then 'Agilent1200'
-         when 'BRUKER-MICROFLEX' then 'BrukerMicroflex' else '--' end 处理接口,
+         when 'BRUKER-MICROFLEX' then 'BrukerMicroflex'
+         when 'AXIOIMAGERZ2' then 'AxioImagerZ2' else '--' end 处理接口,
        case when nvl(p.parsed_count,0)>0 then '解析成功' else '解析失败' end 解析状态,
        nvl(p.parsed_count,0) 解析数据量, nvl(p.sample_count,0) 样品数量,
        to_char(p.first_parse_time,'yyyy-mm-dd hh24:mi:ss') 首次解析时间,

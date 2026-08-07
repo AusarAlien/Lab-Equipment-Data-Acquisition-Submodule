@@ -13,7 +13,9 @@
     <!-- 模拟数据降级入口（真实查询启用期间停用）
     <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080401"></script>
     -->
-    <script src="{% static 'ynjksys/syssjcj_cjwd_service.js' %}?v=2026080606"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjwd_service.js' %}?v=2026080701"></script>
+    <script src="{% static 'lib/docx/docx.iife.js' %}?v=9.7.1"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjwd_axio_document.js' %}?v=2026080702"></script>
 </head>
 <body>
 <main class="page-container">
@@ -115,6 +117,7 @@
 </div>
 
 <div id="toast" class="toast is-hidden" role="status" aria-live="polite"></div>
-<script src="{% static 'ynjksys/syssjcj_cjwd_list.js' %}?v=2026080606"></script>
+<script src="{% static 'ynjksys/syssjcj_pagination.js' %}?v=2026080701"></script>
+<script src="{% static 'ynjksys/syssjcj_cjwd_list.js' %}?v=2026080702"></script>
 </body>
 </html>

@@ -39,10 +39,12 @@ begin
          case p.finstno
            when 'AGILENT-1200' then '安捷伦1200液相色谱仪'
            when 'BRUKER-MICROFLEX' then '布鲁克飞行时间质谱仪'
+           when 'AXIOIMAGERZ2' then '卡尔蔡司AxioImagerZ2染色体扫描仪'
            else '--' end device_name,
          case p.finstno
            when 'AGILENT-1200' then 'Agilent1200'
            when 'BRUKER-MICROFLEX' then 'BrukerMicroflex'
+           when 'AXIOIMAGERZ2' then 'AxioImagerZ2'
            else '--' end parser_class,
          case when nvl(p.parsed_count, 0) > 0 then '解析成功' else '解析失败' end parse_status,
          nvl(p.parsed_count, 0) parsed_count,
@@ -54,7 +56,7 @@ begin
     left join parse_summary p on p.fdiseq = d.fdiseq
    where (nvl(?, 0) = 0 or d.fhiino = ?)
      and nvl(trim(d.finvalidflag), '0') = '0'
-     and (p.finstno in ('AGILENT-1200','BRUKER-MICROFLEX') or p.finstno is null)
+     and (p.finstno in ('AGILENT-1200','BRUKER-MICROFLEX','AXIOIMAGERZ2') or p.finstno is null)
 ), filtered as (
   select b.*
     from base_data b

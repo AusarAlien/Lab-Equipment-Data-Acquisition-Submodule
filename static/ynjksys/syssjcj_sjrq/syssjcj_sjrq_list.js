@@ -404,14 +404,19 @@
   function renderPagination(prefix, total, page) {
     var pages = Math.ceil(total / CONFIG.pageSize),
       node = el(prefix + "Pages");
-    node.innerHTML = Array.from({ length: pages }, function (_, i) {
+    node.innerHTML = global.SyssjcjPagination
+      .items(pages, page, 5)
+      .map(function (pageNumber) {
+      if (pageNumber === global.SyssjcjPagination.ELLIPSIS) {
+        return '<button class="page-number page-ellipsis" type="button" disabled aria-hidden="true">...</button>';
+      }
       return (
         '<button class="page-number' +
-        (page === i + 1 ? " is-current" : "") +
+        (page === pageNumber ? " is-current" : "") +
         '" data-page="' +
-        (i + 1) +
+        pageNumber +
         '">' +
-        (i + 1) +
+        pageNumber +
         "</button>"
       );
     }).join("");

@@ -80,8 +80,15 @@
       columns: [],
       rows: [],
     },
+    AXIOIMAGERZ2: {
+      parserClass: "AxioImagerZ2",
+      reportTitle: "体外染色体畸变分析合并记录",
+      columns: [],
+      rows: [],
+    },
   };
   var currentDocument = null,
+    currentAxioModel = null,
     pdfPage = 1,
     imageScale = 1;
 
@@ -265,7 +272,9 @@
     setText("parserName", item.parserName);
     el("parseMessageRow").classList.toggle("is-hidden", !item.parseMessage);
     setText("parseMessage", item.parseMessage);
-    el("previewType").textContent = item.fileType + " 文件";
+    var isAxio = item.instno === "AXIOIMAGERZ2";
+    el("previewType").textContent = isAxio ? "动态合并文档" : item.fileType + " 文件";
+    el("downloadButton").textContent = isAxio ? "下载合并文档" : "下载";
   }
   function profileFor(item) {
     return (
@@ -383,6 +392,7 @@
   function renderPreview(item) {
     var profile = profileFor(item);
     [
+      "axioPreview",
       "excelPreview",
       "csvPreview",
       "pdfPreview",
@@ -391,6 +401,10 @@
     ].forEach(function (id) {
       el(id).classList.add("is-hidden");
     });
+    if (item.instno === "AXIOIMAGERZ2") {
+      renderAxioPreview(item);
+      return;
+    }
     if (item.fileType === "Excel") {
       renderTabularPreview(profile);
       el("excelPreview").classList.remove("is-hidden");
@@ -425,6 +439,38 @@
       return;
     }
     el("unsupportedPreview").classList.remove("is-hidden");
+  }
+
+  function renderAxioPreview(item) {
+    currentAxioModel = null;
+    el("axioPreview").classList.remove("is-hidden");
+    el("axioLoading").classList.remove("is-hidden");
+    el("axioError").classList.add("is-hidden");
+    el("axioDocument").innerHTML = "";
+    el("downloadButton").disabled = true;
+    if (!global.SyssjcjAxioDocument) {
+      el("axioLoading").classList.add("is-hidden");
+      el("axioError").textContent = "AXIO合并文档组件未加载";
+      el("axioError").classList.remove("is-hidden");
+      return;
+    }
+    global.SyssjcjAxioDocument
+      .load(item)
+      .then(function (model) {
+        if (!model.summaries.length || !model.cells.length) {
+          throw new Error("未查询到完整的玻片汇总或逐细胞数据");
+        }
+        currentAxioModel = model;
+        global.SyssjcjAxioDocument.render(el("axioDocument"), model);
+        el("axioLoading").classList.add("is-hidden");
+        el("downloadButton").disabled = false;
+      })
+      .catch(function (error) {
+        console.error("AXIO合并文档加载失败：", error);
+        el("axioLoading").classList.add("is-hidden");
+        el("axioError").textContent = error.message || "合并数据加载失败";
+        el("axioError").classList.remove("is-hidden");
+      });
   }
   function updateImageScale() {
     el("spectrumImage").style.transform = "scale(" + imageScale + ")";
@@ -463,6 +509,26 @@
   }
   function downloadCurrent() {
     if (!currentDocument) {
+      return;
+    }
+    if (currentDocument.instno === "AXIOIMAGERZ2") {
+      if (!currentAxioModel) {
+        showMessage("合并数据尚未加载完成，请稍后重试", "error");
+        return;
+      }
+      el("downloadButton").disabled = true;
+      global.SyssjcjAxioDocument
+        .download(currentAxioModel)
+        .then(function (fileName) {
+          showMessage("合并文档已生成：" + fileName, "success");
+        })
+        .catch(function (error) {
+          console.error(error);
+          showMessage(error.message || "合并文档生成失败", "error");
+        })
+        .then(function () {
+          el("downloadButton").disabled = false;
+        });
       return;
     }
     dataService

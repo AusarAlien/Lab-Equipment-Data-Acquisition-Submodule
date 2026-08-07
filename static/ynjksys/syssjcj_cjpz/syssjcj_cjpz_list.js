@@ -119,7 +119,13 @@
         (current <= 1 ? " disabled" : "") +
         ">‹</button>",
     );
-    for (var i = 1; i <= pages; i++)
+    global.SyssjcjPagination.items(pages, current, 5).forEach(function (i) {
+      if (i === global.SyssjcjPagination.ELLIPSIS) {
+        buttons.push(
+          '<button class="page-ellipsis" type="button" disabled aria-hidden="true">...</button>',
+        );
+        return;
+      }
       buttons.push(
         '<button class="' +
           (i === current ? "is-current" : "") +
@@ -129,6 +135,7 @@
           i +
           "</button>",
       );
+    });
     buttons.push(
       '<button data-dir="1"' +
         (!pages || current >= pages ? " disabled" : "") +

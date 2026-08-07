@@ -141,6 +141,13 @@
       experimentTime: row["数据入库时间"] || "--",
       collectTime: row["采集时间"] || "--",
       fileName: safeDecode(row["来源文件"] || ""),
+      dataType: row["数据类型"] || "仪器解析数据",
+      xCor: row["X坐标"] == null ? "" : row["X坐标"],
+      yCor: row["Y坐标"] == null ? "" : row["Y坐标"],
+      zCor: row["Z坐标"] == null ? "" : row["Z坐标"],
+      objectNo: row["对象编号"] == null ? "" : row["对象编号"],
+      slideNo: row["玻片号"] == null ? "" : row["玻片号"],
+      groupName: row["组别"] == null ? "" : row["组别"],
       departmentId: String(row["部门编号"] || ""),
       departmentName: row["部门名称"] || "--",
       total: Number(row["总数"] || 0),
@@ -431,7 +438,14 @@
     var pages = Math.ceil(total / CONFIG.pageSize),
       host = el(prefix + "Pages");
     host.innerHTML = "";
-    for (var index = 1; index <= pages; index += 1) {
+    global.SyssjcjPagination.items(pages, page, 5).forEach(function (index) {
+      if (index === global.SyssjcjPagination.ELLIPSIS) {
+        host.insertAdjacentHTML(
+          "beforeend",
+          '<button class="page-number page-ellipsis" type="button" disabled aria-hidden="true">...</button>',
+        );
+        return;
+      }
       host.insertAdjacentHTML(
         "beforeend",
         '<button class="page-number' +
@@ -442,7 +456,7 @@
           index +
           "</button>",
       );
-    }
+    });
     el(prefix + "Previous").disabled = page <= 1;
     el(prefix + "Next").disabled = !pages || page >= pages;
     el(prefix + "PageSummary").textContent = "共 " + pages + " 页，10 条";
@@ -479,8 +493,8 @@
   }
   function detailPairs(row) {
     var dev = device(row.deviceId),
-      file = CONFIG.mockMode ? documentItem(row.fdiseq) : row;
-    return [
+      file = CONFIG.mockMode ? documentItem(row.fdiseq) : row,
+      pairs = [
       ["样品编号", row.sampleNo],
       ["样品序号", row.sampleSeq || "--"],
       ["检测项目编号", row.projectCode],
@@ -495,6 +509,20 @@
       ["文件序号", row.fdiseq],
       ["数据标识", row.dataId],
     ];
+    if (row.instno === "AXIOIMAGERZ2") {
+      pairs.splice(
+        6,
+        0,
+        ["数据类型", row.dataType || "--"],
+        ["玻片号", row.slideNo || "--"],
+        ["对象编号", row.objectNo || "--"],
+        ["X坐标", row.xCor || "--"],
+        ["Y坐标", row.yCor || "--"],
+        ["Z坐标", row.zCor || "--"],
+        ["组别", row.groupName || "--"],
+      );
+    }
+    return pairs;
   }
   function openDataDetail(id) {
     var row = find(allData, "dataId", id);

@@ -202,14 +202,19 @@
     el("emptyState").classList.toggle("is-hidden", filtered.length !== 0);
     el("resultSummary").textContent = "（当前查询 " + filtered.length + " 条）";
     var pages = Math.ceil(filtered.length / CONFIG.pageSize);
-    el("pages").innerHTML = Array.from({ length: pages }, function (_, i) {
+    el("pages").innerHTML = global.SyssjcjPagination
+      .items(pages, page, 5)
+      .map(function (pageNumber) {
+      if (pageNumber === global.SyssjcjPagination.ELLIPSIS) {
+        return '<button class="page-ellipsis" type="button" disabled aria-hidden="true">...</button>';
+      }
       return (
         '<button class="' +
-        (i + 1 === page ? "active" : "") +
+        (pageNumber === page ? "active" : "") +
         '" data-page="' +
-        (i + 1) +
+        pageNumber +
         '">' +
-        (i + 1) +
+        pageNumber +
         "</button>"
       );
     }).join("");

@@ -9,6 +9,8 @@
     spectrumList: "ynjksys_02005q",
     documentDelete: "ynjksys_02006q",
     parseRowsDelete: "ynjksys_02007q",
+    axioSummary: "ynjksys_02008q",
+    axioCells: "ynjksys_02009q",
   };
 
   function commonParams() {
@@ -226,6 +228,19 @@
     });
   }
 
+  function loadAxioDocument(fdiseq) {
+    var params = { fdiseq_sql_equal: Number(fdiseq) };
+    return Promise.all([
+      query(QUERY_IDS.axioSummary, params),
+      query(QUERY_IDS.axioCells, params),
+    ]).then(function (results) {
+      return {
+        summaries: rowsFromResult(results[0]),
+        cells: rowsFromResult(results[1]),
+      };
+    });
+  }
+
   function blobUrl(fdiseq, mode) {
     return appendSessionId(
       controllerBase() +
@@ -284,5 +299,6 @@
     normalizeSubmitResult: normalizeSubmitResult,
     deleteDocument: deleteDocument,
     deleteParseRows: deleteParseRows,
+    loadAxioDocument: loadAxioDocument,
   };
 })(window);

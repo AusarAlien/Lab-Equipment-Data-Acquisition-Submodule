@@ -317,14 +317,22 @@
   function renderPages(pages) {
     var host = el("pageNumbers");
     host.innerHTML = "";
-    for (var i = 1; i <= pages; i++) {
+    global.SyssjcjPagination.items(pages, state.page, 5).forEach(function (i) {
       var b = document.createElement("button");
       b.type = "button";
+      if (i === global.SyssjcjPagination.ELLIPSIS) {
+        b.className = "page-number page-ellipsis";
+        b.textContent = "...";
+        b.disabled = true;
+        b.setAttribute("aria-hidden", "true");
+        host.appendChild(b);
+        return;
+      }
       b.className = "page-number" + (i === state.page ? " is-active" : "");
       b.textContent = i;
       b.dataset.page = i;
       host.appendChild(b);
-    }
+    });
     el("previousPage").disabled = state.page <= 1;
     el("nextPage").disabled = state.page >= pages || pages === 0;
   }

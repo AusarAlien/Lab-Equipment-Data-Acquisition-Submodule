@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>采集文件详情</title>
-    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjwd_detail.css' %}?v=2026080308">
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjwd_detail.css' %}?v=2026080701">
     <script src="{% static 'common/isvar.js' %}"></script>
     <script src="{% static 'common/isqrydata.js' %}"></script>
     <script src="{% static 'common/issubmit.js' %}"></script>
@@ -13,7 +13,9 @@
     <!-- 模拟数据降级入口（真实查询启用期间停用）
     <script src="{% static 'ynjksys/syssjcj_mock_data.js' %}?v=2026080401"></script>
     -->
-    <script src="{% static 'ynjksys/syssjcj_cjwd_service.js' %}?v=2026080606"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjwd_service.js' %}?v=2026080701"></script>
+    <script src="{% static 'lib/docx/docx.iife.js' %}?v=9.7.1"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjwd_axio_document.js' %}?v=2026080702"></script>
 </head>
 <body>
 <main class="page-container">
@@ -70,6 +72,11 @@
                 <div class="preview-meta"><span id="previewType">--</span></div>
             </div>
             <div id="previewArea" class="preview-area">
+                <div id="axioPreview" class="preview-content axio-preview is-hidden">
+                    <div id="axioLoading" class="axio-state">正在组合PDF解析数据与TXT坐标数据...</div>
+                    <div id="axioError" class="axio-state is-error is-hidden"></div>
+                    <div id="axioDocument"></div>
+                </div>
                 <div id="excelPreview" class="preview-content is-hidden">
                     <div class="sheet-tabs"><button class="sheet-tab is-active" type="button">检测结果</button></div>
                     <div class="sheet-scroll">
@@ -118,6 +125,6 @@
     </div>
 </main>
 <div id="toast" class="toast is-hidden" role="status" aria-live="polite"></div>
-<script src="{% static 'ynjksys/syssjcj_cjwd_detail.js' %}?v=2026080606"></script>
+<script src="{% static 'ynjksys/syssjcj_cjwd_detail.js' %}?v=2026080701"></script>
 </body>
 </html>

@@ -24,10 +24,30 @@ begin
          'BRUKER', 'New autofex',
          'TY2016000034', '4号楼308', 2
     from dual
+  union all
+  select 'AXIOIMAGERZ2', 'DEPT-DL',
+         '检验中心毒理室', '卡尔蔡司AxioImagerZ2染色体扫描仪',
+         '卡尔蔡司', 'AxioImagerZ2',
+         null, null, 3
+    from dual
 ), available_inst as (
   select distinct upper(trim(t.finstno)) instno
     from htlis.lis_instdata_new t
    where (nvl(?, 0) = 0 or t.fhiino = ?)
+     and exists (
+         select 1
+           from hii.ib_tbs_detailedinf d
+          where d.fdiseq = t.fdiseq
+            and (t.fhiino is null or d.fhiino = t.fhiino)
+            and nvl(trim(d.finvalidflag),'0')='0'
+            and exists (
+                select 1
+                  from hii.ib_tbs_tbldat b
+                 where b.fdiseq=d.fdiseq
+                   and upper(trim(b.ftblnm))='INSTFILE'
+                   and trim(b.fpkseq2)='F'
+            )
+     )
 )
 select d.instno 仪器编号,
        d.device_name 仪器设备,
