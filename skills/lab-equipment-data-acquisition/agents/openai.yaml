@@ -1,0 +1,4 @@
+interface:
+  display_name: "实验室设备数据采集开发"
+  short_description: "智源平台实验室设备数据采集全链路开发、联调、排障与部署规范"
+  default_prompt: "Use $lab-equipment-data-acquisition to continue developing the laboratory equipment data acquisition submodule safely."
