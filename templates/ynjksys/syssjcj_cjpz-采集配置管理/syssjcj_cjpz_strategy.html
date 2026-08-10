@@ -6,7 +6,7 @@
     <title>采集策略</title>
     <link
       rel="stylesheet"
-      href="{% static 'ynjksys/syssjcj_cjpz_modal.css' %}?v=2026080401"
+      href="{% static 'ynjksys/syssjcj_cjpz_modal.css' %}?v=2026081001"
     />
     <script src="{% static 'common/isvar.js' %}"></script>
     <script src="{% static 'common/isloadpage.js' %}"></script>
@@ -17,8 +17,10 @@
     <main class="modal-page">
       <nav class="subtabs">
         <button class="subtab is-active" data-tab="basic">基本信息</button
-        ><button class="subtab" data-tab="rule">采集规则</button
-        ><button class="subtab" data-tab="archive">归档规则</button>
+        ><button class="subtab" data-tab="rule">采集规则</button>
+        <!-- 当前 HTTP 采集由客户端执行文件追踪、服务端自动归档，不开放归档规则配置。
+        <button class="subtab" data-tab="archive">归档规则</button>
+        -->
         <!-- 当前阶段隐藏脚本功能，具备在线脚本管理前提后恢复。
         <button class="subtab" data-tab="script">关联脚本</button>
         -->
@@ -99,10 +101,9 @@
             <label>样品列标识</label><input id="sampcolflag" />
           </div>
           <div class="form-item">
-            <label>文件追踪</label
-            ><select id="trackMode">
+            <label>文件处理追踪</label
+            ><select id="trackMode" disabled>
               <option>启用</option>
-              <option>停用</option>
             </select>
           </div>
           <div class="form-item">
@@ -152,8 +153,12 @@
               </div>
             </div>
           </div>
+          <div class="readonly-note form-item full">
+            上传成功后写入客户端处理记录，防止同一文件重复上传；源文件保持在监听目录，服务端归档由系统自动完成。
+          </div>
         </div>
       </section>
+      <!-- 当前阶段隐藏归档规则：HTTP 客户端不执行本地文件归档，服务端接收后自动写入平台文件库。
       <section id="archivePanel" class="card is-hidden">
         <div class="card-title"><h1>采集归档规则</h1></div>
         <div class="card-body form-grid">
@@ -180,6 +185,7 @@
           </div>
         </div>
       </section>
+      -->
       <!-- 当前阶段隐藏关联脚本及调试入口，页面结构保留供后续恢复。
       <section id="scriptPanel" class="card is-hidden">
         <div class="card-title"><h1>关联脚本</h1></div>
@@ -201,6 +207,6 @@
       </footer>
     </main>
     <div id="toast" class="toast is-hidden"></div>
-    <script src="{% static 'ynjksys/syssjcj_cjpz_strategy.js' %}?v=2026080403"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_strategy.js' %}?v=2026081001"></script>
   </body>
 </html>

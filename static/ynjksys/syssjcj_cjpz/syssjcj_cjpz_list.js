@@ -443,19 +443,21 @@
         "service = " + x.service,
         "startrow = " + x.startrow,
         "sampcolflag = " + x.sampcolflag,
-        "track_mode = " + (x.trackMode === "启用" ? 1 : 0),
-        "usb_mode = " + (x.usbMode || "mass_storage"),
-        "usb_poll_interval = " + (x.usbPollInterval || 5),
-        "data_mode = file_first",
-        "usb_output_dir = " + (x.outputDir || ""),
-        "usb_filename_template = " + x.filenameTemplate,
+        "track_mode = 1",
         "client_id = " + x.clientId,
         "client_type = " + (c.clientType || ""),
         "client_ver = " + (c.clientVersion || ""),
         "lab_id = " + x.departmentId,
         "heartbeat_interval = " + x.heartbeatInterval,
-      ],
-      blob = new Blob(["\ufeff" + lines.join("\r\n")], {
+      ];
+    // HTTP 客户端不使用本地归档字段；USB/串口能力恢复时再输出对应配置。
+    if (String(x.interfaceType || "").toLowerCase() !== "http") {
+      lines.splice(9, 0,
+        "usb_mode = " + (x.usbMode || "mass_storage"),
+        "usb_poll_interval = " + (x.usbPollInterval || 5)
+      );
+    }
+    var blob = new Blob(["\ufeff" + lines.join("\r\n")], {
         type: "text/plain;charset=utf-8",
       }),
       a = document.createElement("a");

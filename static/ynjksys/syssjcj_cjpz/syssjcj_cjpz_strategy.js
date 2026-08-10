@@ -62,6 +62,7 @@
     ["strategyId", "instno", "version", "owner"].forEach(function (id) {
       el(id).disabled = true;
     });
+    el("trackMode").disabled = true;
     el("edit").classList.toggle("is-hidden", !flag);
     el("save").classList.toggle("is-hidden", flag);
     el("cancelEdit").classList.toggle("is-hidden", flag);
@@ -92,7 +93,6 @@
       "service",
       "startrow",
       "sampcolflag",
-      "trackMode",
       "heartbeatInterval",
       "usbMode",
       "usbPollInterval",
@@ -102,14 +102,11 @@
       "comStopbits",
       "comParity",
       "comTimeout",
-      "archiveMode",
-      "dataMode",
-      "outputDir",
-      "filenameTemplate",
     ].forEach(function (id) {
       value(id, x[id]);
     });
     value("instno", d.instno);
+    value("trackMode", "启用");
     dynamic();
     /* 当前阶段隐藏关联脚本展示，具备数据库、服务端执行及版本管理能力后恢复。
     el("scriptInfo").innerHTML = s.scriptId
@@ -148,14 +145,9 @@
       "filepath",
       "service",
       "sampcolflag",
-      "trackMode",
       "usbMode",
       "comPort",
       "comParity",
-      "archiveMode",
-      "dataMode",
-      "outputDir",
-      "filenameTemplate",
     ].forEach(function (id) {
       x[id] = el(id).value.trim();
     });
@@ -171,6 +163,7 @@
     ].forEach(function (id) {
       x[id] = Number(el(id).value) || 0;
     });
+    x.trackMode = "启用";
     x.updateTime = "2026-08-04 16:20:00";
     x.version =
       "V" + (Number(String(x.version).replace(/^V/, "")) + 0.1).toFixed(1);
@@ -244,7 +237,7 @@
         "service = " + x.service,
         "startrow = " + x.startrow,
         "sampcolflag = " + x.sampcolflag,
-        "track_mode = " + (x.trackMode === "启用" ? 1 : 0),
+        "track_mode = 1",
         "client_id = " + x.clientId,
         "client_type = " + c.clientType,
         "client_ver = " + c.clientVersion,
@@ -266,7 +259,8 @@
         document.querySelectorAll(".subtab").forEach(function (x) {
           x.classList.toggle("is-active", x === n);
         });
-        var visibleTabs = ["basic", "rule", "archive"];
+        var visibleTabs = ["basic", "rule"];
+        // visibleTabs.push("archive"); // 非 HTTP 客户端具备本地归档能力后恢复。
         // visibleTabs.push("script"); // 在线脚本功能具备实际通路后恢复。
         visibleTabs.forEach(function (x) {
           el(x + "Panel").classList.toggle("is-hidden", x !== n.dataset.tab);
