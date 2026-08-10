@@ -6,7 +6,7 @@
     <title>采集策略</title>
     <link
       rel="stylesheet"
-      href="{% static 'ynjksys/syssjcj_cjpz_modal.css' %}?v=2026081001"
+      href="{% static 'ynjksys/syssjcj_cjpz_modal.css' %}?v=2026081002"
     />
     <script src="{% static 'common/isvar.js' %}"></script>
     <script src="{% static 'common/isloadpage.js' %}"></script>
@@ -29,10 +29,18 @@
         <div class="card-title"><h1>策略基本信息</h1></div>
         <div class="card-body form-grid">
           <div class="form-item">
-            <label class="required">策略名称</label><input id="strategyName" />
+            <label class="required">策略名称</label
+            ><input
+              id="strategyName"
+              placeholder="如：安捷伦1200液相色谱仪-HTTP目录采集策略"
+              title="平台侧业务名称，用于查询和审计"
+            />
           </div>
           <div class="form-item">
             <label>策略编号</label><input id="strategyId" disabled />
+          </div>
+          <div class="field-help form-item full">
+            策略名称由平台维护，仅用于页面识别、查询和审计；修改名称不会触发客户端重新应用配置。
           </div>
           <div class="form-item">
             <label class="required">所属实验室</label
@@ -207,6 +215,6 @@
       </footer>
     </main>
     <div id="toast" class="toast is-hidden"></div>
-    <script src="{% static 'ynjksys/syssjcj_cjpz_strategy.js' %}?v=2026081001"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjpz_strategy.js' %}?v=2026081002"></script>
   </body>
 </html>

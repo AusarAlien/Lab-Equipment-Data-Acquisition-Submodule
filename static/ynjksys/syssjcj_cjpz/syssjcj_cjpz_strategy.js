@@ -73,6 +73,54 @@
     el("usbFields").classList.toggle("is-hidden", mode !== "USB存储采集");
     el("serialFields").classList.toggle("is-hidden", mode !== "串口采集");
   }
+  function pad(v) {
+    return Number(v) < 10 ? "0" + Number(v) : String(v);
+  }
+  function dateText(date, compact) {
+    var day =
+        date.getFullYear() +
+        pad(date.getMonth() + 1) +
+        pad(date.getDate()),
+      time = pad(date.getHours()) + pad(date.getMinutes()) + pad(date.getSeconds());
+    return compact
+      ? day + time
+      : day.slice(0, 4) +
+          "-" +
+          day.slice(4, 6) +
+          "-" +
+          day.slice(6, 8) +
+          " " +
+          time.slice(0, 2) +
+          ":" +
+          time.slice(2, 4) +
+          ":" +
+          time.slice(4, 6);
+  }
+  function nextConfigVersion(current) {
+    var match = /^v(\d+)/i.exec(String(current || "")),
+      major = match ? Number(match[1]) + 1 : 1;
+    return "v" + major + "_" + dateText(new Date(), true);
+  }
+  function isOperationalChange(before, after) {
+    return [
+      "departmentId",
+      "deviceId",
+      "clientId",
+      "collectionMode",
+      "status",
+      "interfaceType",
+      "filepath",
+      "frequency",
+      "service",
+      "startrow",
+      "sampcolflag",
+      "trackMode",
+      "heartbeatInterval",
+    ].some(function (key) {
+      return String(before[key] == null ? "" : before[key]) !==
+        String(after[key] == null ? "" : after[key]);
+    });
+  }
   function fill() {
     var x = state.target,
       d = find(state.devices, "deviceId", x.deviceId),
@@ -164,9 +212,7 @@
       x[id] = Number(el(id).value) || 0;
     });
     x.trackMode = "启用";
-    x.updateTime = "2026-08-04 16:20:00";
-    x.version =
-      "V" + (Number(String(x.version).replace(/^V/, "")) + 0.1).toFixed(1);
+    x.updateTime = dateText(new Date(), false);
     return x;
   }
   function notify() {
@@ -184,10 +230,33 @@
       toast("请填写策略名称、设备和客户端");
       return;
     }
-    var x = collect(),
+    var before = state.target,
+      x = collect(),
+      nameChanged = before.strategyName !== x.strategyName,
+      configChanged = isOperationalChange(before, x),
       idx = state.strategies.findIndex(function (s) {
         return s.strategyId === x.strategyId;
+      }),
+      changes = [];
+    if (!nameChanged && !configChanged) {
+      toast("未检测到需要保存的修改");
+      return;
+    }
+    x.version = configChanged ? nextConfigVersion(before.version) : before.version;
+    if (nameChanged) {
+      changes.push({
+        field: "策略名称",
+        before: before.strategyName,
+        after: x.strategyName,
       });
+    }
+    if (configChanged) {
+      changes.push({
+        field: "策略版本",
+        before: before.version,
+        after: x.version,
+      });
+    }
     state.strategies[idx] = x;
     S.saveStrategies(state.strategies)
       .then(function () {
@@ -204,15 +273,13 @@
           operationTime: x.updateTime,
           operator: x.owner,
           operationSource: "采集配置管理",
-          syncResult: "待同步",
-          changeSummary: "修改采集策略规则",
-          changes: [
-            {
-              field: "策略版本",
-              before: state.target.version,
-              after: x.version,
-            },
-          ],
+          syncResult: configChanged ? "待同步" : "无需同步",
+          changeSummary: configChanged
+            ? nameChanged
+              ? "修改策略名称及客户端运行配置"
+              : "修改客户端运行配置"
+            : "修改策略名称（不触发客户端同步）",
+          changes: changes,
         });
         return S.saveStrategyLogs(logs);
       })
@@ -221,7 +288,7 @@
         fill();
         disabled(true);
         notify();
-        toast("采集策略已保存");
+        toast(configChanged ? "采集策略已保存，等待客户端同步" : "策略名称已保存");
       });
   }
   function download() {
