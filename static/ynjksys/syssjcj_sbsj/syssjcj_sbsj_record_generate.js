@@ -106,6 +106,35 @@
     }
     return params;
   }
+  function getSInfo() {
+    var current = global.parent,
+      depth = 0;
+    while (current && depth < 5) {
+      try {
+        if (
+          current.reEcdtJ &&
+          current.reEcdtJ.sInfo
+        ) {
+          return current.reEcdtJ.sInfo;
+        }
+        if (!current.parent || current.parent === current) break;
+        current = current.parent;
+      } catch (error) {
+        break;
+      }
+      depth += 1;
+    }
+    return {};
+  }
+  function currentOperator() {
+    var sInfo = getSInfo(),
+      empId = String(sInfo.empId || sInfo.opNo || "").trim(),
+      userName = String(sInfo.empNm || "").trim();
+    return {
+      empId: empId,
+      userName: userName,
+    };
+  }
   function queryPlatform(qid) {
     return new Promise(function (resolve, reject) {
       if (!global.isqrydata || typeof global.isqrydata.query !== "function") {
@@ -162,7 +191,7 @@
       项目模式: "ITEM",
     }[mode] || "";
   }
-  function submitPlatform(data) {
+  function submitPlatform(data, operator) {
     return new Promise(function (resolve, reject) {
       if (!global.issubmit || typeof global.issubmit.add !== "function") {
         reject(new Error("平台提交组件 issubmit.js 未加载"));
@@ -172,6 +201,10 @@
         qid: CONFIG.qids.generateRecord,
         isSaveBusiJson: "否",
         data: data,
+        urlParams: {
+          empid_sql_equal: operator.empId,
+          empnm_sql_equal: operator.userName,
+        },
         successCallback: function (result) {
           var normalized = normalizeSubmitResult(result);
           if (normalized.success === true) {
@@ -506,6 +539,7 @@
   function renderPreview() {
     var category = selectedCategory() || {},
       schema = targetTemplate.editorSchema || null,
+      operator = currentOperator(),
       range = experimentRange(),
       selectedMode = el("recordModeSelect").value,
       namePrefix =
@@ -573,7 +607,9 @@
     } else {
       el("templateFooter").classList.remove("is-hidden");
       el("templateFooter").innerHTML =
-        "<span>记录生成：监*一</span><span>生成时间：系统生成</span><span>复核：________</span>";
+        "<span>记录生成：" +
+        escapeHtml(operator.userName || operator.empId || "--") +
+        "</span><span>生成时间：系统生成</span><span>复核：________</span>";
     }
     var defaultFields = [
         { field: "sampleNo", label: "样品编号" },
@@ -646,6 +682,7 @@
   function submit() {
     var name = el("recordName").value.trim(),
       category = selectedCategory(),
+      operator = currentOperator(),
       key =
         mock && mock.keys
           ? mock.keys.generationContext
@@ -654,6 +691,10 @@
     if (!name) {
       el("recordName").focus();
       showToast("请输入原始记录名称");
+      return;
+    }
+    if (!operator.empId || !operator.userName) {
+      showToast("未取得当前平台操作人信息，请从功能平台重新进入");
       return;
     }
     el("workingMask").classList.remove("is-hidden");
@@ -674,7 +715,7 @@
         fguids: rows.map(function (row) {
           return row.dataId;
         }),
-      })
+      }, operator)
         .then(function (result) {
           global.sessionStorage.removeItem(key);
           try {
@@ -732,7 +773,7 @@
               new Date().toISOString().slice(0, 10) +
               " " +
               new Date().toTimeString().slice(0, 8),
-            creator: "监*一",
+            creator: operator.userName,
           };
         records.unshift(record);
         mock.setRecords(records);
