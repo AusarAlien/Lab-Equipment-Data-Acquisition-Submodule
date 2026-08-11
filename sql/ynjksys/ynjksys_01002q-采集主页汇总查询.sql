@@ -19,7 +19,7 @@ begin
      and trim(b.fpkseq2) = 'F'
 ), parse_summary as (
   select t.fdiseq,
-         min(t.finstno) keep (dense_rank first order by t.fopdt desc nulls last) finstno,
+         min(upper(trim(t.finstno))) keep (dense_rank first order by t.fopdt desc nulls last) finstno,
          count(*) parsed_count
     from htlis.lis_instdata_new t
    group by t.fdiseq
@@ -31,7 +31,7 @@ begin
     left join parse_summary p on p.fdiseq = d.fdiseq
    where (nvl(?, 0) = 0 or d.fhiino = ?)
      and nvl(trim(d.finvalidflag), '0') = '0'
-     and (p.finstno in ('AGILENT-1200','BRUKER-MICROFLEX') or p.finstno is null)
+     and (upper(trim(p.finstno)) in ('AGILENT-1200','BRUKER-MICROFLEX','AXIOIMAGERZ2') or p.finstno is null)
 )
 select count(*) 采集文件数量,
        nvl(sum(b.parsed_count), 0) 采集数据数量,

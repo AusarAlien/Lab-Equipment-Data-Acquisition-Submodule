@@ -12,7 +12,7 @@
     qids: {
       document: "ynjksys_02002q",
       parseRows: "ynjksys_02003q",
-      parseInfo: "",
+      parseInfo: "ynjksys_02011q",
       deleteRows: "ynjksys_02007q",
       reparse: "",
       reparseStatus: "",
@@ -443,31 +443,51 @@
         var detailRow = service.rowsFromResult(detailResult)[0];
         if (!detailRow) return null;
         var documentItem = service.normalizeDocument(detailRow);
-        return service
-          .query(CONFIG.qids.parseRows, { fdiseq_sql_equal: fdiseq })
-          .then(function (rowsResult) {
+        return Promise.all([
+          service.query(CONFIG.qids.parseRows, { fdiseq_sql_equal: fdiseq }),
+          service.query(CONFIG.qids.parseInfo, { fdiseq_sql_equal: fdiseq })
+            .catch(function () { return { data: [] }; }),
+        ]).then(function (results) {
+            var rowsResult = results[0];
+            var auditRow = service.rowsFromResult(results[1])[0];
             var rawRows = service.rowsFromResult(rowsResult);
             var rows = rawRows.map(function (row) {
               return adaptLiveRow(row, documentItem.instno);
             });
+            var auditResult = auditRow
+              ? service.value(auditRow, ["解析结果", "RESULT_STATUS"], documentItem.parseStatus)
+              : documentItem.parseStatus;
             return {
               document: documentItem,
               rows: rows,
               info: {
-                startTime: documentItem.firstParseTime,
-                endTime: documentItem.lastParseTime,
-                result: documentItem.parseStatus,
-                rawCount: rows.length,
-                successCount: rows.length,
+                startTime: auditRow
+                  ? service.value(auditRow, ["开始时间", "START_TIME"], documentItem.firstParseTime)
+                  : documentItem.firstParseTime,
+                endTime: auditRow
+                  ? service.value(auditRow, ["结束时间", "END_TIME"], documentItem.lastParseTime)
+                  : documentItem.lastParseTime,
+                result: auditResult,
+                rawCount: auditRow
+                  ? Number(service.value(auditRow, ["解析前数据量", "BEFORE_COUNT"], rows.length))
+                  : rows.length,
+                successCount: auditRow
+                  ? Number(service.value(auditRow, ["解析后数据量", "AFTER_COUNT"], rows.length))
+                  : rows.length,
                 skipCount: 0,
-                error:
-                  documentItem.parseStatus === "解析成功"
+                error: auditRow
+                  ? service.value(auditRow, ["错误信息", "ERROR_MESSAGE"], "--") || "--"
+                  : (documentItem.parseStatus === "解析成功"
                     ? "--"
-                    : documentItem.parseMessage || "未生成解析入库数据",
-                reason: "--",
-                operator: rawRows.length
-                  ? service.normalizeParseRow(rawRows[0]).operator || "系统自动采集"
-                  : "系统自动采集",
+                    : documentItem.parseMessage || "未生成解析入库数据"),
+                reason: auditRow
+                  ? service.value(auditRow, ["重新解析原因", "REPARSE_REASON"], "--")
+                  : "--",
+                operator: auditRow
+                  ? service.value(auditRow, ["操作人", "FEMPID"], "--")
+                  : (rawRows.length
+                    ? service.normalizeParseRow(rawRows[0]).operator || "系统自动采集"
+                    : "系统自动采集"),
               },
             };
           });
@@ -871,13 +891,41 @@
   }
   function submitReparse() {
     var reason = el("reparseReason").value.trim();
-    if (!reason) {
+    if (reason.length < 2) {
       el("reasonError").classList.remove("is-hidden");
       return;
     }
     if (!CONFIG.mockMode) {
       closeDialog("reasonDialog");
-      showToast("重新解析服务端接口尚未配置，当前未执行解析操作");
+      setProcessing(true);
+      global.SyssjcjDocumentService
+        .reparseDocument(state.document.fdiseq, reason)
+        .then(function (result) {
+          return loadLiveData(state.document.fdiseq).then(function (payload) {
+            return { result: result, payload: payload };
+          });
+        })
+        .then(function (completed) {
+          var payload = completed.payload;
+          if (!payload) throw new Error("重新解析后未找到采集文件");
+          state.document = payload.document;
+          state.profile = profileFor(state.document.instno);
+          state.allRows = payload.rows.slice();
+          state.filteredRows = state.allRows.slice();
+          state.selected = {};
+          state.page = 1;
+          renderSummary();
+          renderHead();
+          renderRows();
+          renderPagination();
+          renderInfo(payload.info);
+          setProcessing(false);
+          showToast(completed.result.message || "重新解析完成");
+        })
+        .catch(function (error) {
+          setProcessing(false);
+          showToast(error.message || "重新解析失败");
+        });
       return;
     }
     closeDialog("reasonDialog");

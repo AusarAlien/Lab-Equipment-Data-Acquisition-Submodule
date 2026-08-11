@@ -11,6 +11,7 @@
     parseRowsDelete: "ynjksys_02007q",
     axioSummary: "ynjksys_02008q",
     axioCells: "ynjksys_02009q",
+    reparseInfo: "ynjksys_02011q",
   };
 
   function commonParams() {
@@ -228,6 +229,39 @@
     });
   }
 
+  function reparseDocument(fdiseq, reason) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      var url = appendSessionId(controllerBase() + "/InstFileReparse.m");
+      xhr.open("POST", url, true);
+      xhr.withCredentials = true;
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) return;
+        var result;
+        try {
+          result = JSON.parse(xhr.responseText || "{}");
+        } catch (error) {
+          reject(new Error("重新解析服务未返回有效结果"));
+          return;
+        }
+        if (xhr.status >= 200 && xhr.status < 300 && result.success === true) {
+          resolve(result);
+          return;
+        }
+        reject(new Error(result.message || "重新解析失败"));
+      };
+      xhr.onerror = function () {
+        reject(new Error("重新解析服务连接失败"));
+      };
+      xhr.send(
+        "fdiseq=" + encodeURIComponent(fdiseq) +
+        "&reason=" + encodeURIComponent(reason)
+      );
+    });
+  }
+
   function loadAxioDocument(fdiseq) {
     var params = { fdiseq_sql_equal: Number(fdiseq) };
     return Promise.all([
@@ -299,6 +333,7 @@
     normalizeSubmitResult: normalizeSubmitResult,
     deleteDocument: deleteDocument,
     deleteParseRows: deleteParseRows,
+    reparseDocument: reparseDocument,
     loadAxioDocument: loadAxioDocument,
   };
 })(window);

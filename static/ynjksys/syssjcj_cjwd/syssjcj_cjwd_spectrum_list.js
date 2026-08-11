@@ -1,7 +1,8 @@
 (function (global) {
   "use strict";
   var CONFIG = {
-    mockMode: false,
+    // 图谱原图接口完成部署前使用静态演示数据；改为 false 即恢复 02005q 查询。
+    mockMode: true,
     defaultDbnm: "ynjk",
     pageSize: 12,
     qids: { spectrumList: "ynjksys_02005q" },
@@ -158,7 +159,80 @@
     rows = global.SyssjcjMockData.getSpectra();
   }
   */
-  var rows = [];
+  var rows = [
+    {
+      spectrumId: "TP202608070001",
+      name: "飞燕草色素液相色谱图",
+      sampleNo: "WJ-2026-0003-1B",
+      project: "飞燕草色素",
+      type: "色谱图",
+      instno: "AGILENT-1200",
+      device: "安捷伦1200液相色谱仪",
+      time: "2026-08-07 15:30:37",
+      file: "6 液相色谱仪.pdf",
+      series: [3, 5, 8, 18, 78, 25, 9, 6, 4, 3],
+    },
+    {
+      spectrumId: "TP202608070002",
+      name: "矢车菊色素液相色谱图",
+      sampleNo: "WJ-2026-0003-1B",
+      project: "矢车菊色素",
+      type: "色谱图",
+      instno: "AGILENT-1200",
+      device: "安捷伦1200液相色谱仪",
+      time: "2026-08-07 15:30:37",
+      file: "6 液相色谱仪.pdf",
+      series: [2, 4, 7, 12, 29, 86, 31, 10, 5, 3],
+    },
+    {
+      spectrumId: "TP202608070003",
+      name: "食品样品液相色谱总图",
+      sampleNo: "WJ-2026-0003-1B",
+      project: "多组分检测",
+      type: "色谱图",
+      instno: "AGILENT-1200",
+      device: "安捷伦1200液相色谱仪",
+      time: "2026-08-07 15:30:37",
+      file: "6 液相色谱仪.pdf",
+      series: [4, 7, 22, 9, 61, 13, 47, 8, 5, 4],
+    },
+    {
+      spectrumId: "TP202608070004",
+      name: "大肠埃希菌质谱鉴定图",
+      sampleNo: "SM-YNLJ-2025-SCR-001",
+      project: "微生物质谱鉴定",
+      type: "质谱图",
+      instno: "BRUKER-MICROFLEX",
+      device: "布鲁克飞行时间质谱仪",
+      time: "2026-08-07 15:25:01",
+      file: "70.pdf",
+      series: [8, 19, 43, 17, 76, 24, 58, 16, 32, 11],
+    },
+    {
+      spectrumId: "TP202608070005",
+      name: "金黄色葡萄球菌质谱鉴定图",
+      sampleNo: "SM-YNLJ-2025-SCR-002",
+      project: "微生物质谱鉴定",
+      type: "质谱图",
+      instno: "BRUKER-MICROFLEX",
+      device: "布鲁克飞行时间质谱仪",
+      time: "2026-08-07 15:25:01",
+      file: "70.pdf",
+      series: [12, 35, 18, 64, 26, 83, 39, 21, 48, 14],
+    },
+    {
+      spectrumId: "TP202608070006",
+      name: "蜡样芽孢杆菌质谱鉴定图",
+      sampleNo: "SM-YNLJ-2025-SCR-003",
+      project: "微生物质谱鉴定",
+      type: "质谱图",
+      instno: "BRUKER-MICROFLEX",
+      device: "布鲁克飞行时间质谱仪",
+      time: "2026-08-07 15:25:01",
+      file: "70.pdf",
+      series: [6, 28, 51, 23, 71, 34, 89, 27, 42, 13],
+    },
+  ];
   var state = { filtered: [], page: 1, selectedId: "" };
   function el(id) {
     return document.getElementById(id);
@@ -206,7 +280,10 @@
       });
   }
   function populateDevices() {
-    var known = { "AGILENT-1200": "安捷伦1200液相色谱仪" };
+    var known = {};
+    rows.forEach(function (item) {
+      if (item.instno && item.device) known[item.instno] = item.device;
+    });
     Object.keys(known).forEach(function (k) {
       var o = document.createElement("option");
       o.value = k;
@@ -312,7 +389,7 @@
     el("spectrumGallery").innerHTML = list.map(cardHtml).join("");
     el("resultSummary").textContent = "（当前查询 " + total + " 张）";
     renderPages(pages);
-    el("pageSummary").textContent = "共 " + pages + " 页，12 条";
+    el("pageSummary").textContent = "共 " + pages + " 页，" + total + " 张";
   }
   function renderPages(pages) {
     var host = el("pageNumbers");

@@ -12,7 +12,7 @@ import szapp.domain.ServiceLocator;
 import szapp.util.CommonHiis;
 import szapp.web.ctl.UpLoadFiles;
 
-/** Authenticated published HTTP-policy pull endpoint: POST /GetClientConfig.m. */
+/** Registered-client published HTTP-policy pull endpoint: POST /GetClientConfig.m. */
 public class GetClientConfig extends UpLoadFiles {
     private static final Logger log = Logger.getLogger(GetClientConfig.class.getName());
 
@@ -27,7 +27,9 @@ public class GetClientConfig extends UpLoadFiles {
         Session session = ServiceLocator.currentSession();
         try {
             ClientApiSupport.RequestData request = ClientApiSupport.parseRequest(commonFields);
-            ClientApiSupport.ClientIdentity client = ClientApiSupport.authenticate(session, commonFields, request);
+            // 客户端凭证功能当前停用；保留原调用便于将来恢复。
+            // ClientApiSupport.ClientIdentity client = ClientApiSupport.authenticate(session, commonFields, request);
+            ClientApiSupport.ClientIdentity client = ClientApiSupport.identifyRegisteredClient(session, request);
             String currentVersion = ClientApiSupport.optional(request.json, "current_policy_ver", 40);
             String currentHash = ClientApiSupport.optional(request.json, "current_policy_hash", 64);
 

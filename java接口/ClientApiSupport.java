@@ -125,6 +125,45 @@ final class ClientApiSupport {
         }
     }
 
+    /**
+     * Credential-free client lookup used by the current deployment policy.
+     * The HMAC credential path above is deliberately retained for optional
+     * future re-enablement, but is not a runtime prerequisite.
+     */
+    static ClientIdentity identifyRegisteredClient(Session session, RequestData request) throws Exception {
+        String clientId = required(request.json, "client_id", 100);
+        String sql = "select client_id,client_type,instno,fdptno,fhiino,fenable,fappliedver "
+            + "from htlis.lis_client_info where client_id=?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = session.connection().prepareStatement(sql);
+            ps.setString(1, clientId);
+            rs = ps.executeQuery();
+            if (!rs.next()) throw new ApiException("CLIENT_NOT_REGISTERED", "客户端未登记");
+            if (!"是".equals(trim(rs.getString("fenable")))) {
+                throw new ApiException("CLIENT_DISABLED", "客户端未启用");
+            }
+            ClientIdentity id = new ClientIdentity();
+            id.clientId = clientId;
+            id.clientType = trim(rs.getString("client_type"));
+            id.instno = trim(rs.getString("instno"));
+            id.fdptno = trim(rs.getString("fdptno"));
+            id.fhiino = rs.getLong("fhiino");
+            if (rs.wasNull() || id.fhiino <= 0) {
+                throw new ApiException("CLIENT_SCOPE_INVALID", "客户端未配置机构归属");
+            }
+            id.appliedVersion = trim(rs.getString("fappliedver"));
+            String reportedInstno = trim(request.json.getString("instno"));
+            if (!isBlank(reportedInstno) && !reportedInstno.equalsIgnoreCase(id.instno)) {
+                throw new ApiException("INSTNO_MISMATCH", "客户端仪器编号与服务端登记不一致");
+            }
+            return id;
+        } finally {
+            close(rs); close(ps);
+        }
+    }
+
     static void verifyHttpMode(JSONObject json) throws ApiException {
         String mode = trim(json.getString("mode"));
         if (!isBlank(mode) && !"http".equalsIgnoreCase(mode)) {

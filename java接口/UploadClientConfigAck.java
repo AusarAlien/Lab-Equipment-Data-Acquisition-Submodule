@@ -12,7 +12,7 @@ import szapp.util.CommonHiis;
 import szapp.web.ctl.UpLoadFiles;
 
 /**
- * Authenticated policy application receipt endpoint: POST
+ * Registered-client policy application receipt endpoint: POST
  * /UploadClientConfigAck.m.
  */
 public class UploadClientConfigAck extends UpLoadFiles {
@@ -29,7 +29,9 @@ public class UploadClientConfigAck extends UpLoadFiles {
         Session session = ServiceLocator.currentSession();
         try {
             ClientApiSupport.RequestData request = ClientApiSupport.parseRequest(commonFields);
-            ClientApiSupport.ClientIdentity client = ClientApiSupport.authenticate(session, commonFields, request);
+            // 客户端凭证功能当前停用；保留原调用便于将来恢复。
+            // ClientApiSupport.ClientIdentity client = ClientApiSupport.authenticate(session, commonFields, request);
+            ClientApiSupport.ClientIdentity client = ClientApiSupport.identifyRegisteredClient(session, request);
             String version = ClientApiSupport.required(request.json, "policy_ver", 40);
             String hash = ClientApiSupport.required(request.json, "policy_hash", 64).toLowerCase();
             String applyStatus = ClientApiSupport.required(request.json, "apply_status", 20).toUpperCase();

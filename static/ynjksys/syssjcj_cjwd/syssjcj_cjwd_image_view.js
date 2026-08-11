@@ -1,7 +1,8 @@
 (function (global) {
   "use strict";
   var CONFIG = {
-    mockMode: false,
+    // 与图谱查询页保持静态演示模式；真实原图接口启用后改为 false。
+    mockMode: true,
     defaultDbnm: "ynjk",
     storageKey: global.SyssjcjMockData
       ? global.SyssjcjMockData.keys.selectedSpectrum

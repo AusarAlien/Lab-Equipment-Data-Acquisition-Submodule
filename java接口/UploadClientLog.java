@@ -10,7 +10,7 @@ import szapp.domain.ServiceLocator;
 import szapp.util.CommonHiis;
 import szapp.web.ctl.UpLoadFiles;
 
-/** Authenticated client heartbeat endpoint: POST /UploadClientLog.m. */
+/** Registered-client heartbeat endpoint: POST /UploadClientLog.m. */
 public class UploadClientLog extends UpLoadFiles {
     private static final Logger log = Logger.getLogger(UploadClientLog.class.getName());
 
@@ -25,7 +25,9 @@ public class UploadClientLog extends UpLoadFiles {
         Session session = ServiceLocator.currentSession();
         try {
             ClientApiSupport.RequestData request = ClientApiSupport.parseRequest(commonFields);
-            ClientApiSupport.ClientIdentity client = ClientApiSupport.authenticate(session, commonFields, request);
+            // 客户端凭证功能当前停用；保留原调用便于将来恢复。
+            // ClientApiSupport.ClientIdentity client = ClientApiSupport.authenticate(session, commonFields, request);
+            ClientApiSupport.ClientIdentity client = ClientApiSupport.identifyRegisteredClient(session, request);
             ClientApiSupport.verifyHttpMode(request.json);
 
             String status = ClientApiSupport.required(request.json, "status", 20).toUpperCase();
