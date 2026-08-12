@@ -1,0 +1,71 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>采集客户端</title>
+    <link rel="stylesheet" href="{% static 'ynjksys/syssjcj_cjkh_list.css' %}?v=2026081101" />
+    <script src="{% static 'common/isvar.js' %}"></script>
+    <script src="{% static 'common/isqrydata.js' %}"></script>
+  </head>
+  <body>
+    <main class="page-container">
+      <section class="query-panel">
+        <div class="query-grid">
+          <div class="form-item">
+            <label for="instrumentFilter">仪器设备</label>
+            <select id="instrumentFilter"><option value="">全部设备</option></select>
+          </div>
+          <div class="form-item">
+            <label for="clientTypeFilter">客户端类型</label>
+            <select id="clientTypeFilter">
+              <option value="">全部类型</option><option value="PYTHON">Python</option><option value="GO">Go</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label for="osFilter">操作系统</label>
+            <select id="osFilter"><option value="">全部系统</option><option value="WINDOWS 10+">Windows 10及以上</option><option value="WINDOWS 7">Windows 7</option></select>
+          </div>
+          <div class="form-item">
+            <label for="versionFilter">版本号</label>
+            <input id="versionFilter" type="text" placeholder="请输入版本号" />
+          </div>
+          <div class="query-actions">
+            <button id="resetButton" class="button">重置</button>
+            <button id="queryButton" class="button button-primary">查询</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="list-panel">
+        <header class="section-header">
+          <h2>客户端发布包</h2>
+          <span id="resultCount" class="section-count"></span>
+        </header>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th class="operation-col">操作</th><th>序号</th><th>适用仪器</th><th>客户端类型</th><th>版本号</th><th>操作系统</th><th>架构</th><th>文件大小</th><th>发布时间</th><th>状态</th></tr></thead>
+            <tbody id="packageBody"></tbody>
+          </table>
+          <div id="emptyState" class="empty-state is-hidden">暂无符合条件的客户端发布包</div>
+        </div>
+        <footer class="pagination" id="pagination"></footer>
+      </section>
+    </main>
+
+    <div id="detailMask" class="modal-mask is-hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <section class="modal-panel">
+        <header class="modal-header"><h2 id="detailTitle">客户端包详情</h2><button id="closeDetail" class="modal-close" aria-label="关闭">×</button></header>
+        <div id="detailContent" class="modal-body"></div>
+      </section>
+    </div>
+
+    <div id="toast" class="toast is-hidden"></div>
+    <script>
+      window.SyssjcjClientPackageStaticBase = "{% static 'ynjksys/client_packages/' %}";
+    </script>
+    <script src="{% static 'ynjksys/syssjcj_cjkh_service.js' %}?v=2026081106"></script>
+    <script src="{% static 'ynjksys/syssjcj_cjkh_list.js' %}?v=2026081104"></script>
+  </body>
+</html>
