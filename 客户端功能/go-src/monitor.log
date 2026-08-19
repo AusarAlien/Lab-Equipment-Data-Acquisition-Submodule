@@ -1,0 +1,533 @@
+2026-07-30 18:00:38 | ==== 仪器接口监听程序 (Go版) 启动 ====
+2026-07-30 18:00:38 | 配置目录: D:\Desktop\FlistenerGO
+2026-07-30 18:01:09 | ==== 仪器接口监听程序 (Go版) 启动 ====
+2026-07-30 18:01:09 | 配置目录: D:\Desktop\FlistenerGO
+2026-07-30 18:02:04 | ==== 仪器接口监听程序 (Go版) 启动 ====
+2026-07-30 18:02:04 | 配置目录: D:\Desktop\FlistenerGO
+2026-07-30 18:02:11 | 监听已停止
+2026-07-30 18:02:12 | 监听已停止
+2026-07-30 18:02:24 | ==== 仪器接口监听程序 (Go版) 启动 ====
+2026-07-30 18:02:24 | 配置目录: D:\Desktop\FlistenerGO
+2026-07-30 18:02:32 | 监听已停止
+2026-07-30 18:08:29 | ==== instrument monitor (Go) started ====
+2026-07-30 18:08:29 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:08:59 | quit
+2026-07-30 18:08:59 | exit
+2026-07-30 18:10:08 | ==== instrument monitor (Go) started ====
+2026-07-30 18:10:08 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:13:57 | ==== instrument monitor (Go) started ====
+2026-07-30 18:13:57 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:14:32 | quit
+2026-07-30 18:14:32 | exit
+2026-07-30 18:17:56 | ==== instrument monitor (Go) started ====
+2026-07-30 18:17:56 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:17:56 | tray ready
+2026-07-30 18:24:32 | ==== instrument monitor (Go) started ====
+2026-07-30 18:24:32 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:24:32 | tray ready
+2026-07-30 18:25:08 | ==== instrument monitor (Go) started ====
+2026-07-30 18:25:08 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:25:08 | tray ready
+2026-07-30 18:29:41 | ==== instrument monitor (Go) started ====
+2026-07-30 18:29:41 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:29:41 | tray ready
+2026-07-30 18:30:21 | ==== instrument monitor (Go) started ====
+2026-07-30 18:30:21 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:30:21 | tray ready
+2026-07-30 18:31:01 | ==== instrument monitor (Go) started ====
+2026-07-30 18:31:01 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:31:01 | tray ready
+2026-07-30 18:32:10 | ==== instrument monitor (Go) started ====
+2026-07-30 18:32:10 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:32:10 | tray: createHIcon returned 0x45724D5, hwnd=0x2B2136
+2026-07-30 18:32:10 | tray: NIM_ADD ret=1 nid.hWnd=0x2B2136 nid.uID=1 nid.uFlags=0x7 nid.uCallbackMessage=0x8001 nid.hIcon=0x45724D5
+2026-07-30 18:32:10 | tray ready
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:11 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:12 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0204 (RButtonUp=0x0205)
+2026-07-30 18:32:14 | tray msg: lParam=0x0205 (RButtonUp=0x0205)
+2026-07-30 18:32:15 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:15 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:15 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:15 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:32:15 | tray msg: lParam=0x0200 (RButtonUp=0x0205)
+2026-07-30 18:33:42 | ==== instrument monitor (Go) started ====
+2026-07-30 18:33:42 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:33:42 | tray: createHIcon returned 0x8530875, hwnd=0x1EB096A
+2026-07-30 18:33:42 | tray: NIM_ADD ret=1 nid.hWnd=0x1EB096A nid.uID=1 nid.uFlags=0x7 nid.uCallbackMessage=0x8001 nid.hIcon=0x8530875
+2026-07-30 18:33:42 | tray ready
+2026-07-30 18:36:47 | ==== instrument monitor (Go) started ====
+2026-07-30 18:36:47 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:36:47 | tray ready
+2026-07-30 18:37:20 | ==== instrument monitor (Go) started ====
+2026-07-30 18:37:20 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:37:20 | tray ready
+2026-07-30 18:38:16 | tray: right-click, showing menu
+2026-07-30 18:38:16 | tray: right-click, showing menu
+2026-07-30 18:38:58 | ==== instrument monitor (Go) started ====
+2026-07-30 18:38:58 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:38:58 | tray ready
+2026-07-30 18:41:28 | ==== instrument monitor (Go) started ====
+2026-07-30 18:41:28 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:41:28 | tray ready
+2026-07-30 18:42:07 | ==== instrument monitor (Go) started ====
+2026-07-30 18:42:07 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:42:07 | tray ready
+2026-07-30 18:43:28 | ==== instrument monitor (Go) started ====
+2026-07-30 18:43:28 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:43:28 | tray ready
+2026-07-30 18:44:01 | ==== instrument monitor (Go) started ====
+2026-07-30 18:44:01 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:44:01 | tray ready
+2026-07-30 18:56:13 | ==== instrument monitor (Go) started ====
+2026-07-30 18:56:13 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 18:56:13 | tray ready
+2026-07-30 18:56:30 | ==== start HTTP ====
+2026-07-30 18:56:30 | [HTTP] 开始监听目录: D:\Desktop\接口监听程序\仪器文件扫描上传测试包\watch_dir (间隔 20s)
+2026-07-30 18:56:30 | [2026-07-30 18:56:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:56:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:56:31 | [2026-07-30 18:56:31] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:56:31 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:56:32 | [2026-07-30 18:56:32] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:56:32 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:56:32 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:56:50 | [2026-07-30 18:56:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:56:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:56:50 | [2026-07-30 18:56:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:56:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:56:50 | [2026-07-30 18:56:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:56:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:56:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:57:29 | [2026-07-30 18:57:29] 失败: 33.bmp - 连接失败: Post "http://172.16.27.4:8801/yncdc/UploadInstDataFilesNew.m": read tcp 172.16.27.35:25793->172.16.27.4:8801: wsarecv: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2026-07-30 18:57:29 | [2026-07-30 18:57:29] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:57:29 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:29 | [2026-07-30 18:57:29] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:57:29 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:29 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:57:30 | [2026-07-30 18:57:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:57:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:30 | [2026-07-30 18:57:30] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:57:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:30 | [2026-07-30 18:57:30] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:57:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:30 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:57:50 | [2026-07-30 18:57:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:57:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:50 | [2026-07-30 18:57:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:57:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:50 | [2026-07-30 18:57:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:57:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:57:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:58:10 | [2026-07-30 18:58:10] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:58:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:10 | [2026-07-30 18:58:10] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:58:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:10 | [2026-07-30 18:58:10] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:58:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:10 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:58:30 | [2026-07-30 18:58:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:58:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:30 | [2026-07-30 18:58:30] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:58:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:30 | [2026-07-30 18:58:30] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:58:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:30 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:58:50 | [2026-07-30 18:58:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:58:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:50 | [2026-07-30 18:58:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:58:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:50 | [2026-07-30 18:58:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:58:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:58:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:59:10 | [2026-07-30 18:59:10] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:59:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:10 | [2026-07-30 18:59:10] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:59:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:10 | [2026-07-30 18:59:10] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:59:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:10 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:59:30 | [2026-07-30 18:59:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:59:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:30 | [2026-07-30 18:59:30] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:59:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:30 | [2026-07-30 18:59:30] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:59:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:30 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 18:59:50 | [2026-07-30 18:59:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 18:59:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:50 | [2026-07-30 18:59:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 18:59:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:50 | [2026-07-30 18:59:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 18:59:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 18:59:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:00:10 | [2026-07-30 19:00:10] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:00:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:10 | [2026-07-30 19:00:10] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:00:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:10 | [2026-07-30 19:00:10] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:00:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:10 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:00:30 | [2026-07-30 19:00:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:00:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:30 | [2026-07-30 19:00:30] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:00:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:30 | [2026-07-30 19:00:30] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:00:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:30 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:00:50 | [2026-07-30 19:00:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:00:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:50 | [2026-07-30 19:00:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:00:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:50 | [2026-07-30 19:00:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:00:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:00:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:01:10 | [2026-07-30 19:01:10] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:01:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:10 | [2026-07-30 19:01:10] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:01:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:10 | [2026-07-30 19:01:10] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:01:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:10 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:01:30 | [2026-07-30 19:01:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:01:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:30 | [2026-07-30 19:01:30] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:01:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:30 | [2026-07-30 19:01:30] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:01:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:30 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:01:50 | [2026-07-30 19:01:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:01:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:50 | [2026-07-30 19:01:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:01:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:50 | [2026-07-30 19:01:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:01:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:01:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:02:10 | [2026-07-30 19:02:10] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:02:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:10 | [2026-07-30 19:02:10] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:02:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:10 | [2026-07-30 19:02:10] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:02:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:10 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:02:30 | [2026-07-30 19:02:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:02:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:30 | [2026-07-30 19:02:30] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:02:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:30 | [2026-07-30 19:02:30] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:02:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:30 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:02:50 | [2026-07-30 19:02:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:02:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:50 | [2026-07-30 19:02:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:02:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:50 | [2026-07-30 19:02:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:02:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:02:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:03:10 | [2026-07-30 19:03:10] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:03:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:10 | [2026-07-30 19:03:10] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:03:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:10 | [2026-07-30 19:03:10] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:03:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:10 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:03:30 | [2026-07-30 19:03:30] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:03:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:30 | [2026-07-30 19:03:30] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:03:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:30 | [2026-07-30 19:03:30] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:03:30 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:30 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:03:50 | [2026-07-30 19:03:50] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:03:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:50 | [2026-07-30 19:03:50] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:03:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:50 | [2026-07-30 19:03:50] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:03:50 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:03:50 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:04:10 | [2026-07-30 19:04:10] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:04:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:04:10 | [2026-07-30 19:04:10] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:04:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:04:10 | [2026-07-30 19:04:10] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:04:10 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:04:10 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:05:33 | ==== instrument monitor (Go) started ====
+2026-07-30 19:05:33 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 19:05:33 | tray ready
+2026-07-30 19:06:39 | ==== start HTTP ====
+2026-07-30 19:06:39 | [HTTP] 开始监听目录: D:\Desktop\接口监听程序\仪器文件扫描上传测试包\watch_dir (间隔 20s)
+2026-07-30 19:06:40 | [2026-07-30 19:06:40] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:06:40 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:06:40 | [2026-07-30 19:06:40] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:06:40 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:06:40 | [2026-07-30 19:06:40] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:06:40 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:06:40 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:07:00 | [2026-07-30 19:07:00] 失败: 33.bmp - 服务器返回失败
+2026-07-30 19:07:00 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:07:00 | [2026-07-30 19:07:00] 失败: 34.bmp - 服务器返回失败
+2026-07-30 19:07:00 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:07:00 | [2026-07-30 19:07:00] 失败: 第17轮熟练度A组01.xlsx - 服务器返回失败
+2026-07-30 19:07:00 |   响应: 
+
+{"result":"error","sessionId":"FIXEDS11","params":{},"errors":{}}
+
+2026-07-30 19:07:00 | 监听运行中 | 目录 8 个文件 | 上传 0 跳过 5 失败 3
+2026-07-30 19:07:04 | [HTTP] 监听已停止
+2026-07-30 19:07:04 | stopped
+2026-07-30 19:32:50 | ==== instrument monitor (Go) started ====
+2026-07-30 19:32:50 | config dir: D:\Desktop\FlistenerGO
+2026-07-30 19:32:50 | tray ready
