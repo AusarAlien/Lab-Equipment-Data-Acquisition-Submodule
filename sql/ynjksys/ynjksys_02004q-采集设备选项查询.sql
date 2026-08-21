@@ -10,13 +10,16 @@ begin
   delete from query_tbs_dispfmt where fid=id and fband in ('HEADER','FOOTER','DETAILS'); delete from query_vws_cnd where fid=id;
   insert into query_vws_cnd(fid,fname,fdirect,fcndxml,fcndxsl,fsql,fdispsql,fparam,fcfgxml,fresulttype,fheader,ffooter)
   values(id,name,direct,cndxml,cndxsl,null,dispsql,param,cfgxml,resulttype,header,footer);
-  bsql := q'~select distinct t.finstno 仪器编号,
-       case t.finstno when 'AGILENT-1200' then '安捷伦1200液相色谱仪'
+  bsql := q'~select distinct upper(trim(t.finstno)) 仪器编号,
+       case upper(trim(t.finstno)) when 'AGILENT-1200' then '安捷伦1200液相色谱仪'
          when 'BRUKER-MICROFLEX' then '布鲁克飞行时间质谱仪'
          when 'AXIOIMAGERZ2' then '卡尔蔡司AxioImagerZ2染色体扫描仪'
+         when 'ICAP-TQ' then '赛默飞iCAP TQ电感耦合等离子体质谱仪'
+         when 'SYNERGYH1' then 'BioTek Synergy H1多功能酶标仪'
          else t.finstno end 仪器设备
   from htlis.lis_instdata_new t
- where upper(trim(t.finstno)) in ('AGILENT-1200','BRUKER-MICROFLEX','AXIOIMAGERZ2')
+ where upper(trim(t.finstno)) in
+       ('AGILENT-1200','BRUKER-MICROFLEX','AXIOIMAGERZ2','ICAP-TQ','SYNERGYH1')
    and exists (
        select 1
          from hii.ib_tbs_detailedinf d

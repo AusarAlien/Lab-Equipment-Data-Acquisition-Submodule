@@ -35,16 +35,20 @@ begin
            when 'jpg' then '图像' when 'jpeg' then '图像' else '其他' end file_type,
          nvl(dbms_lob.getlength(d.fcontent), 0) file_size,
          d.fopdt collect_time,
-         p.finstno,
-         case p.finstno
+         upper(trim(p.finstno)) finstno,
+         case upper(trim(p.finstno))
            when 'AGILENT-1200' then '安捷伦1200液相色谱仪'
            when 'BRUKER-MICROFLEX' then '布鲁克飞行时间质谱仪'
            when 'AXIOIMAGERZ2' then '卡尔蔡司AxioImagerZ2染色体扫描仪'
+           when 'ICAP-TQ' then '赛默飞iCAP TQ电感耦合等离子体质谱仪'
+           when 'SYNERGYH1' then 'BioTek Synergy H1多功能酶标仪'
            else '--' end device_name,
-         case p.finstno
+         case upper(trim(p.finstno))
            when 'AGILENT-1200' then 'Agilent1200'
            when 'BRUKER-MICROFLEX' then 'BrukerMicroflex'
            when 'AXIOIMAGERZ2' then 'AxioImagerZ2'
+           when 'ICAP-TQ' then 'ICAP_TQ'
+           when 'SYNERGYH1' then 'ExcelSYNERGYH1'
            else '--' end parser_class,
          case when nvl(p.parsed_count, 0) > 0 then '解析成功' else '解析失败' end parse_status,
          nvl(p.parsed_count, 0) parsed_count,
@@ -56,7 +60,9 @@ begin
     left join parse_summary p on p.fdiseq = d.fdiseq
    where (nvl(?, 0) = 0 or d.fhiino = ?)
      and nvl(trim(d.finvalidflag), '0') = '0'
-     and (p.finstno in ('AGILENT-1200','BRUKER-MICROFLEX','AXIOIMAGERZ2') or p.finstno is null)
+     and (upper(trim(p.finstno)) in
+          ('AGILENT-1200','BRUKER-MICROFLEX','AXIOIMAGERZ2','ICAP-TQ','SYNERGYH1')
+          or p.finstno is null)
 ), filtered as (
   select b.*
     from base_data b

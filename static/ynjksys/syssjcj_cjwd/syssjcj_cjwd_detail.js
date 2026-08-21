@@ -86,6 +86,18 @@
       columns: [],
       rows: [],
     },
+    "ICAP-TQ": {
+      parserClass: "ICAP_TQ",
+      reportTitle: "iCAP TQ电感耦合等离子体质谱检测数据",
+      columns: [],
+      rows: [],
+    },
+    SYNERGYH1: {
+      parserClass: "ExcelSYNERGYH1",
+      reportTitle: "Synergy H1多功能酶标仪检测数据",
+      columns: [],
+      rows: [],
+    },
   };
   var currentDocument = null,
     currentAxioModel = null,
@@ -184,7 +196,8 @@
       documentItem.parserClass || profile.parserClass || "待识别";
     if (documentItem.parseStatus === "解析失败") {
       documentItem.parseMessage =
-        "处理接口未能识别文件中的样品编号列，请进入解析工作页重新解析。";
+        documentItem.parseMessage ||
+        "客户端已上传文件，但当前归档文件未查询到解析入库数据，请进入解析工作页核对或重新解析。";
     }
     return documentItem;
   }

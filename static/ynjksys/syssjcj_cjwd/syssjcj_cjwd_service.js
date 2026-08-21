@@ -118,6 +118,7 @@
       instno: value(row, ["仪器编号", "FINSTNO"], ""),
       sampleNo: value(row, ["样品编号", "SAMPNO"], ""),
       itemSeq: value(row, ["检测项目编号", "ITEMSEQ"], ""),
+      itemName: value(row, ["检测项目", "ITEM_NAME", "itemName"], ""),
       result: value(row, ["主结果", "RSLT"], ""),
       result1: value(row, ["结果1", "RSLT1"], ""),
       result2: value(row, ["结果2", "RSLT2"], ""),

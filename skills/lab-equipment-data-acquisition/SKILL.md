@@ -1,6 +1,6 @@
 ---
 name: lab-equipment-data-acquisition
-description: Develop, diagnose, test, and deploy the 云南省疾控实验室设备数据采集子模块 across its Windows Python/Go collection clients, 智源 Java service interfaces, Oracle tables, Django/SQL-registration platform pages, local Conda environment, and server environment. Use for work involving syssjcj_* pages, ynjksys SQL registrations, instrument parsers, file/BLOB preview or download, client heartbeat/logging, original-record generation, equipment dictionaries, or end-to-end laboratory instrument acquisition workflows.
+description: Develop, diagnose, test, and deploy the 云南省疾控实验室设备数据采集与物联监控子模块 across Windows collection clients, 智源 services, Oracle tables, registered-SQL pages, local Conda, and server environments. Use for syssjcj_* or syswljk_* pages, ynjksys SQL registrations, instrument/environment monitoring data, parsers, file/BLOB flows, client heartbeat/logging, original records, equipment dictionaries, or end-to-end laboratory acquisition workflows.
 ---
 
 # 实验室设备数据采集子模块开发
@@ -15,6 +15,7 @@ description: Develop, diagnose, test, and deploy the 云南省疾控实验室设
    - 数据表、页面和查询号：`references/data-model-and-pages.md`
    - 仪器清单与能力分级：`references/equipment-inventory-and-capability.md`
    - 当前完成度和后续路线：`references/current-status-and-roadmap.md`
+   - 实验室物联监控正式表映射、阶段状态与厂家后续边界：`references/iot-monitoring-submodule.md`
 4. 优先沿用 `D:\Desktop\云南省疾控实验室ai\智源Conda分层部署开发Skill.md` 中的平台交互、参数传递和部署规则。
 5. 用户处于功能规划阶段时，只输出边界、页面、按钮、跳转和交互方案；获得明确批准后再开发页面。
 
@@ -67,6 +68,7 @@ description: Develop, diagnose, test, and deploy the 云南省疾控实验室设
 - Java 新接口先在 `D:\Desktop\CodeTalkers\inst\data` 开发验证，再同步到 SVN 正式路径，最后编译打包上传服务端。
 - 删除、重解析和原始记录生成必须由服务端或注册 SQL 在事务中完成，并校验身份、机构、对象存在性及影响行数。
 - 不把数据库密码、生产会话或个人敏感信息写入 Skill、前端 JS 或版本库。
+- 处理 `syswljk_*`、环境监测、能耗、预警、门禁或一卡通任务时，先读取 `references/iot-monitoring-submodule.md`；若仓库存在 `开发指导与数据关联边界.md`，以仓库文件中的更新结论为准。
 
 ## 任务工作流
 

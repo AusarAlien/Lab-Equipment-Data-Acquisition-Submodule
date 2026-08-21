@@ -52,6 +52,28 @@
         ["organism2", "第二匹配菌种"], ["score2", "第二Score"]
       ],
       items: []
+    },
+    "ICAP-TQ": {
+      parser: "ICAP_TQ",
+      sampleFlag: "Analysis label",
+      fields: [
+        ["sampno", "样品编号"], ["item", "检测项目"], ["rslt", "检测结果"],
+        ["unit", "单位"], ["mode", "测量模式"], ["category", "结果类别"],
+        ["sampleType", "样品类型"], ["itemToken", "元素标识"],
+        ["analysisTime", "分析时间"]
+      ],
+      items: []
+    },
+    SYNERGYH1: {
+      parser: "ExcelSYNERGYH1",
+      sampleFlag: "板编号-孔位",
+      fields: [
+        ["sampno", "样品编号/孔位"], ["item", "检测项目"], ["rslt", "荧光读数"],
+        ["unit", "单位"], ["plateNo", "板编号"], ["detectTime", "检测时间"],
+        ["wavelength", "波长组合"], ["experimentPath", "实验文件路径"],
+        ["serialNo", "检测仪序列号"], ["temperature", "实际温度"]
+      ],
+      items: []
     }
   };
   /* 以下为旧版多仪器模拟字段及模拟行，保留用于降级。
@@ -431,7 +453,30 @@
       common.score2 = raw.result6;
       return common;
     }
-    common.item = raw.itemSeq;
+    if (instno === "ICAP-TQ") {
+      common.item = raw.itemName || raw.itemSeq;
+      common.rslt = raw.result;
+      common.unit = raw.result2 || raw.unit;
+      common.mode = raw.result1;
+      common.category = raw.result3;
+      common.sampleType = raw.result4;
+      common.itemToken = raw.result5;
+      common.analysisTime = raw.result6;
+      return common;
+    }
+    if (instno === "SYNERGYH1") {
+      common.item = raw.itemName || raw.itemSeq;
+      common.rslt = raw.result;
+      common.unit = raw.unit || "RFU";
+      common.plateNo = raw.result1;
+      common.detectTime = raw.result2;
+      common.wavelength = raw.result3;
+      common.experimentPath = raw.result4;
+      common.serialNo = raw.result5;
+      common.temperature = raw.result6;
+      return common;
+    }
+    common.item = raw.itemName || raw.itemSeq;
     common.rslt = raw.result;
     return common;
   }

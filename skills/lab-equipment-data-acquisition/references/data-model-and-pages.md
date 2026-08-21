@@ -166,3 +166,9 @@ hf=syssjcj_cjpz_list
 - 操作列始终放第一列。
 - 删除后刷新当前列表或工作页，并保持查询条件。
 - 长文本省略显示但必须通过 `title` 或统一悬浮组件展示全文。
+
+## 物联监控与环境监测页面
+
+`syswljk_*` 页面不沿用仪器文件解析表作为环境监测数据源。环境监测正式使用 `LIS_LIBDEF / LP_TBC_INSTFILE / LP_TBC_CIRCUDEFM / LIS_MCIRCSLOG / LIS_DCIRCSLOG`，其中 `LIS_DCIRCSLOG` 是正式项目值明细表。完整表关系、查询号、当前空数据事实和厂家后续接入边界见 [iot-monitoring-submodule.md](iot-monitoring-submodule.md)。
+
+开发时必须区分：对象/项目档案已可展示、监测明细当前为 0 行、平台注册查询是否已更新、厂家接口是否已经联通。这四项不能合并表述为“已完成数据接入”。
